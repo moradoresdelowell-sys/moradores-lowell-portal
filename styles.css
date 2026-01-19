@@ -1,13 +1,11 @@
-/* Reset e Variáveis */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ===================================
+   MORADORES DE LOWELL - PORTAL DIGITAL
+   =================================== */
 
+/* ===== VARIÁVEIS DE CORES ===== */
 :root {
-    --primary-color: #ff0000;        /* VERMELHO BRILHANTE */
-    --secondary-color: #cc0000;      /* VERMELHO ESCURO */
+    --primary-color: #ff0000;        /* Vermelho principal */
+    --secondary-color: #cc0000;      /* Vermelho escuro */
     --dark-color: #1a1a1a;
     --light-color: #ffffff;
     --gray-color: #f5f5f5;
@@ -18,12 +16,19 @@
     --transition: all 0.3s ease;
 }
 
+/* ===== RESET E BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    overflow-x: hidden;
     background: var(--gray-color);
+    overflow-x: hidden;
 }
 
 .container {
@@ -32,59 +37,37 @@ body {
     padding: 0 20px;
 }
 
-/* Header */
+/* ===== HEADER ===== */
 .header {
     background: var(--light-color);
-    box-shadow: var(--shadow);
+    box-shadow: var(--adow);
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 999;
 }
 
 .header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 20px;
+    padding: 1rem 20px;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-.logo-text h1 {
-    color: var(--primary-color); /* VERMELHO */
-    font-size: 1.3rem;
+.logo h1 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
     margin: 0;
 }
 
-.logo-text p {
+.logo p {
     font-size: 0.8rem;
     color: #666;
     margin: 0;
 }
 
-/* Navegação */
 .nav-menu {
     position: relative;
-}
-
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-color);
 }
 
 .nav-list {
@@ -107,761 +90,55 @@ body {
 
 .nav-list a:hover,
 .nav-list a.active {
-    background: var(--primary-color); /* VERMELHO */
+    background: var(--primary-color);
     color: var(--light-color);
 }
 
-.user-menu .btn-login {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-    border: none;
-    padding: 0.5rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.user-menu .btn-login:hover {
-    background: var(--secondary-color); /* VERMELHO ESCURO */
-}
-
-/* Dashboard Stats */
-.dashboard-stats {
-    background: var(--light-color);
-    padding: 2rem 0;
-    margin-top: 80px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-
-.stat-card {
-    background: var(--gray-color);
-    padding: 1.5rem;
-    border-radius: 15px;
-    text-align: center;
-    transition: var(--transition);
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
-}
-
-.stat-card i {
-    font-size: 2rem;
-    color: var(--primary-color); /* VERMELHO */
-    margin-bottom: 0.5rem;
-}
-
-.stat-info h3 {
-    font-size: 2rem;
-    color: var(--dark-color);
-}
-
-.stat-info p {
-    color: #666;
-}
-
-/* Main Content */
+/* ===== CONTEÚDO PRINCIPAL ===== */
 .main-content {
     padding: 2rem 0;
+    min-height: calc(100vh - 160px);
 }
 
 .content-section {
     display: none;
+    padding: 2rem 0;
 }
 
 .content-section.active {
     display: block;
 }
 
-/* Welcome Banner */
-.welcome-banner {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* VERMELHO */
-    color: var(--light-color);
-    padding: 3rem;
-    border-radius: 20px;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.welcome-banner h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.quick-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-}
-
-.quick-btn {
-    background: var(--light-color);
-    border: 2px solid var(--primary-color); /* VERMELHO */
-    color: var(--primary-color); /* VERMELHO */
-    padding: 1rem 2rem;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.quick-btn:hover {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-}
-
-/* Section Headers */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    padding: 0 1rem;
 }
 
 .section-header h2 {
-    color: var(--dark-color);
-    font-size: 2rem;
-}
-
-.btn-primary {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.btn-primary:hover {
-    background: var(--secondary-color); /* VERMELHO ESCURO */
-}
-
-/* Filters */
-.filters-bar {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.filters-bar select,
-.filters-bar input {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: var(--light-color);
-}
-
-.search-box {
-    display: flex;
-    gap: 0.5rem;
-    flex: 1;
-}
-
-.search-box input {
-    flex: 1;
-}
-
-.search-box button {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-/* Grids */
-.anuncios-grid,
-.noticias-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.vagas-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* Cards */
-.anuncio-card,
-.noticia-card {
-    background: var(--light-color);
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-.anuncio-card:hover,
-.noticia-card:hover {
-    transform: translateY(-5px);
-}
-
-.anuncio-header,
-.noticia-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 1rem;
-}
-
-.categoria-tag {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-}
-
-.anuncio-title,
-.noticia-title {
-    color: var(--dark-color);
-    margin-bottom: 0.5rem;
-}
-
-.anuncio-price {
-    color: var(--primary-color); /* VERMELHO */
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.anuncio-contato,
-.noticia-date {
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-}
-
-/* Vaga Card */
-.vaga-card {
-    background: var(--light-color);
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.vaga-info h3 {
-    color: var(--dark-color);
-    margin-bottom: 0.5rem;
-}
-
-.vaga-details {
-    display: flex;
-    gap: 1rem;
-    margin: 0.5rem 0;
-    flex-wrap: wrap;
-}
-
-.vaga-detail {
-    background: var(--gray-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-}
-
-.vaga-salary {
-    color: var(--success-color);
-    font-weight: bold;
-}
-
-/* Mapa Interativo */
-.mapa-container {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 2rem;
-    height: 600px;
-}
-
-.mapa-interativo {
-    background: #e0e0e0;
-    border-radius: 15px;
-    position: relative;
-    overflow: hidden;
-}
-
-.estabelecimentos-sidebar {
-    background: var(--light-color);
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    overflow-y: auto;
-}
-
-.categorias-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0;
-}
-
-.categoria-btn {
-    background: var(--gray-color);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.categoria-btn.active,
-.categoria-btn:hover {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-}
-
-.estabelecimento-card {
-    background: var(--gray-color);
-    padding: 1rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.estabelecimento-card:hover {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-}
-
-/* Rádio */
-.radio-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-}
-
-.player-radio {
-    background: var(--light-color);
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-}
-
-.radio-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.radio-logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 15px;
-}
-
-.radio-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-}
-
-.radio-programacao {
-    background: var(--light-color);
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-}
-
-.programacao-lista {
-    margin-top: 1rem;
-}
-
-.programa-item {
-    padding: 1rem;
-    border-left: 4px solid var(--primary-color); /* VERMELHO */
-    margin-bottom: 1rem;
-    background: var(--gray-color);
-    border-radius: 0 10px 10px 0;
-}
-
-/* Modais */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: var(--light-color);
-    margin: 5% auto;
-    padding: 0;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.modal-header {
-    background: var(--primary-color); /* VERMELHO */
-    color: var(--light-color);
-    padding: 1.5rem;
-    border-radius: 20px 20px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    color: var(--light-color);
-    font-size: 2rem;
-    cursor: pointer;
-}
-
-.modal form {
-    padding: 2rem;
-}
-
-.modal input,
-.modal select,
-.modal textarea {
-    width: 100%;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.upload-images {
-    margin: 1rem 0;
-}
-
-/* Footer */
-.footer {
-    background: var(--dark-color);
-    color: var(--light-color);
-    padding: 3rem 0 1rem;
-    margin-top: 3rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3,
-.footer-section h4 {
-    color: var(--primary-color); /* VERMELHO */
-    margin-bottom: 1rem;
-}
-
-.footer-section ul {
-    list-style: none;
-}
-
-.footer-section ul li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-section a {
-    color: var(--light-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.footer-section a:hover {
-    color: var(--primary-color); /* VERMELHO */
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.social-links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--primary-color); /* VERMELHO */
-    border-radius: 50%;
-    transition: var(--transition);
-}
-
-.social-links a:hover {
-    background: var(--secondary-color); /* VERMELHO ESCURO */
-    transform: scale(1.1);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid #444;
-}
-
-/* Botão WhatsApp adicional */
-.btn-whats {
-    background: #25d366;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.btn-whats:hover {
-    background: #128c7e;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-    
-    .nav-list {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--light-color);
-        flex-direction: column;
-        padding: 1rem;
-        box-shadow: var(--shadow);
-        transform: translateY(-100%);
-        opacity: 0;
-        visibility: hidden;
-        transition: var(--transition);
-    }
-    
-    .nav-list.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .quick-actions {
-        flex-direction: column;
-    }
-    
-    .mapa-container {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-    
-    .mapa-interativo {
-        height: 300px;
-    }
-    
-    .radio-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .filters-bar {
-        flex-direction: column;
-    }
-    
-    .search-box {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .section-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .anuncios-grid,
-    .noticias-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Estatísticas compactas - mobile friendly */
-.stats-compact {
-    background: var(--light-color);
-    padding: 1rem 0;
-    margin-top: 80px;
-}
-
-.stats-bar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1rem;
-}
-
-.stat-item {
-    text-align: center;
-    padding: 0.5rem;
-}
-
-.stat-number {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: bold;
     color: var(--primary-color);
-    line-height: 1;
-}
-
-.stat-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.25rem;
-}
-
-/* Responsivo - fica em linha no mobile */
-@media (max-width: 480px) {
-    .stats-bar {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    
-    .stat-item {
-        flex: 1;
-        min-width: 80px;
-    }
-    
-    .stat-number {
-        font-size: 1.2rem;
-    }
-    
-    .stat-label {
-        font-size: 0.7rem;
-    }
-}
-
-/* Player de Rádio Fixo Global */
-.radio-player-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #1a1a1a;
-    color: white;
-    padding: 10px 20px;
+    font-size: 2rem;
+    margin: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    gap: 0.5rem;
 }
 
-.radio-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* ===== HOME/DESTAQUES ===== */
+.home-content {
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.radio-logo-mini {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-}
-
-.radio-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.radio-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-.radio-program {
-    font-size: 0.8rem;
-    opacity: 0.8;
-}
-
-.radio-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.control-btn {
-    background: #ff0000;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-#radioVolume {
-    width: 80px;
-}
-
-/* Espaço pro player não cobrir conteúdo */
-body {
-    padding-bottom: 80px;
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-    .radio-player-fixed {
-        padding: 8px 15px;
-    }
-    
-    .radio-title {
-        font-size: 0.8rem;
-    }
-    
-    .radio-program {
-        font-size: 0.7rem;
-    }
-}
-
-/* Destaques Premium na Index */
-.destaque-section {
-    padding: 3rem 0;
-    background: linear-gradient(135deg, #ff0000, #cc0000);
-    margin: 2rem 0;
+.destaques-section {
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 3rem 1rem;
+    border-radius: 15px;
+    margin: 2rem 1rem;
 }
 
 .destaques-titulo {
@@ -878,152 +155,37 @@ body {
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
 }
 
-.destaque-premium-card {
-    background: white;
-    border-radius: 15px;
-    padding: 2rem;
+.destaques-grid .loading,
+.destaques-grid .sem-destaques {
+    grid-column: 1 / -1;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.destaque-premium-card:hover {
-    transform: translateY(-5px);
-}
-
-.destaque-premium-header {
-    position: relative;
-    margin-bottom: 1rem;
-}
-
-.destaque-premium-badge {
-    position: absolute;
-    top: 10px;
-    right: -30px;
-    background: gold;
-    color: #333;
-    padding: 5px 30px;
-    transform: rotate(45deg);
-    font-size: 0.7rem;
-    font-weight: bold;
-    z-index: 1;
-}
-
-.destaque-premium-imagem {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-}
-
-.destaque-premium-nome {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.destaque-premium-categoria {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-.destaque-premium-descricao {
-    color: #555;
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-    line-height: 1.4;
-}
-
-.destaque-premium-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.destaque-premium-endereco,
-.destaque-premium-horario {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.destaque-premium-estrelas {
-    color: #ffc107;
-    margin: 1rem 0;
-}
-
-.destaque-premium-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.destaque-premium-btn {
-    background: var(--primary-color);
+    padding: 3rem;
     color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-size: 1.2rem;
 }
 
-.destaque-premium-btn:hover {
-    background: var(--secondary-color);
+.home-info {
+    text-align: center;
+    padding: 2rem;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .destaques-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .destaque-premium-card {
-        padding: 1.5rem;
-    }
-    
-    .destaque-premium-actions {
-        flex-direction: column;
-    }
-}
-
-/* ===================================
-   SISTEMA REORGANIZADO - NOVAS GUIAS
-   =================================== */
-
-/* ===== GERAL ===== */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding: 0 1rem;
-}
-
-.section-header h2 {
+.home-info h3 {
     color: var(--primary-color);
     font-size: 2rem;
-    margin: 0;
+    margin-bottom: 1rem;
+}
+
+.home-info p {
+    color: #666;
+    font-size: 1.1rem;
 }
 
 /* ===== ALUGUEL ===== */
 .aluguel-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     padding: 0 1rem;
 }
@@ -1294,15 +456,19 @@ body {
     .guia-actions {
         justify-content: center;
     }
+    
+    .destaques-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 
 /* ===== LOADING E MENSAGENS ===== */
-.loading {
-    text-align: center;
-    padding: 3rem;
-    color: #666;
-}
-
+.loading,
 .sem-destaques,
 .sem-conteudo {
     text-align: center;
@@ -1310,9 +476,103 @@ body {
     color: #666;
 }
 
+.loading i,
 .sem-destaques i,
 .sem-conteudo i {
     font-size: 3rem;
     margin-bottom: 1rem;
     color: #ccc;
+}
+
+/* ===== PLAYER DE RÁDIO ===== */
+.radio-player-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+}
+
+.radio-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.radio-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.radio-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.radio-program {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.radio-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.control-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#radioVolume {
+    width: 80px;
+}
+
+/* ===== AJUSTES GERAIS ===== */
+body {
+    padding-bottom: 60px; /* Espaço pro player */
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: var(--gray-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header {
+    background: var(--light-color);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.footer {
+    background: var(--dark-color);
+    color: var(--light-color);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 3rem;
 }

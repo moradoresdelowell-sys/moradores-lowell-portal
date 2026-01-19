@@ -7,467 +7,143 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Firebase SDK - uma vez só -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
-    <!-- Config Firebase -->
+    <!-- Firebase Config -->
     <script src="firebase-config.js"></script>
 </head>
 <body>
-    <!-- Header simples -->
-
-<!-- Destaques Premium na Index -->
-<section id="destaques-premium" class="destaques-section">
-    <div class="container">
-        <h2 class="destaques-titulo">🎯 Estabelecimentos Destacados</h2>
-        <div class="destaques-grid" id="destaquesPremium">
-            <!-- Vai preencher com JavaScript -->
-            <div class="loading">Carregando destaques...</div>
-        </div>
-    </div>
-</section>
-
+    <!-- Header limpo -->
     <header class="header">
         <div class="container">
             <div class="logo">
                 <h1>Moradores de Lowell</h1>
                 <p>Portal Digital</p>
             </div>
-            <!-- Seção Aluguel (só imóveis) -->
-<section id="aluguel" class="content-section">
-    <div class="section-header">
-        <h2><i class="fas fa-home"></i> Aluguel</h2>
-    </div>
-    <div class="aluguel-list" id="aluguelList">
-        <!-- Somente imóveis do Firebase -->
-    </div>
-</section>
-
-<!-- Seção Classificados (só produtos/doações) -->
-<section id="classificados" class="content-section">
-    <div class="section-header">
-        <h2><i class="fas fa-tag"></i> Classificados</h2>
-    </div>
-    <div class="classificados-list" id="classificadosList">
-        <!-- Somente produtos/doações do Firebase -->
-    </div>
-</section>
-
-<!-- Seção Empregos (só WhatsApp) -->
-<section id="empregos" class="content-section">
-    <div class="section-header">
-        <h2><i class="fas fa-briefcase"></i> Empregos</h2>
-    </div>
-    <div class="empregos-list" id="empregosList">
-        <!-- Somente vagas do Firebase -->
-    </div>
-</section>
-
-<!-- Seção Guia Comercial (organizado por nível) -->
-<section id="guia" class="content-section">
-    <div class="section-header">
-        <h2><i class="fas fa-store"></i> Guia Comercial</h2>
-    </div>
-    
-    <!-- Destaques no topo -->
-    <div class="guia-destaques" id="guiaDestaques">
-        <h3>Estabelecimentos em Destaque</h3>
-        <!-- Destaques do Firebase -->
-    </div>
-    
-    <!-- Restante dos comércios -->
-    <div class="guia-list" id="guiaList">
-        <!-- Comércios normais do Firebase -->
-    </div>
-</section>
+            <nav class="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Início</a></li>
+                    <li><a href="#aluguel" class="nav-link">Aluguel</a></li>
+                    <li><a href="#classificados" class="nav-link">Classificados</a></li>
+                    <li><a href="#empregos" class="nav-link">Empregos</a></li>
+                    <li><a href="#guia" class="nav-link">Guia Comercial</a></li>
+                    <li><a href="#noticias" class="nav-link">Notícias</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <!-- Conteúdo principal -->
     <main class="main-content">
-        <!-- Seção Home -->
+        <!-- Home com destaques premium -->
         <section id="home" class="content-section active">
-            <div class="welcome-section">
-                <h2>Bem-vindo ao Portal</h2>
-                <p>Tudo para a comunidade brasileira de Lowell</p>
+            <div class="home-content">
+                <div class="destaques-section">
+                    <h2 class="destaques-titulo">🎯 Estabelecimentos Destacados</h2>
+                    <div class="destaques-grid" id="destaquesPremium">
+                        <div class="loading">Carregando destaques...</div>
+                    </div>
+                </div>
+                
+                <div class="home-info">
+                    <h3>Bem-vindo ao Portal</h3>
+                    <p>Tudo para a comunidade brasileira de Lowell</p>
+                </div>
             </div>
         </section>
 
-        <!-- Seção Classificados -->
+        <!-- Aluguel - Só imóveis -->
+        <section id="aluguel" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-home"></i> Aluguel</h2>
+            </div>
+            <div class="aluguel-list" id="aluguelList">
+                <!-- Alugueis do Firebase -->
+            </div>
+        </section>
+
+        <!-- Classificados - Só produtos/doações -->
         <section id="classificados" class="content-section">
-            <h2>Classificados</h2>
-            <div class="anuncios-grid" id="anunciosGrid">
-                <!-- Anúncios do Firebase vão aqui -->
+            <div class="section-header">
+                <h2><i class="fas fa-tag"></i> Classificados</h2>
+            </div>
+            <div class="classificados-list" id="classificadosList">
+                <!-- Classificados do Firebase -->
             </div>
         </section>
 
-        <!-- Seção Empregos -->
+        <!-- Empregos - Só WhatsApp -->
         <section id="empregos" class="content-section">
-            <h2>Empregos</h2>
-            <div class="vagas-list" id="vagasList">
-                <!-- Vagas do Firebase vão aqui -->
+            <div class="section-header">
+                <h2><i class="fas fa-briefcase"></i> Empregos</h2>
+            </div>
+            <div class="empregos-list" id="empregosList">
+                <!-- Empregos do Firebase -->
             </div>
         </section>
 
-        <!-- Seção Guia -->
+        <!-- Guia Comercial - Organizado por níveis -->
         <section id="guia" class="content-section">
-            <h2>Guia Comercial</h2>
-            <div class="estabelecimentos-list" id="estabelecimentosList">
-                <!-- Estabelecimentos do Firebase vão aqui -->
+            <div class="section-header">
+                <h2><i class="fas fa-store"></i> Guia Comercial</h2>
+            </div>
+            
+            <!-- Destaques no topo -->
+            <div class="guia-destaques" id="guiaDestaques">
+                <h3>Estabelecimentos em Destaque</h3>
+                <!-- Destaques do Firebase -->
+            </div>
+            
+            <!-- Restante dos comércios -->
+            <div class="guia-list" id="guiaList">
+                <!-- Comércios normais do Firebase -->
             </div>
         </section>
 
-        <!-- Seção Notícias -->
+        <!-- Notícias -->
         <section id="noticias" class="content-section">
-            <h2>Notícias</h2>
+            <div class="section-header">
+                <h2><i class="fas fa-newspaper"></i> Notícias</h2>
+            </div>
             <div class="noticias-grid" id="noticiasGrid">
-                <!-- Notícias do Firebase vão aqui -->
+                <!-- Notícias do Firebase -->
             </div>
         </section>
     </main>
 
-    <!-- Footer simples -->
+    <!-- Player de Rádio Fixo -->
+    <div class="radio-player-fixed">
+        <div class="radio-info">
+            <div class="radio-text">
+                <span class="radio-title">Rádio Comunidade</span>
+                <span class="radio-program">Manhã Brasileira</span>
+            </div>
+        </div>
+        
+        <div class="radio-controls">
+            <button class="control-btn" id="radioPlayBtn">
+                <i class="fas fa-play" id="radioIcon"></i>
+            </button>
+            <input type="range" id="radioVolume" min="0" max="100" value="50">
+        </div>
+        
+        <audio id="radioAudio" preload="none">
+            <source src="https://stream.radio.comunidade.lowell/live" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 Moradores de Lowell</p>
         </div>
     </footer>
 
-<!-- Player de Rádio Global Fixo -->
-<div class="radio-player-fixed">
-    <div class="radio-info">
-        <img src="radio-logo.png" alt="Rádio" class="radio-logo-mini">
-        <div class="radio-text">
-            <span class="radio-title">MDL Radio</span>
-            <span class="radio-program">Manhã Brasileira</span>
-        </div>
-    </div>
-    
-    <div class="radio-controls">
-        <button class="control-btn" id="radioPlayBtn">
-            <i class="fas fa-play" id="radioIcon"></i>
-        </button>
-        <input type="range" id="radioVolume" min="0" max="100" value="50">
-        <button class="control-btn" id="radioMuteBtn">
-            <i class="fas fa-volume-up"></i>
-        </button>
-    </div>
-    
-    <audio id="radioAudio" preload="none">
-        <source src="https://stream.radio.comunidade.lowell/live" type="audio/mpeg">
-    </audio>
-</div>
-
-<script>
-// Sistema de Destaques Premium - Index
-async function carregarDestaquesPremium() {
-    try {
-        console.log("Carregando destaques premium...");
-        
-        const destaquesRef = firebase.firestore().collection('estabelecimentos');
-        const snapshot = await destaquesRef
-            .where('destaque.tipo', '==', 'premium')
-            .where('destaque.ativo', '==', true)
-            .orderBy('destaque.posicao')
-            .limit(3)
-            .get();
-        
-        const destaques = [];
-        snapshot.forEach(doc => {
-            destaques.push({ id: doc.id, ...doc.data() });
-        });
-        
-        console.log("Destaques carregados:", destaques);
-        renderizarDestaquesPremium(destaques);
-        
-    } catch (error) {
-        console.error("Erro ao carregar destaques:", error);
-        mostrarMensagemSemDestaques();
-    }
-}
-
-function renderizarDestaquesPremium(destaques) {
-    const container = document.getElementById('destaquesPremium');
-    if (!container) return;
-    
-    if (destaques.length === 0) {
-        mostrarMensagemSemDestaques();
-        return;
-    }
-    
-    container.innerHTML = `
-        <div class="destaques-grid">
-            ${destaques.map((estab, index) => `
-                <div class="destaque-premium-card">
-                    <div class="destaque-premium-header">
-                        <span class="destaque-premium-badge">★ PREMIUM ★</span>
-                        <span class="destaque-posicao">Posição ${index + 1}</span>
-                    </div>
-                    
-                    ${estab.imagem ? `<img src="${estab.imagem}" alt="${estab.nome}" class="destaque-premium-imagem">` : '<div class="sem-imagem">Sem imagem</div>'}
-                    
-                    <h3 class="destaque-premium-nome">${estab.nome}</h3>
-                    <p class="destaque-premium-categoria">${estab.categoria}</p>
-                    <p class="destaque-premium-descricao">${estab.descricao}</p>
-                    
-                    <div class="destaque-premium-info">
-                        <p class="destaque-premium-endereco"><i class="fas fa-map-marker-alt"></i> ${estab.endereco}</p>
-                        <p class="destaque-premium-horario"><i class="fas fa-clock"></i> ${estab.horario}</p>
-                        <div class="destaque-premium-estrelas">${renderizarEstrelas(estab.avaliacao)}</div>
-                    </div>
-                    
-                    <div class="destaque-premium-actions">
-                        <button class="destaque-premium-btn" onclick="abrirWhatsApp('${estab.telefone}')">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </button>
-                        <button class="destaque-premium-btn" onclick="ligarPara('${estab.telefone}')">
-                            <i class="fas fa-phone"></i> Ligar
-                        </button>
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-    `;
-}
-
-function renderizarEstrelas(avaliacao) {
-    const estrelasCheias = Math.floor(parseFloat(avaliacao));
-    const temMeiaEstrela = parseFloat(avaliacao) % 1 !== 0;
-    let html = '';
-    
-    for (let i = 0; i < estrelasCheias; i++) {
-        html += '<i class="fas fa-star"></i>';
-    }
-    if (temMeiaEstrela) {
-        html += '<i class="fas fa-star-half-alt"></i>';
-    }
-    for (let i = estrelasCheias + (temMeiaEstrela ? 1 : 0); i < 5; i++) {
-        html += '<i class="far fa-star"></i>';
-    }
-    return html;
-}
-
-function mostrarMensagemSemDestaques() {
-    const container = document.getElementById('destaquesPremium');
-    if (container) {
-        container.innerHTML = `
-            <div class="sem-destaques">
-                <i class="fas fa-store"></i>
-                <h3>Em breve destaques premium!</h3>
-                <p>Estabelecimentos premium aparecerão aqui.</p>
-            </div>
-        `;
-    }
-}
-
-// Funções auxiliares
-function abrirWhatsApp(telefone) {
-    window.open(`https://wa.me/1${telefone.replace(/\D/g, '')}`, '_blank');
-}
-
-function ligarPara(telefone) {
-    window.location.href = `tel:${telefone}`;
-}
-
-// Iniciar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("✅ Iniciando sistema de destaques premium...");
-    carregarDestaquesPremium();
-});
-</script>
-
-    <!-- Scripts ESSENCIAIS -->
+    <!-- Scripts -->
     <script src="script.js"></script>
     <script src="firebase-loader.js"></script>
-
-<script>
-// Sistema reorganizado - Somente Admin pode cadastrar
-
-// 1. Aluguel - Só imóveis
-async function carregarAlugueis() {
-    const aluguelRef = firebase.firestore().collection('estabelecimentos');
-    const snapshot = await aluguelRef
-        .where('categoria', '==', 'aluguel')
-        .where('ativo', '==', true)
-        .get();
-    
-    const alugueis = [];
-    snapshot.forEach(doc => alugueis.push({ id: doc.id, ...doc.data() }));
-    
-    renderizarAlugueis(alugueis);
-}
-
-function renderizarAlugueis(alugueis) {
-    const container = document.getElementById('aluguelList');
-    container.innerHTML = alugueis.map(aluguel => `
-        <div class="aluguel-card">
-            <h3>${aluguel.nome}</h3>
-            <p>${aluguel.descricao}</p>
-            <p><strong>${aluguel.endereco}</strong></p>
-            <p>💰 ${aluguel.preco || 'Valor a combinar'}</p>
-            <div class="aluguel-actions">
-                <button class="btn-whats" onclick="abrirWhatsApp('${aluguel.telefone}')">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// 2. Classificados - Só produtos/doações
-async function carregarClassificados() {
-    const classRef = firebase.firestore().collection('anuncios');
-    const snapshot = await classRef
-        .where('categoria', 'in', ['venda', 'doacao', 'procura'])
-        .where('ativo', '==', true)
-        .get();
-    
-    const classificados = [];
-    snapshot.forEach(doc => classificados.push({ id: doc.id, ...doc.data() }));
-    
-    renderizarClassificados(classificados);
-}
-
-function renderizarClassificados(classificados) {
-    const container = document.getElementById('classificadosList');
-    container.innerHTML = classificados.map(item => `
-        <div class="classificado-card">
-            <div class="classificado-header">
-                <span class="categoria-tag">${item.categoria}</span>
-                <small>${formatarData(item.data)}</small>
-            </div>
-            <h3>${item.titulo}</h3>
-            <p>${item.descricao}</p>
-            ${item.preco ? `<p class="preco"><strong>${item.preco}</strong></p>` : ''}
-            <div class="classificado-actions">
-                <button class="btn-whats" onclick="abrirWhatsApp('${item.telefone}')">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// 3. Empregos - Só WhatsApp (sem candidatar)
-async function carregarEmpregos() {
-    const empregosRef = firebase.firestore().collection('vagas');
-    const snapshot = await empregosRef
-        .where('ativo', '==', true)
-        .get();
-    
-    const empregos = [];
-    snapshot.forEach(doc => empregos.push({ id: doc.id, ...doc.data() }));
-    
-    renderizarEmpregos(empregos);
-}
-
-function renderizarEmpregos(empregos) {
-    const container = document.getElementById('empregosList');
-    container.innerHTML = empregos.map(vaga => `
-        <div class="emprego-card">
-            <h3>${vaga.titulo}</h3>
-            <p><strong>${vaga.empresa}</strong></p>
-            <p>${vaga.descricao}</p>
-            <div class="emprego-detalhes">
-                <span><i class="fas fa-map-marker-alt"></i> ${vaga.local}</span>
-                <span><i class="fas fa-clock"></i> ${vaga.tipo}</span>
-                ${vaga.experiencia === 'sem-experiencia' ? '<span><i class="fas fa-star"></i> Sem Experiência</span>' : ''}
-            </div>
-            <p class="emprego-salario"><strong>${vaga.salario}</strong></p>
-            <div class="emprego-actions">
-                <button class="btn-whats" onclick="abrirWhatsApp('${vaga.telefone}')">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// 4. Guia Comercial - Organizado por níveis
-async function carregarGuia() {
-    // Primeiro carrega os com destaque
-    const destaquesRef = firebase.firestore().collection('estabelecimentos');
-    const destaquesSnapshot = await destaquesRef
-        .where('destaque.tipo', '==', 'destaque')
-        .where('destaque.ativo', '==', true)
-        .get();
-    
-    const destaques = [];
-    destaquesSnapshot.forEach(doc => destaques.push({ id: doc.id, ...doc.data() }));
-    
-    // Depois carrega o restante
-    const normaisSnapshot = await firebase.firestore()
-        .collection('estabelecimentos')
-        .where('destaque.tipo', '!=', 'premium') // Não mostra premium aqui
-        .where('ativo', '==', true)
-        .get();
-    
-    const normais = [];
-    normaisSnapshot.forEach(doc => normais.push({ id: doc.id, ...doc.data() }));
-    
-    renderizarGuia(destaques, normais);
-}
-
-function renderizarGuia(destaques, normais) {
-    // Destaques no topo
-    const destaquesContainer = document.getElementById('guiaDestaques');
-    if (destaques.length > 0) {
-        destaquesContainer.innerHTML = `
-            <h3>Estabelecimentos em Destaque</h3>
-            ${destaques.map(est => `
-                <div class="guia-destaque-card">
-                    <h4>${est.nome}</h4>
-                    <p>${est.descricao}</p>
-                    <p><i class="fas fa-map-marker-alt"></i> ${est.endereco}</p>
-                    <div class="guia-actions">
-                        <button class="btn-whats" onclick="abrirWhatsApp('${est.telefone}')">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </button>
-                    </div>
-                </div>
-            `).join('')}
-        `;
-    }
-    
-    // Restante dos comércios
-    const normaisContainer = document.getElementById('guiaList');
-    normaisContainer.innerHTML = normais.map(est => `
-        <div class="guia-card">
-            <h4>${est.nome}</h4>
-            <p>${est.descricao}</p>
-            <p><i class="fas fa-map-marker-alt"></i> ${est.endereco}</p>
-            <p><i class="fas fa-clock"></i> ${est.horario}</p>
-            <div class="guia-actions">
-                <button class="btn-whats" onclick="abrirWhatsApp('${est.telefone}')">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Funções auxiliares
-function abrirWhatsApp(telefone) {
-    window.open(`https://wa.me/1${telefone.replace(/\D/g, '')}`, '_blank');
-}
-
-function formatarData(timestamp) {
-    if (!timestamp) return 'Recente';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString('pt-BR');
-}
-
-// Iniciar tudo quando carregar
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("✅ Sistema reorganizado iniciado!");
-    carregarAlugueis();
-    carregarClassificados();
-    carregarEmpregos();
-    carregarGuia();
-});
-</script>
-
 </body>
 </html>
