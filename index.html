@@ -85,6 +85,31 @@
         </div>
     </footer>
 
+<!-- Player de Rádio Global Fixo -->
+<div class="radio-player-fixed">
+    <div class="radio-info">
+        <img src="radio-logo.png" alt="Rádio" class="radio-logo-mini">
+        <div class="radio-text">
+            <span class="radio-title">MDL Radio</span>
+            <span class="radio-program">Manhã Brasileira</span>
+        </div>
+    </div>
+    
+    <div class="radio-controls">
+        <button class="control-btn" id="radioPlayBtn">
+            <i class="fas fa-play" id="radioIcon"></i>
+        </button>
+        <input type="range" id="radioVolume" min="0" max="100" value="50">
+        <button class="control-btn" id="radioMuteBtn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+    
+    <audio id="radioAudio" preload="none">
+        <source src="https://stream.radio.comunidade.lowell/live" type="audio/mpeg">
+    </audio>
+</div>
+
     <!-- Scripts ESSENCIAIS -->
     <script src="script.js"></script>
     <script src="firebase-loader.js"></script>
