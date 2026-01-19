@@ -16,20 +16,10 @@ overlay.addEventListener('click', function() {
 });
 
 // Fecha menu ao clicar em link
-document.querySelectorAll('.nav-menu a').forEach(link => {
+document.querySelectorAll('.nav-list-hamburguer a').forEach(link => {
     link.addEventListener('click', function() {
         hamburguer.classList.remove('active');
         navMenu.classList.remove('active');
         overlay.classList.remove('active');
     });
-});
-
-// Rádio play button
-const playButton = document.getElementById('playButton');
-playButton.addEventListener('click', function() {
-    if (this.textContent === '▶ PLAY') {
-        this.textContent = '⏸ PAUSE';
-    } else {
-        this.textContent = '▶ PLAY';
-    }
 });

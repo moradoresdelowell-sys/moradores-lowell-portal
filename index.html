@@ -16,24 +16,42 @@
     <script src="firebase-config.js"></script>
 </head>
 <body>
-    <!-- Header simples -->
-    <header class="header">
-        <div class="container">
+   <!-- Header com hamburguer -->
+<header class="header">
+    <div class="container">
+        <div class="nav-container">
+            <!-- Logo e Nome (mantido igual) -->
             <div class="logo">
-                <h1>Moradores de Lowell</h1>
-                <p>Portal Digital</p>
+                <img src="logo-moradores.png" alt="Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>Moradores de Lowell</h1>
+                    <p>Portal Digital</p>
+                </div>
             </div>
-            <nav class="nav-menu">
-                <ul class="nav-list">
-                    <li><a href="#home" class="nav-link active">Início</a></li>
-                    <li><a href="#classificados" class="nav-link">Classificados</a></li>
-                    <li><a href="#empregos" class="nav-link">Empregos</a></li>
-                    <li><a href="#guia" class="nav-link">Guia</a></li>
-                    <li><a href="#noticias" class="nav-link">Notícias</a></li>
-                </ul>
-            </nav>
+            
+            <!-- Menu Hamburguer (NOVO) -->
+            <div class="hamburguer" id="hamburguer">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-    </header>
+    </div>
+</header>
+
+<!-- Menu Lateral (NOVO) -->
+<nav class="nav-menu-hamburguer" id="navMenu">
+    <ul class="nav-list-hamburguer">
+        <li><a href="#home" class="nav-link">Início</a></li>
+        <li><a href="#classificados" class="nav-link">Classificados</a></li>
+        <li><a href="#empregos" class="nav-link">Empregos</a></li>
+        <li><a href="#guia" class="nav-link">Guia</a></li>
+        <li><a href="#noticias" class="nav-link">Notícias</a></li>
+    </ul>
+</nav>
+
+<!-- Overlay (NOVO) -->
+<div class="overlay" id="overlay"></div>
 
     <!-- Conteúdo principal -->
     <main class="main-content">
