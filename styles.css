@@ -910,3 +910,65 @@ body {
     color: #999;
     font-size: 0.8rem;
 }
+
+/* ===== AJUSTE DA BARRA VERMELHA - MAIS ELEGANTE ===== */
+
+/* Barra mais fina e elegante */
+.section-header {
+    padding: 0.5rem 1rem; /* MENOR - mais fina */
+    margin-bottom: 1.5rem; /* Menor espaço */
+    margin-top: 90px; /* Menor espaço do header */
+    background: var(--primary-color); /* Só a cor, sem gradiente grande */
+    border-radius: 8px; /* Menos arredondado */
+    margin: 90px 1rem 1.5rem 1rem; /* Menor tudo */
+}
+
+.section-header h2 {
+    color: white;
+    font-size: 1.5rem; /* MENOR - mais elegante */
+    margin: 0;
+    line-height: 1.2; /* Mais compacto */
+}
+
+/* HEADER MAIS COMPACTO - MENOR ESPAÇO */
+.header {
+    background: var(--light-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra menor */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 0.5rem 0; /* MENOR - mais compacto */
+}
+
+.main-content {
+    padding-top: 70px; /* MENOR espaço para o header */
+}
+
+/* TÍTULOS MAIS COMPACTOS */
+.section-header h2 {
+    font-size: 1.4rem; /* MENOR - mais elegante */
+    line-height: 1.2; /* Mais compacto */
+    margin: 0.5rem 0; /* Menor margem interna */
+}
+
+/* MARGENS MENORES - MAIS COMPACTO */
+.section-header {
+    margin: 80px 1rem 1rem 1rem; /* MUITO menor espaço */
+    padding: 0.8rem 1rem; /* MUITO menor */
+    border-radius: 5px; /* Quase reto */
+}
+
+/* MOBILE - AINDA MAIS COMPACTO */
+@media (max-width: 768px) {
+    .section-header {
+        margin: 70px 0.5rem 0.5rem 0.5rem; /* MUITO menor em mobile */
+        padding: 0.5rem; /* MUITO compacto */
+        border-radius: 3px; /* Quase reto */
+    }
+    
+    .section-header h2 {
+        font-size: 1.2rem; /* MUITO menor em mobile */
+        margin: 0.3rem 0; /* MUITO compacto */
+    }
+}
