@@ -8,6 +8,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff6b35">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+
+<!-- Firebase Config -->
+<script src="firebase-config.js"></script>
+
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<!-- Firebase Config -->
+<script>
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCYx6LLnu4tf6OS4W4xPcBprve4IRROtX8",
+  authDomain: "moradores-lowell-portal.firebaseapp.com",
+  projectId: "moradores-lowell-portal",
+  storageBucket: "moradores-lowell-portal.firebasestorage.app",
+  messagingSenderId: "967028216371",
+  appId: "1:967028216371:web:b35abe9e38877fdc6b0946"
+};
+
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
+
 </head>
 <body>
     <!-- Header com navegação -->
@@ -370,5 +403,8 @@
     </footer>
 
     <script src="script.js"></script>
+
+<script src="firebase-integration.js"></script>
+
 </body>
 </html>
