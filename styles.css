@@ -972,3 +972,120 @@ body {
         margin: 0.3rem 0; /* MUITO compacto */
     }
 }
+
+/* ===== AJUSTES FINAIS - MOBILE PERFEITO ===== */
+
+/* MOBILE - HEADER SUPER COMPACTO */
+@media (max-width: 768px) {
+    .header {
+        padding: 0.3rem 0; /* MUITO pequeno */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra menor */
+    }
+    
+    .header .container {
+        padding: 0.3rem 10px; /* MUITO pequeno */
+    }
+    
+    .logo h1 {
+        font-size: 1.2rem; /* MUITO pequeno */
+    }
+    
+    .logo p {
+        font-size: 0.7rem; /* MUITO pequeno */
+    }
+    
+    .nav-list {
+        gap: 0.5rem; /* MUITO pequeno */
+    }
+    
+    .nav-list a {
+        padding: 0.3rem 0.8rem; /* MUITO pequeno */
+        font-size: 0.8rem; /* MUITO pequeno */
+    }
+    
+    /* BARRA SUPER COMPACTA EM MOBILE */
+    .section-header {
+        margin: 60px 0.5rem 0.5rem 0.5rem; /* MUITO pequeno */
+        padding: 0.4rem 0.8rem; /* MUITO pequeno */
+        border-radius: 3px; /* Quase reto */
+    }
+    
+    .section-header h2 {
+        font-size: 1.1rem; /* MUITO pequeno */
+        margin: 0.2rem 0; /* MUITO pequeno */
+    }
+    
+    /* CONTEÚDO SUPER COMPACTO EM MOBILE */
+    .main-content {
+        padding-top: 50px; /* MUITO pequeno */
+    }
+    
+    .home-content {
+        padding: 1rem 0.5rem; /* MUITO pequeno */
+    }
+    
+    .destaques-titulo {
+        font-size: 1.5rem; /* MUITO pequeno */
+        margin: 1rem 0; /* MUITO pequeno */
+    }
+    
+    .destaques-grid {
+        gap: 1rem; /* MUITO pequeno */
+        padding: 0 0.5rem; /* MUITO pequeno */
+    }
+    
+    .destaque-premium-card {
+        padding: 1rem; /* MUITO pequeno */
+    }
+    
+    .destaque-premium-nome {
+        font-size: 1.1rem; /* MUITO pequeno */
+    }
+    
+    /* CARDS SUPER COMPACTOS EM MOBILE */
+    .aluguel-card,
+    .classificado-card,
+    .emprego-card,
+    .guia-card {
+        padding: 1rem; /* MUITO pequeno */
+        margin-bottom: 1rem; /* MUITO pequeno */
+    }
+    
+    .aluguel-card h3,
+    .classificado-card h3,
+    .emprego-card h3,
+    .guia-card h4 {
+        font-size: 1.1rem; /* MUITO pequeno */
+    }
+    
+    /* BOTÕES SUPER COMPACTOS EM MOBILE */
+    .btn-whats {
+        padding: 0.5rem 1rem; /* MUITO pequeno */
+        font-size: 0.8rem; /* MUITO pequeno */
+    }
+    
+    /* HEADER SUPER COMPACTO - MÓVEL */
+    .header {
+        min-height: 50px; /* MUITO pequeno */
+    }
+    
+    .main-content {
+        min-height: calc(100vh - 50px); /* MUITO pequeno */
+    }
+}
+
+/* SUPER MOBILE - MENOR AINDA */
+@media (max-width: 480px) {
+    .header {
+        padding: 0.2rem 0; /* EXTREMAMENTE pequeno */
+    }
+    
+    .section-header {
+        margin: 55px 0.3rem 0.3rem 0.3rem; /* EXTREMAMENTE pequeno */
+        padding: 0.3rem 0.5rem; /* EXTREMAMENTE pequeno */
+    }
+    
+    .section-header h2 {
+        font-size: 1rem; /* EXTREMAMENTE pequeno */
+    }
+}
