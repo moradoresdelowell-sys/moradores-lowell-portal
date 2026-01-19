@@ -23,3 +23,45 @@ document.querySelectorAll('.nav-list-hamburguer a').forEach(link => {
         overlay.classList.remove('active');
     });
 });
+
+// Player de Rádio do Rodapé
+const radioAudio = document.getElementById('radioAudio');
+const playBtn = document.getElementById('playBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+
+// Controle de play/pause
+playBtn.addEventListener('click', function() {
+    if (radioAudio.paused) {
+        radioAudio.play();
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+        radioAudio.pause();
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+});
+
+// Controle de volume
+volumeSlider.addEventListener('input', function() {
+    radioAudio.volume = this.value / 100;
+});
+
+// Quando o áudio começar a tocar
+radioAudio.addEventListener('play', function() {
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+});
+
+// Quando o áudio pausar
+radioAudio.addEventListener('pause', function() {
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+});
+
+// Tenta dar play automaticamente (pode ser bloqueado por navegador)
+window.addEventListener('load', function() {
+    // Delay pra tentar evitar bloqueio
+    setTimeout(function() {
+        radioAudio.play().catch(function(error) {
+            console.log('Autoplay bloqueado:', error);
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+    }, 1000);
+});
