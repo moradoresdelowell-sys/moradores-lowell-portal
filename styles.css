@@ -1089,3 +1089,215 @@ body {
         font-size: 1rem; /* EXTREMAMENTE pequeno */
     }
 }
+
+/* ===== MENU HAMBÚRGUE - SUPER COMPACTO ===== */
+
+/* HEADER SUPER COMPACTO */
+.header {
+    background: var(--light-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 0.3rem 0; /* SUPER compacto */
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 10px; /* SUPER compacto */
+}
+
+/* LOGO SUPER COMPACTO */
+.logo h1 {
+    font-size: 1.1rem; /* SUPER pequeno */
+    margin: 0;
+}
+
+.logo p {
+    font-size: 0.7rem; /* SUPER pequeno */
+    margin: 0;
+}
+
+/* MENU HAMBÚRGUE - SUPER COMPACTO */
+.mobile-menu {
+    position: relative;
+}
+
+.hamburger-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 35px; /* SUPER pequeno */
+    height: 30px; /* SUPER pequeno */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.hamburger-btn:hover {
+    background: var(--secondary-color);
+}
+
+.hamburger-btn i {
+    font-size: 1.2rem; /* SUPER pequeno */
+}
+
+/* MENU SUSPENSO - SUPER COMPACTO */
+.mobile-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--light-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    min-width: 180px; /* SUPER compacto */
+    max-height: 250px; /* SUPER compacto */
+    overflow-y: auto;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.mobile-nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-nav-list {
+    list-style: none;
+    padding: 0.5rem 0; /* SUPER compacto */
+    margin: 0;
+}
+
+.mobile-nav-link {
+    display: block;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.8rem 1rem; /* SUPER compacto */
+    font-size: 0.9rem; /* SUPER pequeno */
+    transition: background 0.3s ease;
+    border-radius: 5px;
+}
+
+.mobile-nav-link:hover {
+    background: var(--gray-color);
+}
+
+.mobile-nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* DESKTOP - MENU NORMAL */
+.desktop-nav {
+    display: block;
+}
+
+.desktop-nav .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1rem; /* SUPER pequeno */
+}
+
+.desktop-nav .nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.9rem; /* SUPER pequeno */
+    padding: 0.5rem 0.8rem; /* SUPER pequeno */
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.desktop-nav .nav-link:hover,
+.desktop-nav .nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* MOBILE - ESCONDE MENU DESKTOP */
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none; /* Esconde menu desktop em mobile */
+    }
+    
+    .mobile-menu {
+        display: block; /* Mostra menu hambúrgue em mobile */
+    }
+    
+    .hamburger-btn {
+        display: flex; /* Mostra botão hambúrgue em mobile */
+    }
+    
+    /* CONTEÚDO SUPER COMPACTO EM MOBILE */
+    .main-content {
+        padding-top: 50px; /* SUPER pequeno */
+    }
+    
+    .section-header {
+        margin: 55px 0.5rem 0.5rem 0.5rem; /* SUPER pequeno */
+        padding: 0.4rem 0.8rem; /* SUPER pequeno */
+        border-radius: 3px; /* Quase reto */
+    }
+    
+    .section-header h2 {
+        font-size: 1.1rem; /* SUPER pequeno */
+        margin: 0.2rem 0; /* SUPER pequeno */
+    }
+    
+    /* CARDS SUPER COMPACTOS EM MOBILE */
+    .aluguel-card,
+    .classificado-card,
+    .emprego-card,
+    .guia-card {
+        padding: 1rem; /* SUPER pequeno */
+        margin-bottom: 1rem; /* SUPER pequeno */
+    }
+    
+    .aluguel-card h3,
+    .classificado-card h3,
+    .emprego-card h3,
+    .guia-card h4 {
+        font-size: 1.1rem; /* SUPER pequeno */
+    }
+    
+    /* BOTÕES SUPER COMPACTOS EM MOBILE */
+    .btn-whats {
+        padding: 0.5rem 1rem; /* SUPER pequeno */
+        font-size: 0.8rem; /* SUPER pequeno */
+    }
+    
+    /* HEADER SUPER COMPACTO - MÓVEL */
+    .header {
+        min-height: 45px; /* EXTREMAMENTE pequeno */
+    }
+    
+    .main-content {
+        min-height: calc(100vh - 45px); /* EXTREMAMENTE pequeno */
+    }
+}
+
+/* SUPER MOBILE - MENOR AINDA */
+@media (max-width: 480px) {
+    .header {
+        padding: 0.2rem 0; /* EXTREMAMENTE pequeno */
+    }
+    
+    .section-header {
+        margin: 50px 0.3rem 0.3rem 0.3rem; /* EXTREMAMENTE pequeno */
+        padding: 0.3rem 0.5rem; /* EXTREMAMENTE pequeno */
+    }
+    
+    .section-header h2 {
+        font-size: 1rem; /* EXTREMAMENTE pequeno */
+        margin: 0.2rem 0; /* EXTREMAMENTE pequeno */
+    }
+}

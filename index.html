@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradores de Lowell - Portal Digital</title>
+    <title>Moradores de Lowell e Região - Portal Digital</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -16,14 +16,34 @@
     <script src="firebase-config.js"></script>
 </head>
 <body>
-    <!-- Header limpo -->
+    <!-- Header com Menu Hambúrgue - SUPER COMPACTO -->
     <header class="header">
         <div class="container">
             <div class="logo">
                 <h1>Moradores de Lowell</h1>
                 <p>Portal Digital</p>
             </div>
-            <nav class="nav-menu">
+            
+            <!-- Menu Hambúrgue para Mobile - SUPER COMPACTO -->
+            <div class="mobile-menu">
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="mobile-nav" id="mobileNav">
+                    <ul class="mobile-nav-list">
+                        <li><a href="#home" class="mobile-nav-link">Início</a></li>
+                        <li><a href="#aluguel" class="mobile-nav-link">Aluguel</a></li>
+                        <li><a href="#classificados" class="mobile-nav-link">Classificados</a></li>
+                        <li><a href="#empregos" class="mobile-nav-link">Empregos</a></li>
+                        <li><a href="#guia" class="mobile-nav-link">Guia Comercial</a></li>
+                        <li><a href="#noticias" class="mobile-nav-link">Notícias</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Menu normal para desktop -->
+            <nav class="desktop-nav">
                 <ul class="nav-list">
                     <li><a href="#home" class="nav-link active">Início</a></li>
                     <li><a href="#aluguel" class="nav-link">Aluguel</a></li>
