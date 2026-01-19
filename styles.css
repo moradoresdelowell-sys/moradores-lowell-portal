@@ -576,3 +576,152 @@ body {
     padding: 2rem 0;
     margin-top: 3rem;
 }
+
+/* ===== CORREÇÕES DE ESTILO ===== */
+
+/* ESPAÇO PARA O HEADER FIXO - CORREÇÃO PRINCIPAL */
+.section-header {
+    padding-top: 100px; /* Espaço para o header fixo */
+    margin-bottom: 2rem;
+}
+
+/* ESTILO DOS CARDS - RESTAURAR ESTILO ORIGINAL */
+.aluguel-card,
+.classificado-card,
+.emprego-card,
+.guia-card,
+.guia-destaque-card,
+.noticia-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.aluguel-card:hover,
+.classificado-card:hover,
+.emprego-card:hover,
+.guia-card:hover,
+.guia-destaque-card:hover,
+.noticia-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ESTILO ESPECÍFICO PARA NOTÍCIAS - RESTAURAR CAIXAS */
+.noticia-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.noticia-card:hover {
+    transform: translateY(-5px);
+}
+
+.noticia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.noticia-title {
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.noticia-conteudo {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.noticia-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+/* TÍTULOS DAS SEÇÕES - MELHOR ESPAÇAMENTO */
+.section-header {
+    margin-top: 120px; /* MAIS espaço pro header */
+    margin-bottom: 3rem;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 15px;
+    margin: 120px 1rem 3rem 1rem; /* Espaço maior */
+}
+
+.section-header h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ESPAÇAMENTO GERAL DAS LISTAS */
+.aluguel-list,
+.classificados-list,
+.empregos-list,
+.guia-list,
+.noticias-grid {
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* CARDS PADRÃO - RESTAURAR ESTILO ORIGINAL */
+[class*="-card"] {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+[class*="-card"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* BOTÕES PADRÃO */
+.btn-whats {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.btn-whats:hover {
+    background: #128c7e;
+}
+
+/* HEADER FIXO - AJUSTE FINAL */
+.header {
+    background: var(--light-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 1rem 0;
+}
+
+.main-content {
+    padding-top: 100px; /* Espaço para o header */
+}
