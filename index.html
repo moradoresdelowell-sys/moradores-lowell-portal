@@ -3,73 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradores de Lowell e Região</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Moradores de Lowell - Portal Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK - uma vez só -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Config Firebase -->
+    <script src="firebase-config.js"></script>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header simples -->
     <header class="header">
         <div class="container">
-            <div class="nav-container">
-                <!-- Logo e Nome -->
-                <div class="logo-area">
-                    <img src="logo-moradores.png" alt="Logo" class="logo-img">
-                    <span class="site-name">Moradores de Lowell</span>
-                </div>
-                
-                <!-- Menu Hamburguer -->
-                <div class="hamburguer" id="hamburguer">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+            <div class="logo">
+                <h1>Moradores de Lowell</h1>
+                <p>Portal Digital</p>
             </div>
+            <nav class="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">Início</a></li>
+                    <li><a href="#classificados" class="nav-link">Classificados</a></li>
+                    <li><a href="#empregos" class="nav-link">Empregos</a></li>
+                    <li><a href="#guia" class="nav-link">Guia</a></li>
+                    <li><a href="#noticias" class="nav-link">Notícias</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- Menu Lateral -->
-    <nav class="nav-menu" id="navMenu">
-        <ul>
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#aluguel">Aluguel</a></li>
-            <li><a href="#classificados">Classificados</a></li>
-            <li><a href="#empregos">Empregos</a></li>
-            <li><a href="#guia">Guia Comercial</a></li>
-            <li><a href="#noticias">Noticias</a></li>
-        </ul>
-    </nav>
-
-    <!-- Main Content -->
+    <!-- Conteúdo principal -->
     <main class="main-content">
-        <!-- Estabelecimentos Destacados -->
-        <section class="destaques-section">
-            <div class="container">
-                <h2>Estabelecimentos Destacados</h2>
-                <div class="destaques-container">
-                    <div class="loading-message">Carregando destaques...</div>
-                </div>
+        <!-- Seção Home -->
+        <section id="home" class="content-section active">
+            <div class="welcome-section">
+                <h2>Bem-vindo ao Portal</h2>
+                <p>Tudo para a comunidade brasileira de Lowell</p>
             </div>
         </section>
 
-        <!-- Rádio Section -->
-        <section class="radio-section">
-            <div class="container">
-                <h2>Rádio Comunidade</h2>
-                <div class="radio-player">
-                    <h3>Manhã Brasileira</h3>
-                    <div class="radio-controls">
-                        <button class="play-button" id="playButton">▶ PLAY</button>
-                        <span class="hora-radio">17:13</span>
-                    </div>
-                </div>
+        <!-- Seção Classificados -->
+        <section id="classificados" class="content-section">
+            <h2>Classificados</h2>
+            <div class="anuncios-grid" id="anunciosGrid">
+                <!-- Anúncios do Firebase vão aqui -->
+            </div>
+        </section>
+
+        <!-- Seção Empregos -->
+        <section id="empregos" class="content-section">
+            <h2>Empregos</h2>
+            <div class="vagas-list" id="vagasList">
+                <!-- Vagas do Firebase vão aqui -->
+            </div>
+        </section>
+
+        <!-- Seção Guia -->
+        <section id="guia" class="content-section">
+            <h2>Guia Comercial</h2>
+            <div class="estabelecimentos-list" id="estabelecimentosList">
+                <!-- Estabelecimentos do Firebase vão aqui -->
+            </div>
+        </section>
+
+        <!-- Seção Notícias -->
+        <section id="noticias" class="content-section">
+            <h2>Notícias</h2>
+            <div class="noticias-grid" id="noticiasGrid">
+                <!-- Notícias do Firebase vão aqui -->
             </div>
         </section>
     </main>
 
-    <!-- Overlay -->
-    <div class="overlay" id="overlay"></div>
+    <!-- Footer simples -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Moradores de Lowell</p>
+        </div>
+    </footer>
 
-    <!-- JavaScript -->
+    <!-- Scripts ESSENCIAIS -->
     <script src="script.js"></script>
+    <script src="firebase-loader.js"></script>
 </body>
 </html>
