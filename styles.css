@@ -1000,3 +1000,319 @@ body {
         flex-direction: column;
     }
 }
+
+/* ===================================
+   SISTEMA REORGANIZADO - NOVAS GUIAS
+   =================================== */
+
+/* ===== GERAL ===== */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.section-header h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* ===== ALUGUEL ===== */
+.aluguel-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.aluguel-card {
+    background: var(--light-color);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.aluguel-card:hover {
+    transform: translateY(-5px);
+}
+
+.aluguel-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.aluguel-card p {
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.aluguel-card .preco {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.aluguel-info p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.aluguel-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* ===== CLASSIFICADOS ===== */
+.classificados-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.classificado-card {
+    background: var(--light-color);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.classificado-card:hover {
+    transform: translateY(-5px);
+}
+
+.classificado-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.categoria-tag {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.classificado-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.classificado-card p {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.classificado-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* ===== EMPREGOS ===== */
+.empregos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1rem;
+}
+
+.emprego-card {
+    background: var(--light-color);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    margin-bottom: 1rem;
+}
+
+.emprego-card:hover {
+    transform: translateY(-5px);
+}
+
+.emprego-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.emprego-card p {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.emprego-detalhes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.emprego-detalhe {
+    background: var(--gray-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.emprego-salario {
+    color: var(--success-color);
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.emprego-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* ===== GUIA COMERCIAL ===== */
+.guia-destaques {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: var(--gray-color);
+    border-radius: 15px;
+}
+
+.guia-destaques h3 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.guia-destaque-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.guia-destaque-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.guia-destaque-card p {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.guia-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 1rem;
+}
+
+.guia-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+}
+
+.guia-card {
+    background: var(--light-color);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.guia-card:hover {
+    transform: translateY(-5px);
+}
+
+.guia-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.guia-card p {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+/* ===== BOTÕES PADRÃO ===== */
+.btn-whats {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.btn-whats:hover {
+    background: #128c7e;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .aluguel-list,
+    .classificados-list,
+    .empregos-list,
+    .guia-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .emprego-detalhes {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .emprego-actions,
+    .classificado-actions,
+    .aluguel-actions {
+        flex-direction: column;
+    }
+    
+    .guia-actions {
+        justify-content: center;
+    }
+}
+
+/* ===== LOADING E MENSAGENS ===== */
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+}
+
+.sem-destaques,
+.sem-conteudo {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+}
+
+.sem-destaques i,
+.sem-conteudo i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #ccc;
+}

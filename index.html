@@ -35,15 +35,53 @@
                 <h1>Moradores de Lowell</h1>
                 <p>Portal Digital</p>
             </div>
-            <nav class="nav-menu">
-                <ul class="nav-list">
-                    <li><a href="#home" class="nav-link active">Início</a></li>
-                    <li><a href="#classificados" class="nav-link">Classificados</a></li>
-                    <li><a href="#empregos" class="nav-link">Empregos</a></li>
-                    <li><a href="#guia" class="nav-link">Guia</a></li>
-                    <li><a href="#noticias" class="nav-link">Notícias</a></li>
-                </ul>
-            </nav>
+            <!-- Seção Aluguel (só imóveis) -->
+<section id="aluguel" class="content-section">
+    <div class="section-header">
+        <h2><i class="fas fa-home"></i> Aluguel</h2>
+    </div>
+    <div class="aluguel-list" id="aluguelList">
+        <!-- Somente imóveis do Firebase -->
+    </div>
+</section>
+
+<!-- Seção Classificados (só produtos/doações) -->
+<section id="classificados" class="content-section">
+    <div class="section-header">
+        <h2><i class="fas fa-tag"></i> Classificados</h2>
+    </div>
+    <div class="classificados-list" id="classificadosList">
+        <!-- Somente produtos/doações do Firebase -->
+    </div>
+</section>
+
+<!-- Seção Empregos (só WhatsApp) -->
+<section id="empregos" class="content-section">
+    <div class="section-header">
+        <h2><i class="fas fa-briefcase"></i> Empregos</h2>
+    </div>
+    <div class="empregos-list" id="empregosList">
+        <!-- Somente vagas do Firebase -->
+    </div>
+</section>
+
+<!-- Seção Guia Comercial (organizado por nível) -->
+<section id="guia" class="content-section">
+    <div class="section-header">
+        <h2><i class="fas fa-store"></i> Guia Comercial</h2>
+    </div>
+    
+    <!-- Destaques no topo -->
+    <div class="guia-destaques" id="guiaDestaques">
+        <h3>Estabelecimentos em Destaque</h3>
+        <!-- Destaques do Firebase -->
+    </div>
+    
+    <!-- Restante dos comércios -->
+    <div class="guia-list" id="guiaList">
+        <!-- Comércios normais do Firebase -->
+    </div>
+</section>
         </div>
     </header>
 
@@ -243,5 +281,193 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- Scripts ESSENCIAIS -->
     <script src="script.js"></script>
     <script src="firebase-loader.js"></script>
+
+<script>
+// Sistema reorganizado - Somente Admin pode cadastrar
+
+// 1. Aluguel - Só imóveis
+async function carregarAlugueis() {
+    const aluguelRef = firebase.firestore().collection('estabelecimentos');
+    const snapshot = await aluguelRef
+        .where('categoria', '==', 'aluguel')
+        .where('ativo', '==', true)
+        .get();
+    
+    const alugueis = [];
+    snapshot.forEach(doc => alugueis.push({ id: doc.id, ...doc.data() }));
+    
+    renderizarAlugueis(alugueis);
+}
+
+function renderizarAlugueis(alugueis) {
+    const container = document.getElementById('aluguelList');
+    container.innerHTML = alugueis.map(aluguel => `
+        <div class="aluguel-card">
+            <h3>${aluguel.nome}</h3>
+            <p>${aluguel.descricao}</p>
+            <p><strong>${aluguel.endereco}</strong></p>
+            <p>💰 ${aluguel.preco || 'Valor a combinar'}</p>
+            <div class="aluguel-actions">
+                <button class="btn-whats" onclick="abrirWhatsApp('${aluguel.telefone}')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 2. Classificados - Só produtos/doações
+async function carregarClassificados() {
+    const classRef = firebase.firestore().collection('anuncios');
+    const snapshot = await classRef
+        .where('categoria', 'in', ['venda', 'doacao', 'procura'])
+        .where('ativo', '==', true)
+        .get();
+    
+    const classificados = [];
+    snapshot.forEach(doc => classificados.push({ id: doc.id, ...doc.data() }));
+    
+    renderizarClassificados(classificados);
+}
+
+function renderizarClassificados(classificados) {
+    const container = document.getElementById('classificadosList');
+    container.innerHTML = classificados.map(item => `
+        <div class="classificado-card">
+            <div class="classificado-header">
+                <span class="categoria-tag">${item.categoria}</span>
+                <small>${formatarData(item.data)}</small>
+            </div>
+            <h3>${item.titulo}</h3>
+            <p>${item.descricao}</p>
+            ${item.preco ? `<p class="preco"><strong>${item.preco}</strong></p>` : ''}
+            <div class="classificado-actions">
+                <button class="btn-whats" onclick="abrirWhatsApp('${item.telefone}')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 3. Empregos - Só WhatsApp (sem candidatar)
+async function carregarEmpregos() {
+    const empregosRef = firebase.firestore().collection('vagas');
+    const snapshot = await empregosRef
+        .where('ativo', '==', true)
+        .get();
+    
+    const empregos = [];
+    snapshot.forEach(doc => empregos.push({ id: doc.id, ...doc.data() }));
+    
+    renderizarEmpregos(empregos);
+}
+
+function renderizarEmpregos(empregos) {
+    const container = document.getElementById('empregosList');
+    container.innerHTML = empregos.map(vaga => `
+        <div class="emprego-card">
+            <h3>${vaga.titulo}</h3>
+            <p><strong>${vaga.empresa}</strong></p>
+            <p>${vaga.descricao}</p>
+            <div class="emprego-detalhes">
+                <span><i class="fas fa-map-marker-alt"></i> ${vaga.local}</span>
+                <span><i class="fas fa-clock"></i> ${vaga.tipo}</span>
+                ${vaga.experiencia === 'sem-experiencia' ? '<span><i class="fas fa-star"></i> Sem Experiência</span>' : ''}
+            </div>
+            <p class="emprego-salario"><strong>${vaga.salario}</strong></p>
+            <div class="emprego-actions">
+                <button class="btn-whats" onclick="abrirWhatsApp('${vaga.telefone}')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 4. Guia Comercial - Organizado por níveis
+async function carregarGuia() {
+    // Primeiro carrega os com destaque
+    const destaquesRef = firebase.firestore().collection('estabelecimentos');
+    const destaquesSnapshot = await destaquesRef
+        .where('destaque.tipo', '==', 'destaque')
+        .where('destaque.ativo', '==', true)
+        .get();
+    
+    const destaques = [];
+    destaquesSnapshot.forEach(doc => destaques.push({ id: doc.id, ...doc.data() }));
+    
+    // Depois carrega o restante
+    const normaisSnapshot = await firebase.firestore()
+        .collection('estabelecimentos')
+        .where('destaque.tipo', '!=', 'premium') // Não mostra premium aqui
+        .where('ativo', '==', true)
+        .get();
+    
+    const normais = [];
+    normaisSnapshot.forEach(doc => normais.push({ id: doc.id, ...doc.data() }));
+    
+    renderizarGuia(destaques, normais);
+}
+
+function renderizarGuia(destaques, normais) {
+    // Destaques no topo
+    const destaquesContainer = document.getElementById('guiaDestaques');
+    if (destaques.length > 0) {
+        destaquesContainer.innerHTML = `
+            <h3>Estabelecimentos em Destaque</h3>
+            ${destaques.map(est => `
+                <div class="guia-destaque-card">
+                    <h4>${est.nome}</h4>
+                    <p>${est.descricao}</p>
+                    <p><i class="fas fa-map-marker-alt"></i> ${est.endereco}</p>
+                    <div class="guia-actions">
+                        <button class="btn-whats" onclick="abrirWhatsApp('${est.telefone}')">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    }
+    
+    // Restante dos comércios
+    const normaisContainer = document.getElementById('guiaList');
+    normaisContainer.innerHTML = normais.map(est => `
+        <div class="guia-card">
+            <h4>${est.nome}</h4>
+            <p>${est.descricao}</p>
+            <p><i class="fas fa-map-marker-alt"></i> ${est.endereco}</p>
+            <p><i class="fas fa-clock"></i> ${est.horario}</p>
+            <div class="guia-actions">
+                <button class="btn-whats" onclick="abrirWhatsApp('${est.telefone}')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Funções auxiliares
+function abrirWhatsApp(telefone) {
+    window.open(`https://wa.me/1${telefone.replace(/\D/g, '')}`, '_blank');
+}
+
+function formatarData(timestamp) {
+    if (!timestamp) return 'Recente';
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    return date.toLocaleDateString('pt-BR');
+}
+
+// Iniciar tudo quando carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("✅ Sistema reorganizado iniciado!");
+    carregarAlugueis();
+    carregarClassificados();
+    carregarEmpregos();
+    carregarGuia();
+});
+</script>
+
 </body>
 </html>
