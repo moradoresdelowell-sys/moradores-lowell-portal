@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moradores de Lowell - Portal Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6b35">
+</head>
+<body>
+    <!-- Header com navegação -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="logo-moradores.png" alt="Moradores de Lowell">
+                <div class="logo-text">
+                    <h1>Moradores de Lowell</h1>
+                    <p>Portal Digital da Comunidade</p>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-list" id="navList">
+                    <li><a href="#home" class="nav-link active"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#classificados" class="nav-link"><i class="fas fa-bullhorn"></i> Classificados</a></li>
+                    <li><a href="#empregos" class="nav-link"><i class="fas fa-briefcase"></i> Empregos</a></li>
+                    <li><a href="#guia" class="nav-link"><i class="fas fa-map-marked-alt"></i> Guia Comercial</a></li>
+                    <li><a href="#noticias" class="nav-link"><i class="fas fa-newspaper"></i> Notícias</a></li>
+                    <li><a href="#radio" class="nav-link"><i class="fas fa-radio"></i> Rádio</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-menu">
+                <button class="btn-login" id="btnLogin">
+                    <i class="fas fa-user"></i> Entrar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard com estatísticas -->
+    <section class="dashboard-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h3 id="totalMembers">2,847</h3>
+                        <p>Membros</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <div class="stat-info">
+                        <h3 id="totalAnuncios">124</h3>
+                        <p>Anúncios Ativos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-briefcase"></i>
+                    <div class="stat-info">
+                        <h3 id="totalVagas">89</h3>
+                        <p>Vagas de Emprego</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-store"></i>
+                    <div class="stat-info">
+                        <h3 id="totalEstabelecimentos">156</h3>
+                        <p>Estabelecimentos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Área Principal com Abas -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Home/Início -->
+            <section id="home" class="content-section active">
+                <div class="welcome-banner">
+                    <h2>Bem-vindo ao Portal Digital</h2>
+                    <p>Tudo que a comunidade brasileira de Lowell precisa em um só lugar!</p>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="showSection('classificados')">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Publicar Anúncio</span>
+                    </button>
+                    <button class="quick-btn" onclick="showSection('empregos')">
+                        <i class="fas fa-search"></i>
+                        <span>Buscar Vagas</span>
+                    </button>
+                    <button class="quick-btn" onclick="showSection('guia')">
+                        <i class="fas fa-store"></i>
+                        <span>Anunciar Negócio</span>
+                    </button>
+                </div>
+
+                <!-- Últimas Atividades -->
+                <div class="recent-activity">
+                    <h3>Últimas Atividades da Comunidade</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Atividades serão carregadas dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Classificados -->
+            <section id="classificados" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bullhorn"></i> Classificados</h2>
+                    <button class="btn-primary" onclick="abrirModalPublicar()">
+                        <i class="fas fa-plus"></i> Publicar Anúncio
+                    </button>
+                </div>
+
+                <div class="filters-bar">
+                    <select id="categoriaClassificados">
+                        <option value="">Todas Categorias</option>
+                        <option value="aluguel">Aluguel</option>
+                        <option value="venda">Venda</option>
+                        <option value="servicos">Serviços</option>
+                        <option value="procura">Procura-se</option>
+                        <option value="doacao">Doação</option>
+                    </select>
+                    
+                    <select id="ordenarClassificados">
+                        <option value="recente">Mais Recentes</option>
+                        <option value="preco">Menor Preço</option>
+                        <option value="relevante">Mais Relevantes</option>
+                    </select>
+                    
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar anúncios..." id="searchClassificados">
+                        <button onclick="buscarClassificados()"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="anuncios-grid" id="anunciosGrid">
+                    <!-- Anúncios serão carregados aqui -->
+                </div>
+            </section>
+
+            <!-- Empregos -->
+            <section id="empregos" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-briefcase"></i> Oportunidades de Emprego</h2>
+                    <button class="btn-primary" onclick="abrirModalVaga()">
+                        <i class="fas fa-plus"></i> Publicar Vaga
+                    </button>
+                </div>
+
+                <div class="job-filters">
+                    <div class="filter-group">
+                        <label><input type="checkbox" value="sem-experiencia"> Sem Experiência</label>
+                        <label><input type="checkbox" value="com-ingles"> Requer Inglês</label>
+                        <label><input type="checkbox" value="meio-periodo"> Meio Período</label>
+                        <label><input type="checkbox" value="tempo-integral"> Tempo Integral</label>
+                    </div>
+                    
+                    <select id="salarioFilter">
+                        <option value="">Qualquer Salário</option>
+                        <option value="0-15">$0 - $15/hora</option>
+                        <option value="15-25">$15 - $25/hora</option>
+                        <option value="25+">$25+/hora</option>
+                    </select>
+                </div>
+
+                <div class="vagas-list" id="vagasList">
+                    <!-- Vagas serão listadas aqui -->
+                </div>
+            </section>
+
+            <!-- Guia Comercial -->
+            <section id="guia" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-map-marked-alt"></i> Guia Comercial</h2>
+                    <button class="btn-primary" onclick="abrirModalEstabelecimento()">
+                        <i class="fas fa-plus"></i> Cadastrar Negócio
+                    </button>
+                </div>
+
+                <div class="mapa-container">
+                    <div id="mapaEstabelecimentos" class="mapa-interativo">
+                        <!-- Mapa interativo será renderizado aqui -->
+                    </div>
+                    
+                    <div class="estabelecimentos-sidebar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Buscar estabelecimento..." id="searchEstabelecimentos">
+                        </div>
+                        
+                        <div class="categorias-filter">
+                            <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                            <button class="categoria-btn" data-categoria="restaurantes">Restaurantes</button>
+                            <button class="categoria-btn" data-categoria="mercados">Mercados</button>
+                            <button class="categoria-btn" data-categoria="servicos">Serviços</button>
+                            <button class="categoria-btn" data-categoria="saude">Saúde</button>
+                        </div>
+                        
+                        <div class="estabelecimentos-list" id="estabelecimentosList">
+                            <!-- Lista de estabelecimentos -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notícias -->
+            <section id="noticias" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-newspaper"></i> Notícias da Comunidade</h2>
+                    <button class="btn-primary" onclick="abrirModalNoticia()">
+                        <i class="fas fa-plus"></i> Publicar Notícia
+                    </button>
+                </div>
+
+                <div class="noticias-categorias">
+                    <button class="categoria-btn active" data-categoria="todas">Todas</button>
+                    <button class="categoria-btn" data-categoria="urgentes">Urgentes</button>
+                    <button class="categoria-btn" data-categoria="eventos">Eventos</button>
+                    <button class="categoria-btn" data-categoria="imigracao">Imigração</button>
+                    <button class="categoria-btn" data-categoria="oportunidades">Oportunidades</button>
+                </div>
+
+                <div class="noticias-grid" id="noticiasGrid">
+                    <!-- Notícias serão carregadas aqui -->
+                </div>
+            </section>
+
+            <!-- Rádio Online -->
+            <section id="radio" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-radio"></i> Rádio Comunidade</h2>
+                </div>
+
+                <div class="radio-container">
+                    <div class="player-radio">
+                        <div class="radio-info">
+                            <img src="radio-logo.png" alt="Rádio Comunidade" class="radio-logo">
+                            <div class="radio-details">
+                                <h3>Rádio Comunidade</h3>
+                                <p id="radioProgram">Programa Atual: Manhã Brasileira</p>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-controls">
+                            <button class="control-btn" id="radioPlayBtn">
+                                <i class="fas fa-play" id="radioIcon"></i>
+                            </button>
+                            <div class="volume-control">
+                                <i class="fas fa-volume-down"></i>
+                                <input type="range" id="radioVolume" min="0" max="100" value="50">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                        </div>
+                        
+                        <audio id="radioAudio">
+                            <source src="https://stream.radio.comunidade.lowell/live" type="audio/mpeg">
+                        </audio>
+                    </div>
+                    
+                    <div class="radio-programacao">
+                        <h4>Programação do Dia</h4>
+                        <div class="programacao-lista" id="programacaoRadio">
+                            <!-- Programação será carregada -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modais -->
+    <!-- Modal Publicar Anúncio -->
+    <div class="modal" id="modalAnuncio">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Publicar Anúncio</h3>
+                <button class="close-modal" onclick="fecharModal('modalAnuncio')">&times;</button>
+            </div>
+            <form id="formAnuncio">
+                <select name="categoria" required>
+                    <option value="">Selecione a Categoria</option>
+                    <option value="aluguel">Aluguel</option>
+                    <option value="venda">Venda</option>
+                    <option value="servicos">Serviços</option>
+                    <option value="procura">Procura-se</option>
+                    <option value="doacao">Doação</option>
+                </select>
+                
+                <input type="text" name="titulo" placeholder="Título do Anúncio" required>
+                <textarea name="descricao" placeholder="Descrição" rows="4" required></textarea>
+                <input type="text" name="preco" placeholder="Preço (opcional)">
+                <input type="tel" name="telefone" placeholder="Telefone/WhatsApp" required>
+                <input type="email" name="email" placeholder="Email">
+                
+                <div class="upload-images">
+                    <label for="imagensAnuncio">Adicionar Fotos:</label>
+                    <input type="file" id="imagensAnuncio" multiple accept="image/*">
+                </div>
+                
+                <button type="submit" class="btn-primary">Publicar Anúncio</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div class="modal" id="modalLogin">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Entrar no Portal</h3>
+                <button class="close-modal" onclick="fecharModal('modalLogin')">&times;</button>
+            </div>
+            <form id="formLogin">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Senha" required>
+                <button type="submit" class="btn-primary">Entrar</button>
+                <div class="form-footer">
+                    <a href="#" onclick="mostrarCadastro()">Criar conta</a>
+                    <a href="#">Esqueci minha senha</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Moradores de Lowell</h3>
+                    <p>O portal digital da comunidade brasileira em Lowell e região.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/moradoresdelowel" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/moradoresdelowell" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://threads.com/@moradoresdelowell" target="_blank"><i class="fab fa-threads"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#classificados">Classificados</a></li>
+                        <li><a href="#empregos">Empregos</a></li>
+                        <li><a href="#guia">Guia Comercial</a></li>
+                        <li><a href="#noticias">Notícias</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> contato@moradoresdelowell.com</p>
+                    <p><i class="fas fa-phone"></i> (341) 206-3177</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Lowell, MA</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Moradores de Lowell. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
