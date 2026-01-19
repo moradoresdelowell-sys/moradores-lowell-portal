@@ -856,3 +856,147 @@ body {
         font-size: 0.7rem;
     }
 }
+
+/* Destaques Premium na Index */
+.destaque-section {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    margin: 2rem 0;
+}
+
+.destaques-titulo {
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.destaques-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.destaque-premium-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.destaque-premium-card:hover {
+    transform: translateY(-5px);
+}
+
+.destaque-premium-header {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.destaque-premium-badge {
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background: gold;
+    color: #333;
+    padding: 5px 30px;
+    transform: rotate(45deg);
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.destaque-premium-imagem {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.destaque-premium-nome {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.destaque-premium-categoria {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.destaque-premium-descricao {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.destaque-premium-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.destaque-premium-endereco,
+.destaque-premium-horario {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.destaque-premium-estrelas {
+    color: #ffc107;
+    margin: 1rem 0;
+}
+
+.destaque-premium-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.destaque-premium-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.destaque-premium-btn:hover {
+    background: var(--secondary-color);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .destaques-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .destaque-premium-card {
+        padding: 1.5rem;
+    }
+    
+    .destaque-premium-actions {
+        flex-direction: column;
+    }
+}

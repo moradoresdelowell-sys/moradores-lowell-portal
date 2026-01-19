@@ -17,6 +17,18 @@
 </head>
 <body>
     <!-- Header simples -->
+
+<!-- Destaques Premium na Index -->
+<section id="destaques-premium" class="destaques-section">
+    <div class="container">
+        <h2 class="destaques-titulo">🎯 Estabelecimentos Destacados</h2>
+        <div class="destaques-grid" id="destaquesPremium">
+            <!-- Vai preencher com JavaScript -->
+            <div class="loading">Carregando destaques...</div>
+        </div>
+    </div>
+</section>
+
     <header class="header">
         <div class="container">
             <div class="logo">
@@ -109,6 +121,124 @@
         <source src="https://stream.radio.comunidade.lowell/live" type="audio/mpeg">
     </audio>
 </div>
+
+<script>
+// Sistema de Destaques Premium - Index
+async function carregarDestaquesPremium() {
+    try {
+        console.log("Carregando destaques premium...");
+        
+        const destaquesRef = firebase.firestore().collection('estabelecimentos');
+        const snapshot = await destaquesRef
+            .where('destaque.tipo', '==', 'premium')
+            .where('destaque.ativo', '==', true)
+            .orderBy('destaque.posicao')
+            .limit(3)
+            .get();
+        
+        const destaques = [];
+        snapshot.forEach(doc => {
+            destaques.push({ id: doc.id, ...doc.data() });
+        });
+        
+        console.log("Destaques carregados:", destaques);
+        renderizarDestaquesPremium(destaques);
+        
+    } catch (error) {
+        console.error("Erro ao carregar destaques:", error);
+        mostrarMensagemSemDestaques();
+    }
+}
+
+function renderizarDestaquesPremium(destaques) {
+    const container = document.getElementById('destaquesPremium');
+    if (!container) return;
+    
+    if (destaques.length === 0) {
+        mostrarMensagemSemDestaques();
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="destaques-grid">
+            ${destaques.map((estab, index) => `
+                <div class="destaque-premium-card">
+                    <div class="destaque-premium-header">
+                        <span class="destaque-premium-badge">★ PREMIUM ★</span>
+                        <span class="destaque-posicao">Posição ${index + 1}</span>
+                    </div>
+                    
+                    ${estab.imagem ? `<img src="${estab.imagem}" alt="${estab.nome}" class="destaque-premium-imagem">` : '<div class="sem-imagem">Sem imagem</div>'}
+                    
+                    <h3 class="destaque-premium-nome">${estab.nome}</h3>
+                    <p class="destaque-premium-categoria">${estab.categoria}</p>
+                    <p class="destaque-premium-descricao">${estab.descricao}</p>
+                    
+                    <div class="destaque-premium-info">
+                        <p class="destaque-premium-endereco"><i class="fas fa-map-marker-alt"></i> ${estab.endereco}</p>
+                        <p class="destaque-premium-horario"><i class="fas fa-clock"></i> ${estab.horario}</p>
+                        <div class="destaque-premium-estrelas">${renderizarEstrelas(estab.avaliacao)}</div>
+                    </div>
+                    
+                    <div class="destaque-premium-actions">
+                        <button class="destaque-premium-btn" onclick="abrirWhatsApp('${estab.telefone}')">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button class="destaque-premium-btn" onclick="ligarPara('${estab.telefone}')">
+                            <i class="fas fa-phone"></i> Ligar
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderizarEstrelas(avaliacao) {
+    const estrelasCheias = Math.floor(parseFloat(avaliacao));
+    const temMeiaEstrela = parseFloat(avaliacao) % 1 !== 0;
+    let html = '';
+    
+    for (let i = 0; i < estrelasCheias; i++) {
+        html += '<i class="fas fa-star"></i>';
+    }
+    if (temMeiaEstrela) {
+        html += '<i class="fas fa-star-half-alt"></i>';
+    }
+    for (let i = estrelasCheias + (temMeiaEstrela ? 1 : 0); i < 5; i++) {
+        html += '<i class="far fa-star"></i>';
+    }
+    return html;
+}
+
+function mostrarMensagemSemDestaques() {
+    const container = document.getElementById('destaquesPremium');
+    if (container) {
+        container.innerHTML = `
+            <div class="sem-destaques">
+                <i class="fas fa-store"></i>
+                <h3>Em breve destaques premium!</h3>
+                <p>Estabelecimentos premium aparecerão aqui.</p>
+            </div>
+        `;
+    }
+}
+
+// Funções auxiliares
+function abrirWhatsApp(telefone) {
+    window.open(`https://wa.me/1${telefone.replace(/\D/g, '')}`, '_blank');
+}
+
+function ligarPara(telefone) {
+    window.location.href = `tel:${telefone}`;
+}
+
+// Iniciar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("✅ Iniciando sistema de destaques premium...");
+    carregarDestaquesPremium();
+});
+</script>
 
     <!-- Scripts ESSENCIAIS -->
     <script src="script.js"></script>
