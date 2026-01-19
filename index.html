@@ -53,41 +53,47 @@
         </div>
     </header>
 
-    <!-- Dashboard com estatísticas -->
-    <section class="dashboard-stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-info">
-                        <h3 id="totalMembers">2,847</h3>
-                        <p>Membros</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-bullhorn"></i>
-                    <div class="stat-info">
-                        <h3 id="totalAnuncios">124</h3>
-                        <p>Anúncios Ativos</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-briefcase"></i>
-                    <div class="stat-info">
-                        <h3 id="totalVagas">89</h3>
-                        <p>Vagas de Emprego</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-store"></i>
-                    <div class="stat-info">
-                        <h3 id="totalEstabelecimentos">156</h3>
-                        <p>Estabelecimentos</p>
-                    </div>
-                </div>
+    <!-- Estatísticas compactas - versão mobile -->
+<div class="stats-compact">
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number">2.8k</span>
+                <span class="stat-label">Membros</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">124</span>
+                <span class="stat-label">Anúncios</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">89</span>
+                <span class="stat-label">Vagas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">156</span>
+                <span class="stat-label">Lojas</span>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+
+<!-- Script para carregar dados do Firebase -->
+<script>
+// Carrega dados quando a página abrir
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Portal carregando...");
+    if (typeof carregarDadosFirebase === 'function') {
+        carregarDadosFirebase();
+    } else {
+        console.log("Firebase ainda não carregado, aguardando...");
+        setTimeout(() => {
+            if (typeof carregarDadosFirebase === 'function') {
+                carregarDadosFirebase();
+            }
+        }, 1000);
+    }
+});
+</script>
 
     <!-- Resto do código continua igual... -->
     <!-- COPIE O RESTO DO SEU CÓDIGO AQUI -->
