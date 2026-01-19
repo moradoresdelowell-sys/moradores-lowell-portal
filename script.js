@@ -752,3 +752,54 @@ if ('serviceWorker' in navigator) {
         console.log('Erro ao registrar Service Worker:', error);
     });
 }
+
+// Player de Rádio Global
+let radioAudio = null;
+let isPlaying = false;
+
+function inicializarRadioGlobal() {
+    radioAudio = document.getElementById('radioAudio');
+    const playBtn = document.getElementById('radioPlayBtn');
+    const volumeSlider = document.getElementById('radioVolume');
+    const muteBtn = document.getElementById('radioMuteBtn');
+    
+    if (!radioAudio) return;
+    
+    // Play/Pause
+    playBtn.addEventListener('click', function() {
+        if (isPlaying) {
+            radioAudio.pause();
+            this.innerHTML = '<i class="fas fa-play"></i>';
+            isPlaying = false;
+        } else {
+            radioAudio.play().catch(e => console.log("Erro ao tocar:", e));
+            this.innerHTML = '<i class="fas fa-pause"></i>';
+            isPlaying = true;
+        }
+    });
+    
+    // Controle de volume
+    volumeSlider.addEventListener('input', function() {
+        radioAudio.volume = this.value / 100;
+    });
+    
+    // Mute
+    muteBtn.addEventListener('click', function() {
+        if (radioAudio.muted) {
+            radioAudio.muted = false;
+            this.innerHTML = '<i class="fas fa-volume-up"></i>';
+        } else {
+            radioAudio.muted = true;
+            this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        }
+    });
+    
+    // Volume inicial
+    radioAudio.volume = 0.5;
+}
+
+// Inicializar quando carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarRadioGlobal();
+    console.log("✅ Player global inicializado!");
+});
