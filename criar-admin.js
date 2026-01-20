@@ -89,3 +89,20 @@ function mostrarErro(mensagem) {
         erroDiv.style.display = 'none';
     }, 5000);
 }
+
+// VERIFICAÇÃO TEMPORÁRIA - COLE NO FINAL DO criar-admin.js
+console.log("=== VERIFICANDO FIREBASE ===");
+console.log("Firebase carregado:", typeof firebase !== 'undefined');
+console.log("Auth disponível:", firebase.auth);
+console.log("Firestore disponível:", firebase.firestore);
+
+// Teste simples
+setTimeout(() => {
+    if (typeof firebase === 'undefined') {
+        alert('❌ Firebase não carregou! Verifique os scripts.');
+    } else if (!firebase.auth) {
+        alert('❌ Firebase Auth não disponível!');
+    } else {
+        console.log("✅ Firebase OK!");
+    }
+}, 2000);
