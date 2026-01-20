@@ -1106,3 +1106,13 @@ body {
     font-size: 1rem; /* Reduz */
     margin-bottom: 2rem; /* Reduz de 3rem pra 2rem */
 }
+
+/* ESCONDER DESTAQUES QUANDO NÃO ESTIVER NA HOME */
+#home:not(.active) .premium-destaques {
+    display: none !important;
+}
+
+/* Garantir que só apareçam na home */
+.content-section:not(.active) {
+    display: none !important;
+}
