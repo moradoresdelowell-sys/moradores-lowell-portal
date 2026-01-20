@@ -912,3 +912,27 @@ body {
         justify-content: center;
     }
 }
+
+/* ESPAÇAMENTO DAS SECTIONS - DESCER MAIS O CONTEÚDO */
+.content-section {
+    padding-top: 160px !important; /* Aumentei de 120px pra 160px */
+    padding-bottom: 3rem;
+    min-height: calc(100vh - 200px);
+}
+
+.content-section .container {
+    margin-top: 3rem; /* Aumentei de 2rem pra 3rem */
+    padding-top: 2rem;
+}
+
+/* Ajuste pro header fixo */
+.main-content {
+    padding-top: 0;
+}
+
+/* Em mobile desce ainda mais */
+@media (max-width: 768px) {
+    .content-section {
+        padding-top: 180px !important; /* Aumentei de 140px pra 180px */
+    }
+}
