@@ -101,3 +101,45 @@ window.addEventListener('load', function() {
         });
     }, 1000);
 });
+
+// NAVEGAÇÃO ENTRE SECTIONS
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-list-hamburguer a');
+    const sections = document.querySelectorAll('.content-section');
+    
+    function showSection(targetId) {
+        sections.forEach(section => {
+            section.classList.remove('active');
+            section.style.display = 'none';
+        });
+        
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            targetSection.style.display = 'block';
+        }
+    }
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            showSection(targetId);
+        });
+    });
+    
+    // Adicionar hashchange pra funcionar com seta do navegador
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            showSection(hash);
+        }
+    });
+    
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        showSection(hash);
+    } else {
+        showSection('home');
+    }
+});
