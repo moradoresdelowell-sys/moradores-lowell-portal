@@ -113,3 +113,17 @@ function showSection(targetId) {
         targetSection.style.display = 'block'; // FORÇA mostrar
     }
 }
+
+// NAVEGAÇÃO - Garantir que esconde/mostra corretamente
+function showSection(targetId) {
+    sections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none'; // FORÇA esconder
+    });
+    
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        targetSection.style.display = 'block'; // FORÇA mostrar
+    }
+}

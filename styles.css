@@ -1116,3 +1116,48 @@ body {
 .content-section:not(.active) {
     display: none !important;
 }
+
+/* DESTAQUES PREMIUM - FORA DAS SECTIONS */
+.premium-destaques-index {
+    background: white;
+    padding: 3rem 0;
+    margin: 1rem 0;
+    margin-top: -30px; /* Sobe mais perto do header */
+}
+
+.premium-title {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.premium-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.premium-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Resto do CSS igual que te passei antes... */
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .premium-destaques-index {
+        padding: 2rem 0;
+    }
+    
+    .premium-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+}
