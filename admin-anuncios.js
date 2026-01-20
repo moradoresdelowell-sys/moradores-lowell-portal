@@ -1,69 +1,69 @@
-// Função para fazer login anônimo no Firebase (temporário)
-async function garantirAuth() {
-    try {
-        const user = firebase.auth().currentUser;
-        if (!user) {
-            await firebase.auth().signInAnonymously();
-            console.log('Login anônimo feito');
-        }
-    } catch (error) {
-        console.error('Erro no login:', error);
-    }
-}
-
-// Garante auth antes de carregar
-garantirAuth();
-
-
-// Verifica se está logado
+// Verifica se está logado como admin
 if (!localStorage.getItem('adminLogado')) {
     window.location.href = 'login-admin.html';
 }
+
+// Faz login no Firebase com o usuário admin
+async function loginFirebaseAdmin() {
+    try {
+        // Login com o usuário admin que você criou
+        await firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+        console.log('✅ Admin logado no Firebase');
+    } catch (error) {
+        console.error('❌ Erro login Firebase:', error);
+        alert('Erro ao conectar com o banco de dados');
+    }
+}
+
+// Faz login ao carregar a página
+loginFirebaseAdmin();
 
 // Configura o formulário
 document.getElementById('formAnuncio').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const mensagemDiv = document.getElementById('mensagem');
+    const btnSubmit = document.querySelector('.btn-cadastrar');
     
     try {
-        // Pega os dados do formulário
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Cadastrando...';
+        
         const anuncio = {
             titulo: document.getElementById('titulo').value,
             categoria: document.getElementById('categoria').value,
             descricao: document.getElementById('descricao').value,
             preco: document.getElementById('preco').value || 'Grátis',
             contato: document.getElementById('contato').value,
-            dataCadastro: new Date().toISOString(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            destaque: false
+            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+            ativo: true
         };
         
-        console.log('Cadastrando anúncio:', anuncio);
+        console.log('📤 Enviando anúncio:', anuncio);
         
         // Salva no Firebase
-        const docRef = await db.collection('anuncios').add(anuncio);
+        await db.collection('anuncios').add(anuncio);
         
-        console.log('Anúncio cadastrado com ID:', docRef.id);
+        console.log('✅ Anúncio cadastrado!');
         
-        // Mostra mensagem de sucesso
         mensagemDiv.className = 'mensagem sucesso';
         mensagemDiv.textContent = 'Anúncio cadastrado com sucesso!';
         mensagemDiv.style.display = 'block';
         
-        // Limpa o formulário
         document.getElementById('formAnuncio').reset();
         
-        // Esconde mensagem após 3 segundos
         setTimeout(() => {
             mensagemDiv.style.display = 'none';
         }, 3000);
         
     } catch (error) {
-        console.error('Erro ao cadastrar:', error);
+        console.error('❌ Erro completo:', error);
         mensagemDiv.className = 'mensagem erro';
-        mensagemDiv.textContent = 'Erro ao cadastrar anúncio: ' + error.message;
+        mensagemDiv.textContent = 'Erro: ' + error.message;
         mensagemDiv.style.display = 'block';
+        
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Cadastrar Anúncio';
     }
 });
