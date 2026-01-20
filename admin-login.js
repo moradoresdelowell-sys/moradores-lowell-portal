@@ -1,41 +1,38 @@
-// Configurações do admin
-const ADMIN_EMAIL = "admin@moradoresdelowell.com";
-const ADMIN_SENHA = "Admin2024!";
-
+// DEBUG COMPLETO
 document.getElementById('formLogin').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
     
+    console.log('=== TENTANDO LOGIN ===');
+    console.log('Email digitado:', email);
+    console.log('Senha digitada:', senha);
+    console.log('Esperado:', ADMIN_EMAIL, ADMIN_SENHA);
+    
     if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
+        console.log('✅ Credenciais corretas, tentando Firebase...');
+        
         try {
-            // Faz login no Firebase
-            await firebase.auth().signInWithEmailAndPassword(email, senha);
+            const result = await firebase.auth().signInWithEmailAndPassword(email, senha);
+            console.log('✅ Firebase login OK:', result.user.uid);
             
-            // Salva no localStorage
             localStorage.setItem('adminLogado', 'true');
-            
-            // Vai pro painel
             window.location.href = 'admin-painel.html';
             
         } catch (error) {
-            console.error('Erro Firebase:', error);
-            const erroDiv = document.getElementById('mensagemErro');
-            erroDiv.textContent = 'Erro ao conectar com o banco de dados: ' + error.message;
-            erroDiv.classList.add('show');
+            console.error('❌ Firebase erro completo:', error);
+            console.error('Código:', error.code);
+            console.error('Mensagem:', error.message);
             
-            setTimeout(() => {
-                erroDiv.classList.remove('show');
-            }, 3000);
+            const erroDiv = document.getElementById('mensagemErro');
+            erroDiv.textContent = 'ERRO FIREBASE: ' + error.code + ' - ' + error.message;
+            erroDiv.classList.add('show');
         }
     } else {
+        console.log('❌ Credenciais incorretas');
         const erroDiv = document.getElementById('mensagemErro');
         erroDiv.textContent = 'Email ou senha incorretos!';
         erroDiv.classList.add('show');
-        
-        setTimeout(() => {
-            erroDiv.classList.remove('show');
-        }, 3000);
     }
 });
