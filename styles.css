@@ -1084,3 +1084,25 @@ body {
         height: 180px; /* Um pouco menor em telas pequenas */
     }
 }
+
+/* SUBIR OS DESTAQUES - MUDAR ESSE CSS */
+.premium-destaques {
+    background: white;
+    padding: 2rem 0; /* Reduz de 4rem pra 2rem */
+    margin: 1rem 0; /* Reduz de 2rem pra 1rem */
+    margin-top: -50px; /* FORÇA subir mais perto do header */
+}
+
+.premium-title {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2rem; /* Reduz um pouco */
+    margin-bottom: 0.5rem;
+}
+
+.premium-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1rem; /* Reduz */
+    margin-bottom: 2rem; /* Reduz de 3rem pra 2rem */
+}
