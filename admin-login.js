@@ -1,3 +1,10 @@
+<script>
+// Verifica se está logado
+if (!localStorage.getItem('adminLogado')) {
+    window.location.href = 'login-admin.html';
+}
+</script>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

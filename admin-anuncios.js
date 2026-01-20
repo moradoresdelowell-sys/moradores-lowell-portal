@@ -1,3 +1,10 @@
+<script>
+// Verifica se está logado
+if (!localStorage.getItem('adminLogado')) {
+    window.location.href = 'login-admin.html';
+}
+</script>
+
 // SISTEMA ADMIN - ANÚNCIOS
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Admin de anúncios carregado!");
