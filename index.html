@@ -144,6 +144,44 @@
                 <button class="filter-btn" data-filter="produtos">Produtos</button>
                 <button class="filter-btn" data-filter="doacoes">Doações</button>
             </div>
+
+<script>
+// Carrega anúncios do Firebase
+async function carregarAnuncios() {
+    try {
+        const anunciosSnapshot = await db.collection('anuncios')
+            .where('ativo', '==', true)
+            .orderBy('dataCadastro', 'desc')
+            .limit(10)
+            .get();
+        
+        let anunciosHTML = '';
+        
+        anunciosSnapshot.forEach((doc) => {
+            const anuncio = doc.data();
+            anunciosHTML += `
+                <div class="anuncio-card">
+                    <h3>${anuncio.titulo}</h3>
+                    <p class="categoria">${anuncio.categoria}</p>
+                    <p class="descricao">${anuncio.descricao}</p>
+                    <p class="preco">${anuncio.preco}</p>
+                    <p class="contato">Contato: ${anuncio.contato}</p>
+                    <p class="data">${anuncio.dataExibicao}</p>
+                </div>
+            `;
+        });
+        
+        document.getElementById('lista-anuncios').innerHTML = anunciosHTML;
+        
+    } catch (error) {
+        console.error('Erro ao carregar anúncios:', error);
+    }
+}
+
+// Carrega quando a página abrir
+document.addEventListener('DOMContentLoaded', carregarAnuncios);
+</script>
+
             <div class="anuncios-grid" id="anunciosGrid">
                 <!-- Anúncios do Firebase vão aqui -->
                 <div class="loading-message">Carregando classificados...</div>
