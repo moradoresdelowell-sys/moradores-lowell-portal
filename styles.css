@@ -936,3 +936,151 @@ body {
         padding-top: 160px !important; /* Aumentei de 140px pra 180px */
     }
 }
+
+/* ===== DESTAQUES PREMIUM ===== */
+.premium-destaques {
+    background: white;
+    padding: 4rem 0;
+    margin: 2rem 0;
+}
+
+.premium-title {
+    text-align: center;
+    color: var(--primary-color); /* Vermelho */
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.premium-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.premium-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.premium-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.premium-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.premium-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.premium-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.premium-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--primary-color); /* Vermelho */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.premium-content {
+    padding: 1.5rem;
+}
+
+.premium-content h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.premium-desc {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.premium-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.premium-info span {
+    color: #888;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.premium-btn {
+    width: 100%;
+    background: var(--primary-color); /* Vermelho */
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.premium-btn:hover {
+    background: var(--secondary-color); /* Vermelho escuro */
+}
+
+/* RESPONSIVO - Mobile */
+@media (max-width: 768px) {
+    .premium-grid {
+        grid-template-columns: 1fr; /* Um embaixo do outro */
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+    
+    .premium-title {
+        font-size: 2rem;
+    }
+    
+    .premium-card {
+        max-width: 400px; /* Tamanho ideal pra mobile */
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .premium-destaques {
+        padding: 2rem 0;
+    }
+    
+    .premium-title {
+        font-size: 1.8rem;
+    }
+    
+    .premium-image {
+        height: 180px; /* Um pouco menor em telas pequenas */
+    }
+}
