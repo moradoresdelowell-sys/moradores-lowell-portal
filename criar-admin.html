@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Admin | Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        .criar-admin-container {
+            max-width: 500px;
+            margin: 150px auto 50px;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .criar-admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .criar-admin-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .btn-criar {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-criar:hover {
+            background: #218838;
+        }
+        
+        .mensagem-sucesso {
+            color: #28a745;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+        
+        .mensagem-erro {
+            color: #dc3545;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="criar-admin-container">
+        <div class="criar-admin-header">
+            <h1><i class="fas fa-user-plus"></i> Criar Administrador</h1>
+            <p>Cadastre seu acesso exclusivo ao portal</p>
+        </div>
+        
+        <form id="formCriarAdmin">
+            <div class="form-group">
+                <label for="nomeAdmin"><i class="fas fa-user"></i> Seu Nome</label>
+                <input type="text" id="nomeAdmin" name="nomeAdmin" required placeholder="Seu nome completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="emailAdmin"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="emailAdmin" name="emailAdmin" required placeholder="seu@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="senhaAdmin"><i class="fas fa-key"></i> Senha</label>
+                <input type="password" id="senhaAdmin" name="senhaAdmin" required placeholder="Mínimo 6 caracteres">
+            </div>
+            
+            <div class="form-group">
+                <label for="senhaAdminConfirma"><i class="fas fa-key"></i> Confirmar Senha</label>
+                <input type="password" id="senhaAdminConfirma" name="senhaAdminConfirma" required placeholder="Repita a senha">
+            </div>
+            
+            <button type="submit" class="btn-criar">
+                <i class="fas fa-save"></i> Criar Administrador
+            </button>
+        </form>
+        
+        <div id="mensagemSucesso" class="mensagem-sucesso">
+            ✅ Administrador criado com sucesso! Você já pode fazer login.
+        </div>
+        
+        <div id="mensagemErro" class="mensagem-erro">
+            ❌ Erro ao criar administrador!
+        </div>
+    </div>
+
+    <script src="criar-admin.js"></script>
+</body>
+</html>
