@@ -933,6 +933,6 @@ body {
 /* Em mobile desce ainda mais */
 @media (max-width: 768px) {
     .content-section {
-        padding-top: 160px !important; /* Aumentei de 140px pra 180px */
+        padding-top: 150px !important; /* Aumentei de 140px pra 180px */
     }
 }
