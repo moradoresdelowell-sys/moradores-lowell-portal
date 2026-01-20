@@ -1,20 +1,17 @@
-// LOGIN ADMIN - SISTEMA DE AUTENTICAÇÃO
+// LOGIN ADMIN - CORRIGIDO
 document.addEventListener('DOMContentLoaded', function() {
     verificarLogin();
-    configurarLogin();
+    configurarFormulario();
 });
 
-// Verifica se já está logado
 function verificarLogin() {
-    const user = localStorage.getItem('adminUser');
-    if (user) {
-        // Já está logado, vai pro admin
-        window.location.href = 'admin-anuncios.html';
+    const adminUser = localStorage.getItem('adminUser');
+    if (adminUser) {
+        window.location.href = 'admin-painel.html';
     }
 }
 
-// Configurar formulário de login
-function configurarLogin() {
+function configurarFormulario() {
     const form = document.getElementById('formLogin');
     
     form.addEventListener('submit', async function(e) {
@@ -24,33 +21,53 @@ function configurarLogin() {
         const senha = document.getElementById('senha').value;
         
         try {
-            // Faz login com email/senha
+            console.log("Tentando login...", email);
+            
+            // Faz login
             const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
             const user = userCredential.user;
             
-            // Verifica se é admin (você vai configurar isso)
-            const userDoc = await db.collection('admin').doc(user.uid).get();
+            console.log("Login Auth OK! UID:", user.uid);
             
-            if (userDoc.exists && userDoc.data().isAdmin) {
+            // VERIFICA SE É ADMIN NO BANCO DE DADOS
+            const adminDoc = await db.collection('admin').doc(user.uid).get();
+            
+            console.log("Documento admin existe:", adminDoc.exists);
+            
+            if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                console.log("✅ É ADMIN! Entrando...");
+                
                 // Salva no localStorage
                 localStorage.setItem('adminUser', JSON.stringify({
                     uid: user.uid,
                     email: user.email,
-                    nome: userDoc.data().nome
+                    nome: adminDoc.data().nome
                 }));
                 
-                // Vai pro admin
-                window.location.href = 'admin-anuncios.html';
+                // Vai pro painel
+                window.location.href = 'admin-painel.html';
                 
             } else {
-                // Não é admin
+                console.log("❌ NÃO é admin ou documento não existe!");
+                
+                // Não é admin, desloga
                 await firebase.auth().signOut();
-                mostrarErro('Acesso negado! Área restrita a administradores.');
+                mostrarErro('Acesso negado! Você não tem permissão de administrador.');
             }
             
         } catch (error) {
-            console.error('Erro login:', error);
-            mostrarErro('Email ou senha incorretos!');
+            console.error('❌ Erro completo:', error);
+            let mensagemErro = 'Email ou senha incorretos!';
+            
+            if (error.code === 'auth/user-not-found') {
+                mensagemErro = 'Usuário não encontrado!';
+            } else if (error.code === 'auth/wrong-password') {
+                mensagemErro = 'Senha incorreta!';
+            } else if (error.code === 'auth/invalid-email') {
+                mensagemErro = 'Email inválido!';
+            }
+            
+            mostrarErro(mensagemErro);
         }
     });
 }
