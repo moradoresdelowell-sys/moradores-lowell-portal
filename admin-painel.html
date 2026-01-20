@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin | Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        .admin-painel {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 2rem;
+        }
+        
+        .painel-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .painel-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .opcoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .opcao-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .opcao-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .opcao-icone {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .opcao-titulo {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .opcao-descricao {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .btn-sair {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-sair:hover {
+            background: #c82333;
+        }
+        
+        .estatisticas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .estatistica-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .estatistica-numero {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .estatistica-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-painel">
+        <div class="painel-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Painel Administrativo</h1>
+            <p>Gerencie todo o conteúdo do portal</p>
+        </div>
+        
+        <div class="admin-info">
+            <div>
+                <strong>Bem-vindo, Admin!</strong><br>
+                <small>Logado como: <span id="adminEmail"></span></small>
+            </div>
+            <button class="btn-sair" onclick="sairAdmin()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+        
+        <!-- Estatísticas Rápidas -->
+        <div class="estatisticas">
+            <div class="estatistica-card">
+                <div class="estatistica-numero" id="totalAnuncios">0</div>
+                <div class="estatistica-label">Anúncios Ativos</div>
+            </div>
+            <div class="estatistica-card">
+                <div class="estatistica-numero" id="totalVagas">0</div>
+                <div class="estatistica-label">Vagas de Emprego</div>
+            </div>
+            <div class="estatistica-card">
+                <div class="estatistica-numero" id="totalImoveis">0</div>
+                <div class="estatistica-label">Imóveis</div>
+            </div>
+            <div class="estatistica-card">
+                <div class="estatistica-numero" id="totalEstabelecimentos">0</div>
+                <div class="estatistica-label">Estabelecimentos</div>
+            </div>
+        </div>
+        
+        <!-- Opções de Admin -->
+        <div class="opcoes-grid">
+            <!-- ANÚNCIOS -->
+            <div class="opcao-card" onclick="window.location.href='admin-anuncios.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3 class="opcao-titulo">Anúncios</h3>
+                <p class="opcao-descricao">Cadastrar produtos e doações</p>
+            </div>
+            
+            <!-- ALUGUEL -->
+            <div class="opcao-card" onclick="window.location.href='admin-aluguel.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3 class="opcao-titulo">Aluguel</h3>
+                <p class="opcao-descricao">Cadastrar quartos, casas e apartamentos</p>
+            </div>
+            
+            <!-- EMPREGOS -->
+            <div class="opcao-card" onclick="window.location.href='admin-empregos.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="opcao-titulo">Empregos</h3>
+                <p class="opcao-descricao">Cadastrar vagas de trabalho</p>
+            </div>
+            
+            <!-- GUIA COMERCIAL -->
+            <div class="opcao-card" onclick="window.location.href='admin-guia.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h3 class="opcao-titulo">Guia Comercial</h3>
+                <p class="opcao-descricao">Cadastrar estabelecimentos</p>
+            </div>
+            
+            <!-- NOTÍCIAS -->
+            <div class="opcao-card" onclick="window.location.href='admin-noticias.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3 class="opcao-titulo">Notícias</h3>
+                <p class="opcao-descricao">Publicar notícias da comunidade</p>
+            </div>
+            
+            <!-- CONFIGURAÇÕES -->
+            <div class="opcao-card" onclick="window.location.href='admin-config.html'">
+                <div class="opcao-icone">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="opcao-titulo">Configurações</h3>
+                <p class="opcao-descricao">Configurar o portal</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-painel.js"></script>
+</body>
+</html>
