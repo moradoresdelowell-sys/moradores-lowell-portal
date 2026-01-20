@@ -62,6 +62,76 @@
                 <h2>Início</h2>
                 <p>Tudo para a comunidade brasileira de Lowell</p>
             </div>
+            
+            <!-- DESTAQUES PREMIUM -->
+            <div class="premium-destaques">
+                <div class="container">
+                    <h2 class="premium-title">Estabelecimentos Destaque</h2>
+                    <p class="premium-subtitle">Conheça nossos comércios premium</p>
+                    
+                    <div class="premium-grid">
+                        <!-- Comércio 1 -->
+                        <div class="premium-card">
+                            <div class="premium-image">
+                                <img src="https://via.placeholder.com/300x200?text=Comércio+1" alt="Estabelecimento 1">
+                                <div class="premium-badge">
+                                    <i class="fas fa-star"></i>
+                                    <span>PREMIUM</span>
+                                </div>
+                            </div>
+                            <div class="premium-content">
+                                <h3>Nome do Estabelecimento</h3>
+                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
+                                <div class="premium-info">
+                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
+                                    <span><i class="fas fa-phone"></i> (978) 555-0001</span>
+                                </div>
+                                <button class="premium-btn">Ver Detalhes</button>
+                            </div>
+                        </div>
+
+                        <!-- Comércio 2 -->
+                        <div class="premium-card">
+                            <div class="premium-image">
+                                <img src="https://via.placeholder.com/300x200?text=Comércio+2" alt="Estabelecimento 2">
+                                <div class="premium-badge">
+                                    <i class="fas fa-star"></i>
+                                    <span>PREMIUM</span>
+                                </div>
+                            </div>
+                            <div class="premium-content">
+                                <h3>Nome do Estabelecimento</h3>
+                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
+                                <div class="premium-info">
+                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
+                                    <span><i class="fas fa-phone"></i> (978) 555-0002</span>
+                                </div>
+                                <button class="premium-btn">Ver Detalhes</button>
+                            </div>
+                        </div>
+
+                        <!-- Comércio 3 -->
+                        <div class="premium-card">
+                            <div class="premium-image">
+                                <img src="https://via.placeholder.com/300x200?text=Comércio+3" alt="Estabelecimento 3">
+                                <div class="premium-badge">
+                                    <i class="fas fa-star"></i>
+                                    <span>PREMIUM</span>
+                                </div>
+                            </div>
+                            <div class="premium-content">
+                                <h3>Nome do Estabelecimento</h3>
+                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
+                                <div class="premium-info">
+                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
+                                    <span><i class="fas fa-phone"></i> (978) 555-0003</span>
+                                </div>
+                                <button class="premium-btn">Ver Detalhes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- CLASSIFICADOS - PRODUTOS E DOAÇÕES -->
@@ -172,14 +242,22 @@
     
     <!-- CARREGA ANÚNCIOS -->
     <script>
+    // Debug primeiro
+    console.log('Firebase carregado?', typeof firebase !== 'undefined');
+    console.log('Firestore carregado?', typeof db !== 'undefined');
+    
     // Carrega anúncios do Firebase
     async function carregarAnuncios() {
         try {
+            console.log('Iniciando carregamento de anúncios...');
+            
             const anunciosSnapshot = await db.collection('anuncios')
                 .where('ativo', '==', true)
                 .orderBy('dataCadastro', 'desc')
                 .limit(10)
                 .get();
+            
+            console.log('Anúncios encontrados:', anunciosSnapshot.size);
             
             let anunciosHTML = '';
             
@@ -202,6 +280,7 @@
             }
             
             document.getElementById('anunciosGrid').innerHTML = anunciosHTML;
+            console.log('Anúncios carregados com sucesso!');
             
         } catch (error) {
             console.error('Erro ao carregar anúncios:', error);
@@ -211,6 +290,7 @@
 
     // Quando clicar em "Classificados"
     document.querySelector('a[href="#classificados"]').addEventListener('click', function() {
+        console.log('Clicou em classificados');
         setTimeout(carregarAnuncios, 300);
     });
     </script>

@@ -1,3 +1,21 @@
+// Debug completo
+console.log('=== DEBUG ANÚNCIOS ===');
+console.log('Firebase carregado?', typeof firebase !== 'undefined');
+console.log('Firestore carregado?', typeof db !== 'undefined');
+
+// Teste simples primeiro
+async function testarFirebase() {
+    try {
+        const teste = await db.collection('anuncios').limit(1).get();
+        console.log('✅ Firebase conectado, documentos encontrados:', teste.size);
+    } catch (error) {
+        console.error('❌ Erro Firebase:', error);
+    }
+}
+
+// Chama o teste
+testarFirebase();
+
 // Verifica se está logado como admin
 if (!localStorage.getItem('adminLogado')) {
     window.location.href = 'login-admin.html';
