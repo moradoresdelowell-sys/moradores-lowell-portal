@@ -24,6 +24,41 @@ document.querySelectorAll('.nav-list-hamburguer a').forEach(link => {
     });
 });
 
+// NAVEGAÇÃO ENTRE SECTIONS - ISSO QUE FALTAVA
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-list-hamburguer a');
+    const sections = document.querySelectorAll('.content-section');
+    
+    // Função para mostrar section
+    function showSection(targetId) {
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+    }
+    
+    // Clique nos links do menu
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            showSection(targetId);
+        });
+    });
+    
+    // Carrega section baseada na URL ao entrar
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        showSection(hash);
+    } else {
+        showSection('home');
+    }
+});
+
 // Player de Rádio do Rodapé
 const radioAudio = document.getElementById('radioAudio');
 const playBtn = document.getElementById('playBtn');
@@ -55,9 +90,8 @@ radioAudio.addEventListener('pause', function() {
     playBtn.innerHTML = '<i class="fas fa-play"></i>';
 });
 
-// Tenta dar play automaticamente (pode ser bloqueado por navegador)
+// Tenta dar play automaticamente
 window.addEventListener('load', function() {
-    // Delay pra tentar evitar bloqueio
     setTimeout(function() {
         radioAudio.play().catch(function(error) {
             console.log('Autoplay bloqueado:', error);
