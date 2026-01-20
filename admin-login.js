@@ -1,3 +1,6 @@
+const ADMIN_EMAIL = "admin@moradoresdelowell.com";
+const ADMIN_SENHA = "Admin2024!";
+
 // DEBUG COMPLETO
 document.getElementById('formLogin').addEventListener('submit', async function(e) {
     e.preventDefault();
