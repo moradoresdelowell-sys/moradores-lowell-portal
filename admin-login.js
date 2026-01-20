@@ -65,8 +65,6 @@ function mostrarErro(mensagem) {
     }, 5000);
 }
 
-// NO FINAL DO admin-login.js - SUBSTITUI O REDIRECIONAMENTO
-// Depois de criar o admin, muda de:
-// window.location.href = 'admin-anuncios.html';
-// Pra:
-window.location.href = 'admin-painel.html';
+// DEPOIS DE CRIAR O ADMIN - MUDA O REDIRECIONAMENTO
+// troca de: window.location.href = 'admin-anuncios.html';
+// pra: window.location.href = 'admin-painel.html';
