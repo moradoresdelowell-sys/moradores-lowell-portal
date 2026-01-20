@@ -51,6 +51,12 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
         
         .btn-entrar {
@@ -63,16 +69,30 @@
             cursor: pointer;
             width: 100%;
             margin-top: 1rem;
+            transition: background 0.3s ease;
         }
         
-        .btn-entrar:hover {
+        .btn-entrar:hover:not(:disabled) {
             background: var(--secondary-color);
+        }
+        
+        .btn-entrar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
         
         .mensagem-erro {
             color: #dc3545;
             margin-top: 1rem;
             display: none;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .mensagem-erro.show {
+            display: block;
         }
     </style>
 </head>
@@ -83,7 +103,8 @@
             <p>Acesso exclusivo para administradores</p>
         </div>
         
-      
+        <!-- FORMULÁRIO CORRIGIDO -->
+        <form id="formLogin">
             <div class="form-group">
                 <label for="email"><i class="fas fa-envelope"></i> Email</label>
                 <input type="email" id="email" name="email" required placeholder="seu@email.com">
@@ -99,9 +120,7 @@
             </button>
         </form>
         
-        <div id="mensagemErro" class="mensagem-erro">
-            Email ou senha incorretos!
-        </div>
+        <div id="mensagemErro" class="mensagem-erro"></div>
     </div>
 
     <script src="admin-login.js"></script>
