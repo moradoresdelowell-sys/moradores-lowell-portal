@@ -1,108 +1,47 @@
-// SISTEMA PARA CRIAR ADMINISTRADOR
-document.addEventListener('DOMContentLoaded', function() {
-    configurarFormulario();
-});
+// VERSÃO SUPERSIMPLIFICADA - SÓ PRA TESTAR
+console.log("=== TESTANDO FIREBASE ===");
 
-function configurarFormulario() {
-    const form = document.getElementById('formCriarAdmin');
+// Remove analytics que tá dando erro
+if (typeof firebase !== 'undefined' && firebase.analytics) {
+    console.log("Analytics disponível");
+} else {
+    console.log("Analytics NÃO disponível - vamos sem ele!");
+}
+
+document.getElementById('formCriarAdmin').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    try {
+        console.log("=== TENTANDO CRIAR USUÁRIO ===");
         
-        const nome = document.getElementById('nomeAdmin').value;
         const email = document.getElementById('emailAdmin').value;
         const senha = document.getElementById('senhaAdmin').value;
-        const senhaConfirma = document.getElementById('senhaAdminConfirma').value;
         
-        // Validações
-        if (senha.length < 6) {
-            mostrarErro('A senha precisa ter no mínimo 6 caracteres!');
-            return;
+        console.log("Email:", email);
+        console.log("Senha:", senha.length, "caracteres");
+        
+        // Tenta criar usuário
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
+        console.log("✅ SUCESSO! UID:", userCredential.user.uid);
+        
+        alert('✅ Usuário criado com sucesso! UID: ' + userCredential.user.uid);
+        
+    } catch (error) {
+        console.error('❌ ERRO COMPLETO:', error);
+        console.error('Código:', error.code);
+        console.error('Mensagem:', error.message);
+        
+        let msg = 'Erro: ';
+        if (error.code === 'auth/configuration-not-found') {
+            msg += 'Auth não configurado no Firebase Console!';
+        } else if (error.code === 'auth/email-already-in-use') {
+            msg += 'Email já existe!';
+        } else if (error.code === 'auth/weak-password') {
+            msg += 'Senha muito fraca!';
+        } else {
+            msg += error.message;
         }
         
-        if (senha !== senhaConfirma) {
-            mostrarErro('As senhas não coincidem!');
-            return;
-        }
-        
-        try {
-            // Criar usuário no Firebase Auth
-            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
-            const user = userCredential.user;
-            
-            // Salvar dados do admin no Firestore
-            await db.collection('admin').doc(user.uid).set({
-                nome: nome,
-                email: email,
-                isAdmin: true,
-                criadoEm: new Date(),
-                ativo: true
-            });
-            
-            // Faz login automaticamente
-            await firebase.auth().signInWithEmailAndPassword(email, senha);
-            
-            // Salva no localStorage
-            localStorage.setItem('adminUser', JSON.stringify({
-                uid: user.uid,
-                email: email,
-                nome: nome
-            }));
-            
-            mostrarSucesso('✅ Administrador criado com sucesso!');
-            
-            // Vai pro admin após 2 segundos
-            setTimeout(() => {
-                window.location.href = 'admin-anuncios.html';
-            }, 2000);
-            
-        } catch (error) {
-            console.error('Erro ao criar admin:', error);
-            let mensagemErro = 'Erro ao criar administrador!';
-            
-            if (error.code === 'auth/email-already-in-use') {
-                mensagemErro = 'Este email já está cadastrado!';
-            } else if (error.code === 'auth/weak-password') {
-                mensagemErro = 'Senha muito fraca!';
-            }
-            
-            mostrarErro(mensagemErro);
-        }
-    });
-}
-
-function mostrarSucesso(mensagem) {
-    const sucessoDiv = document.getElementById('mensagemSucesso');
-    sucessoDiv.textContent = mensagem;
-    sucessoDiv.style.display = 'block';
-    
-    // Esconde o formulário
-    document.getElementById('formCriarAdmin').style.display = 'none';
-}
-
-function mostrarErro(mensagem) {
-    const erroDiv = document.getElementById('mensagemErro');
-    erroDiv.textContent = mensagem;
-    erroDiv.style.display = 'block';
-    
-    setTimeout(() => {
-        erroDiv.style.display = 'none';
-    }, 5000);
-}
-
-// VERIFICAÇÃO TEMPORÁRIA - COLE NO FINAL DO criar-admin.js
-console.log("=== VERIFICANDO FIREBASE ===");
-console.log("Firebase carregado:", typeof firebase !== 'undefined');
-console.log("Auth disponível:", firebase.auth);
-console.log("Firestore disponível:", firebase.firestore);
-
-// Teste simples
-setTimeout(() => {
-    if (typeof firebase === 'undefined') {
-        alert('❌ Firebase não carregou! Verifique os scripts.');
-    } else if (!firebase.auth) {
-        alert('❌ Firebase Auth não disponível!');
-    } else {
-        console.log("✅ Firebase OK!");
+        alert(msg);
     }
-}, 2000);
+});
