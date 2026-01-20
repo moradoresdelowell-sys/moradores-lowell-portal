@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Anúncios | Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .admin-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-salvar {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-salvar:hover {
+            background: var(--secondary-color);
+        }
+        
+        .preview-imagem {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .lista-anuncios {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #eee;
+        }
+        
+        .anuncio-admin-item {
+            background: #f9f9f9;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn-excluir {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-plus-circle"></i> Cadastrar Anúncio</h1>
+            <p>Área Administrativa - Moradores de Lowell</p>
+        </div>
+        
+        <form id="formAnuncio" class="admin-form">
+            <div class="form-group">
+                <label for="titulo"><i class="fas fa-heading"></i> Título do Anúncio *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Geladeira em ótimo estado">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria"><i class="fas fa-tags"></i> Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione...</option>
+                    <option value="produtos">Produtos</option>
+                    <option value="doacoes">Doações</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao"><i class="fas fa-align-left"></i> Descrição *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva o produto/doação com detalhes..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="preco"><i class="fas fa-dollar-sign"></i> Preço (deixe vazio se for doação)</label>
+                <input type="text" id="preco" name="preco" placeholder="Ex: R$ 150 ou Grátis">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefone"><i class="fas fa-phone"></i> Telefone/WhatsApp *</label>
+                <input type="tel" id="telefone" name="telefone" required placeholder="(978) 99999-9999">
+            </div>
+            
+            <div class="form-group">
+                <label for="imagem"><i class="fas fa-image"></i> Imagem do Produto</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*">
+                <img id="previewImagem" class="preview-imagem" alt="Preview">
+            </div>
+            
+            <button type="submit" class="btn-salvar">
+                <i class="fas fa-save"></i> Publicar Anúncio
+            </button>
+        </form>
+        
+        <div class="lista-anuncios">
+            <h2><i class="fas fa-list"></i> Meus Anúncios</h2>
+            <div id="listaAnuncios"></div>
+        </div>
+    </div>
+
+    <script src="admin-anuncios.js"></script>
+</body>
+</html>
