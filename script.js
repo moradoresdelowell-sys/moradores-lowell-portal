@@ -24,20 +24,22 @@ document.querySelectorAll('.nav-list-hamburguer a').forEach(link => {
     });
 });
 
-// NAVEGAÇÃO ENTRE SECTIONS - ISSO QUE FALTAVA
+// NAVEGAÇÃO ENTRE SECTIONS - CORRIGIDO
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-list-hamburguer a');
     const sections = document.querySelectorAll('.content-section');
     
-    // Função para mostrar section
+    // Função única para mostrar section - COM DISPLAY NONE/BLOCK
     function showSection(targetId) {
         sections.forEach(section => {
             section.classList.remove('active');
+            section.style.display = 'none'; // FORÇA esconder
         });
         
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
             targetSection.classList.add('active');
+            targetSection.style.display = 'block'; // FORÇA mostrar
         }
     }
     
@@ -99,31 +101,3 @@ window.addEventListener('load', function() {
         });
     }, 1000);
 });
-
-// Função para mostrar section - ADICIONE ESTA LINHA
-function showSection(targetId) {
-    sections.forEach(section => {
-        section.classList.remove('active');
-        section.style.display = 'none'; // FORÇA esconder
-    });
-    
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-        targetSection.classList.add('active');
-        targetSection.style.display = 'block'; // FORÇA mostrar
-    }
-}
-
-// NAVEGAÇÃO - Garantir que esconde/mostra corretamente
-function showSection(targetId) {
-    sections.forEach(section => {
-        section.classList.remove('active');
-        section.style.display = 'none'; // FORÇA esconder
-    });
-    
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-        targetSection.classList.add('active');
-        targetSection.style.display = 'block'; // FORÇA mostrar
-    }
-}
