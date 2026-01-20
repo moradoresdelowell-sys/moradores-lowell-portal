@@ -1,49 +1,41 @@
-<script>
-// Verifica se está logado
-if (!localStorage.getItem('adminLogado')) {
-    window.location.href = 'login-admin.html';
-}
-</script>
+// Configurações do admin
+const ADMIN_EMAIL = "admin@moradoresdelowell.com";
+const ADMIN_SENHA = "Admin2024!";
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - Moradores de Lowell</title>
-    <link rel="stylesheet" href="style-login-admin.css">
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <img src="logo-moradores.png" alt="Logo">
-            <h1>Painel Administrativo</h1>
-            <p>Moradores de Lowell e Região</p>
-        </div>
-        
-        <div class="login-body">
-            <div id="mensagemErro" class="mensagem-erro"></div>
-            
-            <form id="formLogin">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" required>
-                </div>
-                
-                <button type="submit" class="btn-submit">Entrar</button>
-            </form>
-        </div>
-        
-        <div class="login-footer">
-            <a href="#">Esqueceu a senha?</a>
-        </div>
-    </div>
+document.getElementById('formLogin').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    <script src="login-admin.js"></script>
-</body>
-</html>
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+    
+    if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
+        try {
+            // Faz login no Firebase
+            await firebase.auth().signInWithEmailAndPassword(email, senha);
+            
+            // Salva no localStorage
+            localStorage.setItem('adminLogado', 'true');
+            
+            // Vai pro painel
+            window.location.href = 'admin-painel.html';
+            
+        } catch (error) {
+            console.error('Erro Firebase:', error);
+            const erroDiv = document.getElementById('mensagemErro');
+            erroDiv.textContent = 'Erro ao conectar com o banco de dados: ' + error.message;
+            erroDiv.classList.add('show');
+            
+            setTimeout(() => {
+                erroDiv.classList.remove('show');
+            }, 3000);
+        }
+    } else {
+        const erroDiv = document.getElementById('mensagemErro');
+        erroDiv.textContent = 'Email ou senha incorretos!';
+        erroDiv.classList.add('show');
+        
+        setTimeout(() => {
+            erroDiv.classList.remove('show');
+        }, 3000);
+    }
+});
