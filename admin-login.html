@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
     <style>
         .login-container {
             max-width: 400px;
@@ -80,7 +86,6 @@
             <p>Acesso exclusivo para administradores</p>
         </div>
         
-        <!-- FORMUÁRIO CORRIGIDO -->
         <form id="formLogin" onsubmit="return false;">
             <div class="form-group">
                 <label for="email"><i class="fas fa-envelope"></i> Email</label>
@@ -100,33 +105,6 @@
         <div id="mensagemErro" class="mensagem-erro"></div>
     </div>
 
-    <!-- LOGIN SIMPLES SEM FIREBASE -->
-    <script>
-        // Configurações simples
-        const ADMIN_EMAIL = "moradoresdelowell@gmail.com";
-        const ADMIN_SENHA = "Pg#145985@";
-        
-        document.getElementById('formLogin').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            
-            if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
-                // Login OK
-                localStorage.setItem('adminLogado', 'true');
-                window.location.href = 'admin-painel.html';
-            } else {
-                // Erro
-                const erroDiv = document.getElementById('mensagemErro');
-                erroDiv.textContent = 'Email ou senha incorretos!';
-                erroDiv.classList.add('show');
-                
-                setTimeout(() => {
-                    erroDiv.classList.remove('show');
-                }, 3000);
-            }
-        });
-    </script>
+    <script src="admin-login.js"></script>
 </body>
 </html>
