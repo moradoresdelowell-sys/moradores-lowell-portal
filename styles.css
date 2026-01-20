@@ -915,7 +915,7 @@ body {
 
 /* ESPAÇAMENTO DAS SECTIONS - DESCER MAIS O CONTEÚDO */
 .content-section {
-    padding-top: 160px !important; /* Aumentei de 120px pra 160px */
+    padding-top: 140px !important; /* Aumentei de 120px pra 160px */
     padding-bottom: 3rem;
     min-height: calc(100vh - 200px);
 }
@@ -933,6 +933,6 @@ body {
 /* Em mobile desce ainda mais */
 @media (max-width: 768px) {
     .content-section {
-        padding-top: 150px !important; /* Aumentei de 140px pra 180px */
+        padding-top: 160px !important; /* Aumentei de 140px pra 180px */
     }
 }
