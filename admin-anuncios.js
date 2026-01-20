@@ -1,3 +1,20 @@
+// Função para fazer login anônimo no Firebase (temporário)
+async function garantirAuth() {
+    try {
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            await firebase.auth().signInAnonymously();
+            console.log('Login anônimo feito');
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+    }
+}
+
+// Garante auth antes de carregar
+garantirAuth();
+
+
 // Verifica se está logado
 if (!localStorage.getItem('adminLogado')) {
     window.location.href = 'login-admin.html';
