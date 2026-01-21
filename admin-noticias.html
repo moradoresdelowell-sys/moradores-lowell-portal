@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Notícia | Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-newspaper"></i> Cadastrar Notícia</h1>
+            <p>Informações para a comunidade</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formNoticia" class="admin-form">
+            <div class="form-group">
+                <label for="titulo">Título da Notícia *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Festa Junina 2024 - Moradores de Lowell">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione...</option>
+                    <option value="comunidade">Comunidade</option>
+                    <option value="eventos">Eventos</option>
+                    <option value="avisos">Avisos Importantes</option>
+                    <option value="informacao">Informação Geral</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="resumo">Resumo *</label>
+                <textarea id="resumo" name="resumo" required placeholder="Breve descrição da notícia..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="conteudo">Conteúdo Completo *</label>
+                <textarea id="conteudo" name="conteudo" required placeholder="Texto completo da notícia..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="autor">Autor</label>
+                <input type="text" id="autor" name="autor" placeholder="Ex: Equipe MDL">
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Publicar Notícia
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'login-admin.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Cadastra notícia
+    document.getElementById('formNoticia').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+            
+            const noticia = {
+                titulo: document.getElementById('titulo').value,
+                categoria: document.getElementById('categoria').value,
+                resumo: document.getElementById('resumo').value,
+                conteudo: document.getElementById('conteudo').value,
+                autor: document.getElementById('autor').value,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'noticias'
+            };
+            
+            await db.collection('noticias').add(noticia);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Notícia publicada com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            document.getElementById('formNoticia').reset();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Publicar Notícia';
+        }
+    });
+    </script>
+</body>
+</html>

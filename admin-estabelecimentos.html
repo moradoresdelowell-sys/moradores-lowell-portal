@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Estabelecimento | Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-store"></i> Cadastrar Estabelecimento</h1>
+            <p>Comércios e serviços da nossa comunidade</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formEstabelecimento" class="admin-form">
+            <div class="form-group">
+                <label for="nome">Nome do Estabelecimento *</label>
+                <input type="text" id="nome" name="nome" required placeholder="Ex: Mercado Brasil">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione...</option>
+                    <option value="mercado">Mercado</option>
+                    <option value="restaurante">Restaurante</option>
+                    <option value="salao">Salão de Beleza</option>
+                    <option value="servicos">Serviços Gerais</option>
+                    <option value="transporte">Transporte</option>
+                    <option value="saude">Saúde</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva os serviços e produtos oferecidos..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="endereco">Endereço Completo *</label>
+                <input type="text" id="endereco" name="endereco" required placeholder="Ex: 123 Main St, Lowell, MA 01851">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefone">Telefone *</label>
+                <input type="text" id="telefone" name="telefone" required placeholder="Ex: (978) 555-0000">
+            </div>
+            
+            <div class="form-group">
+                <label for="whatsapp">WhatsApp</label>
+                <input type="text" id="whatsapp" name="whatsapp" placeholder="Ex: (978) 555-0000">
+            </div>
+            
+            <div class="form-group">
+                <label for="horario">Horário de Funcionamento</label>
+                <input type="text" id="horario" name="horario" placeholder="Ex: Seg-Sex: 9h-18h, Sáb: 9h-17h">
+            </div>
+            
+            <div class="form-group">
+                <label for="plano">Plano *</label>
+                <select id="plano" name="plano" required>
+                    <option value="">Selecione...</option>
+                    <option value="premium">Premium (Destaque Total)</option>
+                    <option value="destaque">Destaque (Meia Página)</option>
+                    <option value="gratis">Grátis (Listagem Básica)</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Cadastrar Estabelecimento
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'login-admin.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Cadastra estabelecimento
+    document.getElementById('formEstabelecimento').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            const estabelecimento = {
+                nome: document.getElementById('nome').value,
+                categoria: document.getElementById('categoria').value,
+                descricao: document.getElementById('descricao').value,
+                endereco: document.getElementById('endereco').value,
+                telefone: document.getElementById('telefone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                horario: document.getElementById('horario').value,
+                plano: document.getElementById('plano').value,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'estabelecimentos'
+            };
+            
+            await db.collection('estabelecimentos').add(estabelecimento);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Estabelecimento cadastrado com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            document.getElementById('formEstabelecimento').reset();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Cadastrar Estabelecimento';
+        }
+    });
+    </script>
+</body>
+</html>
