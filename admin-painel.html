@@ -40,6 +40,33 @@
             align-items: center;
         }
         
+        .estatisticas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .estatistica-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .estatistica-numero {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .estatistica-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
         .opcoes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -92,30 +119,15 @@
             background: #c82333;
         }
         
-        .estatisticas {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
+        /* Cards desativados */
+        .opcao-card[style*="opacity: 0.5"] {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
-        .estatistica-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .estatistica-numero {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .estatistica-label {
-            color: #666;
-            font-size: 0.9rem;
+        .opcao-card[style*="opacity: 0.5"]:hover {
+            transform: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -140,15 +152,15 @@
         <div class="estatisticas">
             <div class="estatistica-card">
                 <div class="estatistica-numero" id="totalAnuncios">0</div>
-                <div class="estatistica-label">Anúncios Ativos</div>
+                <div class="estatistica-label">Classificados Ativos</div>
             </div>
             <div class="estatistica-card">
                 <div class="estatistica-numero" id="totalVagas">0</div>
                 <div class="estatistica-label">Vagas de Emprego</div>
             </div>
             <div class="estatistica-card">
-                <div class="estatistica-numero" id="totalImoveis">0</div>
-                <div class="estatistica-label">Imóveis</div>
+                <div class="estatistica-numero" id="totalAluguel">0</div>
+                <div class="estatistica-label">Imóveis Aluguel</div>
             </div>
             <div class="estatistica-card">
                 <div class="estatistica-numero" id="totalEstabelecimentos">0</div>
@@ -156,14 +168,14 @@
             </div>
         </div>
         
-        <!-- Opções de Admin -->
+        <!-- OPÇÕES CORRETAS -->
         <div class="opcoes-grid">
-            <!-- ANÚNCIOS -->
-            <div class="opcao-card" onclick="window.location.href='admin-anuncios.html'">
+            <!-- CLASSIFICADOS -->
+            <div class="opcao-card" onclick="window.location.href='admin-classificados.html'">
                 <div class="opcao-icone">
-                    <i class="fas fa-bullhorn"></i>
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
-                <h3 class="opcao-titulo">Anúncios</h3>
+                <h3 class="opcao-titulo">Classificados</h3>
                 <p class="opcao-descricao">Cadastrar produtos e doações</p>
             </div>
             
@@ -203,13 +215,13 @@
                 <p class="opcao-descricao">Publicar notícias da comunidade</p>
             </div>
             
-            <!-- CONFIGURAÇÕES -->
-            <div class="opcao-card" onclick="window.location.href='admin-config.html'">
+            <!-- CONFIGURAÇÕES (DESATIVADO POR ENQUANTO) -->
+            <div class="opcao-card" style="opacity: 0.5; cursor: not-allowed;">
                 <div class="opcao-icone">
                     <i class="fas fa-cog"></i>
                 </div>
                 <h3 class="opcao-titulo">Configurações</h3>
-                <p class="opcao-descricao">Configurar o portal</p>
+                <p class="opcao-descricao">Em breve...</p>
             </div>
         </div>
     </div>
