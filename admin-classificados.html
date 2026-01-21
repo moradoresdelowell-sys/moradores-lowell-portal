@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Classificados | Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-shopping-cart"></i> Cadastrar Classificado</h1>
+            <p>Produtos e doações para a comunidade</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formClassificado" class="admin-form">
+            <div class="form-group">
+                <label for="titulo">Título do Produto/Doação *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Geladeira em ótimo estado">
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo">Tipo *</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="produto">Produto</option>
+                    <option value="doacao">Doação</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva com detalhes o que está vendendo ou doando..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="preco">Preço (deixe vazio se for doação)</label>
+                <input type="text" id="preco" name="preco" placeholder="Ex: $100">
+            </div>
+            
+            <div class="form-group">
+                <label for="contato">Contato (telefone ou email) *</label>
+                <input type="text" id="contato" name="contato" required placeholder="Telefone ou email para contato">
+            </div>
+            
+            <div class="form-group">
+                <label for="local">Localização</label>
+                <input type="text" id="local" name="local" placeholder="Ex: Lowell, MA">
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Cadastrar Classificado
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'login-admin.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Cadastra classificado
+    document.getElementById('formClassificado').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            const classificado = {
+                titulo: document.getElementById('titulo').value,
+                tipo: document.getElementById('tipo').value,
+                descricao: document.getElementById('descricao').value,
+                preco: document.getElementById('preco').value || 'Grátis',
+                contato: document.getElementById('contato').value,
+                local: document.getElementById('local').value,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'classificados'
+            };
+            
+            await db.collection('classificados').add(classificado);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Classificado cadastrado com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            document.getElementById('formClassificado').reset();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Cadastrar Classificado';
+        }
+    });
+    </script>
+</body>
+</html>
