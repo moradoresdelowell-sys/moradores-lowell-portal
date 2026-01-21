@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Vaga | Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-briefcase"></i> Cadastrar Vaga</h1>
+            <p>Oportunidades de trabalho na região</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formVaga" class="admin-form">
+            <div class="form-group">
+                <label for="titulo">Título da Vaga *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Auxiliar de Cozinha, Motorista, Operador de Caixa">
+            </div>
+            
+            <div class="form-group">
+                <label for="empresa">Nome da Empresa *</label>
+                <input type="text" id="empresa" name="empresa" required placeholder="Ex: Restaurante Brasil, Transportes Silva">
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição Completa da Vaga *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva as atividades, requisitos, experiência necessária, benefícios..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="salario">Salário / Remuneração</label>
+                <input type="text" id="salario" name="salario" placeholder="Ex: 15 por hora, 600 por semana, A combinar">
+            </div>
+            
+            <div class="form-group">
+                <label for="local">Local de Trabalho *</label>
+                <input type="text" id="local" name="local" required placeholder="Ex: Lowell, MA ou Região de Boston">
+            </div>
+            
+            <div class="form-group">
+                <label for="horario">Horário de Trabalho</label>
+                <input type="text" id="horario" name="horario" placeholder="Ex: Segunda a Sexta, 9h às 17h, Turnos alternados">
+            </div>
+            
+            <div class="form-group">
+                <label for="beneficios">Benefícios Oferecidos</label>
+                <input type="text" id="beneficios" name="beneficios" placeholder="Ex: Vale transporte, refeição, seguro saúde, etc...">
+            </div>
+            
+            <div class="form-group">
+                <label for="requisitos">Requisitos e Experiência</label>
+                <textarea id="requisitos" name="requisitos" placeholder="Idade mínima, experiência necessária, idiomas, documentação..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="contato">Contato (telefone ou email) *</label>
+                <input type="text" id="contato" name="contato" required placeholder="Telefone ou email para candidatura">
+            </div>
+            
+            <div class="form-group">
+                <label for="dataLimite">Data Limite para Candidatura</label>
+                <input type="date" id="dataLimite" name="dataLimite">
+            </div>
+            
+            <div class="form-group">
+                <label for="observacoes">Observações Adicionais</label>
+                <textarea id="observacoes" name="observacoes" placeholder="Informações complementares sobre a vaga..."></textarea>
+            </div>
+            
+            <!-- Upload de Fotos -->
+            <div class="form-group">
+                <label>Fotos da Vaga/Empresa (opcional, máximo 5 fotos)</label>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Clique aqui ou arraste fotos para upload</p>
+                    <small>Formatos: JPG, PNG, GIF (máx. 5MB cada)</small>
+                </div>
+                <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                <div class="preview-container" id="previewContainer"></div>
+            </div>
+            
+            <!-- Carrossel de Imagens -->
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel-main">
+                    <img class="carousel-image" id="carouselImage" src="" alt="">
+                    <button class="carousel-nav carousel-prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav carousel-next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <div class="carousel-indicators" id="indicators"></div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Cadastrar Vaga
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Modal de Visualização -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'admin-login.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Variáveis globais
+    let uploadedImages = [];
+    let currentImageIndex = 0;
+
+    // Cadastro da vaga
+    document.getElementById('formVaga').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            // Upload das fotos para o Firebase Storage
+            const fotoURLs = [];
+            
+            for (let i = 0; i < uploadedImages.length; i++) {
+                const imagem = uploadedImages[i];
+                const storageRef = firebase.storage().ref();
+                const fileName = `vagas/${Date.now()}_${i}_${imagem.file.name}`;
+                const fileRef = storageRef.child(fileName);
+                
+                await fileRef.put(imagem.file);
+                const url = await fileRef.getDownloadURL();
+                fotoURLs.push(url);
+            }
+            
+            const vaga = {
+                titulo: document.getElementById('titulo').value,
+                empresa: document.getElementById('empresa').value,
+                descricao: document.getElementById('descricao').value,
+                salario: document.getElementById('salario').value,
+                local: document.getElementById('local').value,
+                horario: document.getElementById('horario').value,
+                beneficios: document.getElementById('beneficios').value,
+                requisitos: document.getElementById('requisitos').value,
+                contato: document.getElementById('contato').value,
+                dataLimite: document.getElementById('dataLimite').value,
+                observacoes: document.getElementById('observacoes').value,
+                fotos: fotoURLs,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'vagas'
+            };
+            
+            await db.collection('vagas').add(vaga);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Vaga cadastrada com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            // Limpa formulário
+            document.getElementById('formVaga').reset();
+            uploadedImages = [];
+            updatePreview();
+            updateCarousel();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Cadastrar Vaga';
+        }
+    });
+
+    // Upload de fotos - IGUAL aos outros
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#e74c3c';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ddd';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ddd';
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+        const remainingSlots = 5 - uploadedImages.length; // MUDOU: 5 fotos para vagas
+        const filesToProcess = Array.from(files).slice(0, remainingSlots);
+        
+        filesToProcess.forEach(file => {
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`Arquivo ${file.name} é muito grande! Máximo 5MB.`);
+                return;
+            }
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImages.push({
+                        file: file,
+                        url: e.target.result
+                    });
+                    updatePreview();
+                    updateCarousel();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function updatePreview() {
+        previewContainer.innerHTML = uploadedImages.map((img, index) => `
+            <div class="preview-image" onclick="showImage(${index})">
+                <img src="${img.url}" alt="Preview ${index + 1}">
+                <button type="button" class="remove-image" onclick="removeImage(${index})" title="Remover foto">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function updateCarousel() {
+        if (uploadedImages.length > 0) {
+            document.getElementById('carouselContainer').style.display = 'block';
+            showCarouselImage(0);
+            updateIndicators();
+        } else {
+            document.getElementById('carouselContainer').style.display = 'none';
+        }
+    }
+
+    function showCarouselImage(index) {
+        currentImageIndex = index;
+        const carouselImage = document.getElementById('carouselImage');
+        carouselImage.src = uploadedImages[index].url;
+        
+        document.querySelectorAll('.indicator').forEach((ind, i) => {
+            ind.classList.toggle('active', i === index);
+        });
+    }
+
+    function updateIndicators() {
+        const indicators = document.getElementById('indicators');
+        indicators.innerHTML = uploadedImages.map((_, index) => `
+            <div class="indicator ${index === 0 ? 'active' : ''}" onclick="showCarouselImage(${index})"></div>
+        `).join('');
+    }
+
+    // Navegação do carrossel
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === 0 ? uploadedImages.length - 1 : currentImageIndex - 1;
+        showCarouselImage(newIndex);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === uploadedImages.length - 1 ? 0 : currentImageIndex + 1;
+        showCarouselImage(newIndex);
+    });
+
+    // Modal de visualização
+    function showImage(index) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = uploadedImages[index].url;
+    }
+
+    function removeImage(index) {
+        event.stopPropagation();
+        uploadedImages.splice(index, 1);
+        updatePreview();
+        updateCarousel();
+    }
+
+    // Fechar modal
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.getElementById('imageModal').style.display = 'none';
+    });
+
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('imageModal')) {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Estabelecimento | Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-store"></i> Cadastrar Estabelecimento</h1>
+            <p>Comércios e serviços da nossa comunidade</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formEstabelecimento" class="admin-form">
+            <div class="form-group">
+                <label for="nome">Nome do Estabelecimento *</label>
+                <input type="text" id="nome" name="nome" required placeholder="Ex: Mercado Brasil, Salão Beleza, Restaurante Sabor">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione...</option>
+                    <option value="mercado">Mercado / Supermercado</option>
+                    <option value="restaurante">Restaurante</option>
+                    <option value="salao">Salão de Beleza</option>
+                    <option value="barbearia">Barbearia</option>
+                    <option value="transporte">Transporte / Uber</option>
+                    <option value="saude">Saúde / Clínica</option>
+                    <option value="servicos">Serviços Gerais</option>
+                    <option value="construcao">Construção / Reforma</option>
+                    <option value="automoveis">Automóveis / Mecânica</option>
+                    <option value="educacao">Educação / Cursos</option>
+                    <option value="moda">Moda / Roupas</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição dos Serviços *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva o que o estabelecimento oferece, especialidades, diferenciais..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="endereco">Endereço Completo *</label>
+                <input type="text" id="endereco" name="endereco" required placeholder="Ex: 123 Main St, Lowell, MA 01851">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefone">Telefone Principal *</label>
+                <div class="telefone-input">
+                    <input type="tel" id="telefone" name="telefone" required placeholder="(978) 555-0000" maxlength="14">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="whatsapp">WhatsApp</label>
+                <div class="telefone-input">
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(978) 555-0000" maxlength="14">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Ex: contato@empresa.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="horario">Horário de Funcionamento</label>
+                <input type="text" id="horario" name="horario" placeholder="Ex: Seg-Sex: 9h-18h, Sáb: 9h-17h, Dom: Fechado">
+            </div>
+            
+            <div class="form-group">
+                <label for="website">Website / Redes Sociais</label>
+                <input type="url" id="website" name="website" placeholder="Ex: https://www.empresa.com ou @empresa">
+            </div>
+            
+            <div class="form-group">
+                <label for="servicos">Principais Serviços/Produtos</label>
+                <textarea id="servicos" name="servicos" placeholder="Liste os principais serviços ou produtos oferecidos..."></textarea>
+            </div>
+            
+            <!-- PLANO DE DESTAQUE -->
+            <div class="form-group">
+                <label>Plano de Destaque *</label>
+                <div class="plano-options">
+                    <label class="plano-option">
+                        <input type="radio" name="plano" value="premium" required>
+                        <div class="plano-card premium">
+                            <div class="plano-header">
+                                <i class="fas fa-crown"></i>
+                                <h3>PREMIUM</h3>
+                            </div>
+                            <div class="plano-body">
+                                <p class="plano-desc">Destaque na página inicial</p>
+                                <p class="plano-beneficios">
+                                    • Aparece no topo da home<br>
+                                    • Foto grande e destaque<br>
+                                    • Primeiro em todas as listas<br>
+                                    • Duração: 30 dias
+                                </p>
+                                <p class="plano-destaque">MAIOR VISIBILIDADE</p>
+                            </div>
+                        </div>
+                    </label>
+                    
+                    <label class="plano-option">
+                        <input type="radio" name="plano" value="destaque">
+                        <div class="plano-card destaque">
+                            <div class="plano-header">
+                                <i class="fas fa-star"></i>
+                                <h3>DESTAQUE</h3>
+                            </div>
+                            <div class="plano-body">
+                                <p class="plano-desc">No topo dos resultados</p>
+                                <p class="plano-beneficios">
+                                    • Aparece no topo da categoria<br>
+                                    • Foto média com destaque<br>
+                                    • Acima dos gratuitos<br>
+                                    • Duração: 30 dias
+                                </p>
+                                <p class="plano-destaque">ALTA VISIBILIDADE</p>
+                            </div>
+                        </div>
+                    </label>
+                    
+                    <label class="plano-option">
+                        <input type="radio" name="plano" value="gratis">
+                        <div class="plano-card gratis">
+                            <div class="plano-header">
+                                <i class="fas fa-gift"></i>
+                                <h3>GRÁTIS</h3>
+                            </div>
+                            <div class="plano-body">
+                                <p class="plano-desc">Listagem básica</p>
+                                <p class="plano-beneficios">
+                                    • Aparece nas buscas<br>
+                                    • Foto pequena<br>
+                                    • Abaixo dos destaques<br>
+                                    • Duração: 30 dias
+                                </p>
+                                <p class="plano-destaque">VISIBILIDADE BÁSICA</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Upload de Fotos -->
+            <div class="form-group">
+                <label>Fotos do Estabelecimento (máximo 6 fotos)</label>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Clique aqui ou arraste fotos para upload</p>
+                    <small>Formatos: JPG, PNG, GIF (máx. 5MB cada)</small>
+                </div>
+                <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                <div class="preview-container" id="previewContainer"></div>
+            </div>
+            
+            <!-- Carrossel de Imagens -->
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel-main">
+                    <img class="carousel-image" id="carouselImage" src="" alt="">
+                    <button class="carousel-nav carousel-prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav carousel-next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <div class="carousel-indicators" id="indicators"></div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Cadastrar Estabelecimento
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+        
+        <!-- Preview do Maps -->
+        <div class="maps-preview" id="mapsPreview" style="display: none; margin-top: 20px;">
+            <h4>Localização no Google Maps:</h4>
+            <div class="map-container">
+                <iframe id="mapFrame" width="100%" height="300" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="map-buttons">
+                <button type="button" class="btn-maps" onclick="abrirGoogleMaps()">
+                    <i class="fas fa-route"></i> Ver Rota no Google Maps
+                </button>
+                <button type="button" class="btn-whats" onclick="abrirWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp Direto
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Visualização -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'admin-login.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Variáveis globais
+    let uploadedImages = [];
+    let currentImageIndex = 0;
+    let enderecoCompleto = '';
+    let whatsappNumero = '';
+
+    // Formatação de telefone
+    function formatPhone(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formattedValue = '';
+        
+        if (value.length > 0) {
+            if (value.length <= 3) {
+                formattedValue = `(${value}`;
+            } else if (value.length <= 6) {
+                formattedValue = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+            } else {
+                formattedValue = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+            }
+        }
+        
+        input.value = formattedValue;
+    }
+
+    // Aplica formatação em ambos os telefones
+    document.getElementById('telefone').addEventListener('input', function(e) {
+        formatPhone(e.target);
+        atualizarBotoesContato();
+    });
+
+    document.getElementById('whatsapp').addEventListener('input', function(e) {
+        formatPhone(e.target);
+        atualizarBotoesContato();
+    });
+
+    // Atualiza endereço e WhatsApp quando digita
+    document.getElementById('endereco').addEventListener('input', atualizarBotoesContato);
+    document.getElementById('whatsapp').addEventListener('input', atualizarBotoesContato);
+
+    function atualizarBotoesContato() {
+        enderecoCompleto = document.getElementById('endereco').value;
+        whatsappNumero = document.getElementById('whatsapp').value.replace(/\D/g, '');
+        
+        if (enderecoCompleto) {
+            document.getElementById('mapsPreview').style.display = 'block';
+            atualizarMapa();
+        } else {
+            document.getElementById('mapsPreview').style.display = 'none';
+        }
+    }
+
+    function atualizarMapa() {
+        const enderecoEncoded = encodeURIComponent(enderecoCompleto);
+        const mapFrame = document.getElementById('mapFrame');
+        mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCYx6LLnu4tf6OS4W4xPcBprve4IRROtX8&q=${enderecoEncoded}`;
+    }
+
+    function abrirGoogleMaps() {
+        const enderecoEncoded = encodeURIComponent(enderecoCompleto);
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${enderecoEncoded}`, '_blank');
+    }
+
+    function abrirWhatsApp() {
+        if (whatsappNumero) {
+            const mensagem = encodeURIComponent(`Olá, vi seu estabelecimento no portal Moradores de Lowell. Gostaria de mais informações.`);
+            window.open(`https://wa.me/1${whatsappNumero}?text=${mensagem}`, '_blank');
+        } else {
+            alert('Número de WhatsApp não cadastrado!');
+        }
+    }
+
+    // Upload de fotos - IGUAL aos outros, mas com 6 fotos
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#e74c3c';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ddd';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ddd';
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+        const remainingSlots = 6 - uploadedImages.length; // MUDOU: 6 fotos para estabelecimentos
+        const filesToProcess = Array.from(files).slice(0, remainingSlots);
+        
+        filesToProcess.forEach(file => {
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`Arquivo ${file.name} é muito grande! Máximo 5MB.`);
+                return;
+            }
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImages.push({
+                        file: file,
+                        url: e.target.result
+                    });
+                    updatePreview();
+                    updateCarousel();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function updatePreview() {
+        previewContainer.innerHTML = uploadedImages.map((img, index) => `
+            <div class="preview-image" onclick="showImage(${index})">
+                <img src="${img.url}" alt="Preview ${index + 1}">
+                <button type="button" class="remove-image" onclick="removeImage(${index})" title="Remover foto">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function updateCarousel() {
+        if (uploadedImages.length > 0) {
+            document.getElementById('carouselContainer').style.display = 'block';
+            showCarouselImage(0);
+            updateIndicators();
+        } else {
+            document.getElementById('carouselContainer').style.display = 'none';
+        }
+    }
+
+    function showCarouselImage(index) {
+        currentImageIndex = index;
+        const carouselImage = document.getElementById('carouselImage');
+        carouselImage.src = uploadedImages[index].url;
+        
+        document.querySelectorAll('.indicator').forEach((ind, i) => {
+            ind.classList.toggle('active', i === index);
+        });
+    }
+
+    function updateIndicators() {
+        const indicators = document.getElementById('indicators');
+        indicators.innerHTML = uploadedImages.map((_, index) => `
+            <div class="indicator ${index === 0 ? 'active' : ''}" onclick="showCarouselImage(${index})"></div>
+        `).join('');
+    }
+
+    // Navegação do carrossel
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === 0 ? uploadedImages.length - 1 : currentImageIndex - 1;
+        showCarouselImage(newIndex);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === uploadedImages.length - 1 ? 0 : currentImageIndex + 1;
+        showCarouselImage(newIndex);
+    });
+
+    // Modal de visualização
+    function showImage(index) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = uploadedImages[index].url;
+    }
+
+    function removeImage(index) {
+        event.stopPropagation();
+        uploadedImages.splice(index, 1);
+        updatePreview();
+        updateCarousel();
+    }
+
+    // Fechar modal
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.getElementById('imageModal').style.display = 'none';
+    });
+
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('imageModal')) {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    });
+
+    // Cadastro do estabelecimento
+    document.getElementById('formEstabelecimento').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        const planoSelecionado = document.querySelector('input[name="plano"]:checked').value;
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            // Upload das fotos para o Firebase Storage
+            const fotoURLs = [];
+            
+            for (let i = 0; i < uploadedImages.length; i++) {
+                const imagem = uploadedImages[i];
+                const storageRef = firebase.storage().ref();
+                const fileName = `estabelecimentos/${Date.now()}_${i}_${imagem.file.name}`;
+                const fileRef = storageRef.child(fileName);
+                
+                await fileRef.put(imagem.file);
+                const url = await fileRef.getDownloadURL();
+                fotoURLs.push(url);
+            }
+            
+            const estabelecimento = {
+                nome: document.getElementById('nome').value,
+                categoria: document.getElementById('categoria').value,
+                descricao: document.getElementById('descricao').value,
+                endereco: document.getElementById('endereco').value,
+                telefone: document.getElementById('telefone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                email: document.getElementById('email').value,
+                horario: document.getElementById('horario').value,
+                website: document.getElementById('website').value,
+                servicos: document.getElementById('servicos').value,
+                plano: planoSelecionado,
+                fotos: fotoURLs,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'estabelecimentos',
+                enderecoMaps: enderecoCompleto,
+                whatsappNumero: whatsappNumero
+            };
+            
+            await db.collection('estabelecimentos').add(estabelecimento);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Estabelecimento cadastrado com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            // Limpa formulário
+            document.getElementById('formEstabelecimento').reset();
+            uploadedImages = [];
+            updatePreview();
+            updateCarousel();
+            document.getElementById('mapsPreview').style.display = 'none';
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Cadastrar Estabelecimento';
+        }
+    });
+
+    // CSS adicional para os planos
+    const style = document.createElement('style');
+    style.textContent = `
+        .plano-options {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+        }
+        
+        .plano-option {
+            display: block;
+            cursor: pointer;
+        }
+        
+        .plano-option input[type="radio"] {
+            display: none;
+        }
+        
+        .plano-card {
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .plano-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .plano-option input[type="radio"]:checked + .plano-card {
+            border-color: #e74c3c;
+            background: #fff5f5;
+        }
+        
+        .plano-card.premium {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #fff8dc, #fff);
+        }
+        
+        .plano-card.destaque {
+            border-color: #ff6b35;
+            background: linear-gradient(135deg, #fff0e6, #fff);
+        }
+        
+        .plano-card.gratis {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #f0fff0, #fff);
+        }
+        
+        .plano-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .plano-header i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .plano-card.premium .plano-header i {
+            color: #ffd700;
+        }
+        
+        .plano-card.destaque .plano-header i {
+            color: #ff6b35;
+        }
+        
+        .plano-card.gratis .plano-header i {
+            color: #28a745;
+        }
+        
+        .plano-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        
+        .plano-body {
+            text-align: center;
+        }
+        
+        .plano-desc {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .plano-beneficios {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .plano-destaque {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .maps-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .map-container {
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .map-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-maps, .btn-whats {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-maps {
+            background: #4285f4;
+            color: white;
+        }
+        
+        .btn-maps:hover {
+            background: #3367d6;
+        }
+        
+        .btn-whats {
+            background: #25d366;
+            color: white;
+        }
+        
+        .btn-whats:hover {
+            background: #128c7e;
+        }
+    `;
+    document.head.appendChild(style);
+    </script>
+</body>
+</html>

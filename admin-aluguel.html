@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Aluguel | Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-classificados.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-home"></i> Cadastrar Aluguel</h1>
+            <p>Quartos, casas e apartamentos para aluguel</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formAluguel" class="admin-form">
+            <div class="form-group">
+                <label for="titulo">Título do Anúncio *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Quarto mobiliado em área tranquila">
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo">Tipo de Imóvel *</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="quarto">Quarto</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="casa">Casa</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição do Imóvel *</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva o imóvel, comodidades, regras da casa, etc..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="preco">Valor do Aluguel *</label>
+                <div class="preco-input">
+                    <input type="text" id="preco" name="preco" required placeholder="Ex: 650">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="endereco">Endereço Completo *</label>
+                <input type="text" id="endereco" name="endereco" required placeholder="Ex: 123 Main St, Lowell, MA 01851">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefone">Telefone para Contato *</label>
+                <div class="telefone-input">
+                    <input type="tel" id="telefone" name="telefone" required placeholder="(978) 555-0000" maxlength="14">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="whatsapp">WhatsApp (opcional)</label>
+                <div class="telefone-input">
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(978) 555-0000" maxlength="14">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="comodidades">Comodidades Inclusas</label>
+                <input type="text" id="comodidades" name="comodidades" placeholder="Ex: Internet, energia, água, gás (separar por vírgula)">
+            </div>
+            
+            <div class="form-group">
+                <label for="regras">Regras da Casa</label>
+                <textarea id="regras" name="regras" placeholder="Ex: Não fumante, sem animais, horário de silêncio..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="disponibilidade">Disponibilidade</label>
+                <input type="text" id="disponibilidade" name="disponibilidade" placeholder="Ex: Disponível imediatamente ou a partir de...">
+            </div>
+            
+            <!-- Upload de Fotos -->
+            <div class="form-group">
+                <label>Fotos do Imóvel (máximo 8 fotos)</label>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Clique aqui ou arraste fotos para upload</p>
+                    <small>Formatos: JPG, PNG, GIF (máx. 5MB cada)</small>
+                </div>
+                <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                <div class="preview-container" id="previewContainer"></div>
+            </div>
+            
+            <!-- Carrossel de Imagens -->
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel-main">
+                    <img class="carousel-image" id="carouselImage" src="" alt="">
+                    <button class="carousel-nav carousel-prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav carousel-next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <div class="carousel-indicators" id="indicators"></div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Cadastrar Aluguel
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Modal de Visualização -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'admin-login.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Variáveis globais
+    let uploadedImages = [];
+    let currentImageIndex = 0;
+
+    // Formatação de telefone - IGUAL ao classificados
+    function formatPhone(input) {
+        let value = input.value.replace(/\D/g, '');
+        let formattedValue = '';
+        
+        if (value.length > 0) {
+            if (value.length <= 3) {
+                formattedValue = `(${value}`;
+            } else if (value.length <= 6) {
+                formattedValue = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+            } else {
+                formattedValue = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+            }
+        }
+        
+        input.value = formattedValue;
+    }
+
+    // Aplica formatação em ambos os telefones
+    document.getElementById('telefone').addEventListener('input', function(e) {
+        formatPhone(e.target);
+    });
+
+    document.getElementById('whatsapp').addEventListener('input', function(e) {
+        formatPhone(e.target);
+    });
+
+    // Preço em dólar - IGUAL ao classificados
+    document.getElementById('preco').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = value;
+    });
+
+    // Upload de fotos - IGUAL ao classificados
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#e74c3c';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ddd';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ddd';
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+        const remainingSlots = 8 - uploadedImages.length; // MUDOU: 8 fotos no aluguel
+        const filesToProcess = Array.from(files).slice(0, remainingSlots);
+        
+        filesToProcess.forEach(file => {
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`Arquivo ${file.name} é muito grande! Máximo 5MB.`);
+                return;
+            }
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImages.push({
+                        file: file,
+                        url: e.target.result
+                    });
+                    updatePreview();
+                    updateCarousel();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function updatePreview() {
+        previewContainer.innerHTML = uploadedImages.map((img, index) => `
+            <div class="preview-image" onclick="showImage(${index})">
+                <img src="${img.url}" alt="Preview ${index + 1}">
+                <button type="button" class="remove-image" onclick="removeImage(${index})" title="Remover foto">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function updateCarousel() {
+        if (uploadedImages.length > 0) {
+            document.getElementById('carouselContainer').style.display = 'block';
+            showCarouselImage(0);
+            updateIndicators();
+        } else {
+            document.getElementById('carouselContainer').style.display = 'none';
+        }
+    }
+
+    function showCarouselImage(index) {
+        currentImageIndex = index;
+        const carouselImage = document.getElementById('carouselImage');
+        carouselImage.src = uploadedImages[index].url;
+        
+        document.querySelectorAll('.indicator').forEach((ind, i) => {
+            ind.classList.toggle('active', i === index);
+        });
+    }
+
+    function updateIndicators() {
+        const indicators = document.getElementById('indicators');
+        indicators.innerHTML = uploadedImages.map((_, index) => `
+            <div class="indicator ${index === 0 ? 'active' : ''}" onclick="showCarouselImage(${index})"></div>
+        `).join('');
+    }
+
+    // Navegação do carrossel
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === 0 ? uploadedImages.length - 1 : currentImageIndex - 1;
+        showCarouselImage(newIndex);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        const newIndex = currentImageIndex === uploadedImages.length - 1 ? 0 : currentImageIndex + 1;
+        showCarouselImage(newIndex);
+    });
+
+    // Modal de visualização
+    function showImage(index) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = uploadedImages[index].url;
+    }
+
+    function removeImage(index) {
+        event.stopPropagation();
+        uploadedImages.splice(index, 1);
+        updatePreview();
+        updateCarousel();
+    }
+
+    // Fechar modal
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.getElementById('imageModal').style.display = 'none';
+    });
+
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('imageModal')) {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    });
+
+    // Cadastro do aluguel
+    document.getElementById('formAluguel').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            // Upload das fotos para o Firebase Storage
+            const fotoURLs = [];
+            
+            for (let i = 0; i < uploadedImages.length; i++) {
+                const imagem = uploadedImages[i];
+                const storageRef = firebase.storage().ref();
+                const fileName = `aluguel/${Date.now()}_${i}_${imagem.file.name}`;
+                const fileRef = storageRef.child(fileName);
+                
+                await fileRef.put(imagem.file);
+                const url = await fileRef.getDownloadURL();
+                fotoURLs.push(url);
+            }
+            
+            const aluguel = {
+                titulo: document.getElementById('titulo').value,
+                tipo: document.getElementById('tipo').value,
+                descricao: document.getElementById('descricao').value,
+                preco: document.getElementById('preco').value,
+                endereco: document.getElementById('endereco').value,
+                telefone: document.getElementById('telefone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                comodidades: document.getElementById('comodidades').value,
+                regras: document.getElementById('regras').value,
+                disponibilidade: document.getElementById('disponibilidade').value,
+                fotos: fotoURLs,
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true,
+                secao: 'aluguel'
+            };
+            
+            await db.collection('aluguel').add(aluguel);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Aluguel cadastrado com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            // Limpa formulário
+            document.getElementById('formAluguel').reset();
+            uploadedImages = [];
+            updatePreview();
+            updateCarousel();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Cadastrar Aluguel';
+        }
+    });
+    </script>
+</body>
+</html>
