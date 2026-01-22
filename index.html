@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moradores de Lowell - Portal Digital</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css ">
     
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js "></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js "></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js "></script>
     
     <!-- Config Firebase -->
     <script src="firebase-config.js"></script>
+<base target="_blank">
 </head>
 <body>
     <!-- Header com Hamburguer -->
@@ -73,7 +74,7 @@
                         <!-- Comércio 1 -->
                         <div class="premium-card">
                             <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comércio+1" alt="Estabelecimento 1">
+                                <img src="https://via.placeholder.com/300x200?text=Com ércio+1" alt="Estabelecimento 1">
                                 <div class="premium-badge">
                                     <i class="fas fa-star"></i>
                                     <span>PREMIUM</span>
@@ -93,7 +94,7 @@
                         <!-- Comércio 2 -->
                         <div class="premium-card">
                             <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comércio+2" alt="Estabelecimento 2">
+                                <img src="https://via.placeholder.com/300x200?text=Com ércio+2" alt="Estabelecimento 2">
                                 <div class="premium-badge">
                                     <i class="fas fa-star"></i>
                                     <span>PREMIUM</span>
@@ -113,7 +114,7 @@
                         <!-- Comércio 3 -->
                         <div class="premium-card">
                             <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comércio+3" alt="Estabelecimento 3">
+                                <img src="https://via.placeholder.com/300x200?text=Com ércio+3" alt="Estabelecimento 3">
                                 <div class="premium-badge">
                                     <i class="fas fa-star"></i>
                                     <span>PREMIUM</span>
@@ -128,6 +129,21 @@
                                 </div>
                                 <button class="premium-btn">Ver Detalhes</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÚLTIMAS NOTÍCIAS - ADICIONADO AQUI -->
+            <div class="ultimas-noticias">
+                <div class="container">
+                    <div class="noticias-header">
+                        <h2 class="noticias-title">Últimas Notícias</h2>
+                        <a href="#noticias" class="ver-todas-noticias">Ver todas <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="noticias-grid-home" id="noticiasGridHome">
+                        <div class="loading-message">
+                            <i class="fas fa-spinner fa-spin"></i> Carregando notícias...
                         </div>
                     </div>
                 </div>
@@ -211,7 +227,7 @@
                 </div>
                 <div class="radio-controls-footer">
                     <audio id="radioAudio" autoplay>
-                        <source src="https://stream.radio.com:8000/radio.mp3" type="audio/mpeg">
+                        <source src="https://stream.radio.com:8000/radio.mp3 " type="audio/mpeg">
                         Seu navegador não suporta o player de áudio.
                     </audio>
                     <button class="play-btn-footer" id="playBtn">
@@ -240,7 +256,129 @@
     <!-- Scripts -->
     <script src="script.js"></script>
     
-    <!-- CARREGA ANÚNCIOS -->
+    <!-- CSS PARA AS NOTÍCIAS NA HOME -->
+    <style>
+        /* Seção Últimas Notícias na Home */
+        .ultimas-noticias {
+            background-color: #f8f9fa;
+            padding: 60px 0;
+            margin-top: 60px;
+        }
+
+        .noticias-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .noticias-title {
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .ver-todas-noticias {
+            color: #dc143c;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .ver-todas-noticias:hover {
+            color: #b71c1c;
+        }
+
+        .noticias-grid-home {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .noticia-card-home {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .noticia-card-home:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .noticia-imagem-home {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 4px solid #dc143c;
+        }
+
+        .noticia-conteudo-home {
+            padding: 25px;
+        }
+
+        .noticia-categoria-home {
+            display: inline-block;
+            background-color: #dc143c;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .noticia-titulo-home {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .noticia-resumo-home {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .noticia-meta-home {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .noticias-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .noticias-title {
+                font-size: 2rem;
+            }
+            
+            .noticias-grid-home {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- CARREGA ANÚNCIOS E NOTÍCIAS -->
     <script>
     // Debug primeiro
     console.log('Firebase carregado?', typeof firebase !== 'undefined');
@@ -288,10 +426,71 @@
         }
     }
 
+    // Carrega notícias para a home (abaixo dos destaques)
+    async function carregarNoticiasHome() {
+        try {
+            console.log('Iniciando carregamento de notícias para home...');
+            
+            const noticiasSnapshot = await db.collection('noticias')
+                .where('ativo', '==', true)
+                .orderBy('data', 'desc')
+                .limit(6) // Limitar às 6 últimas notícias para home
+                .get();
+            
+            console.log('Notícias encontradas para home:', noticiasSnapshot.size);
+            
+            let noticiasHTML = '';
+            
+            if (noticiasSnapshot.empty) {
+                noticiasHTML = '<p class="sem-noticias">Nenhuma notícia publicada ainda.</p>';
+            } else {
+                noticiasSnapshot.forEach((doc) => {
+                    const noticia = doc.data();
+                    const data = noticia.data ? new Date(noticia.data.seconds * 1000).toLocaleDateString('pt-BR') : 'Data não disponível';
+                    
+                    noticiasHTML += `
+                        <div class="noticia-card-home" onclick="window.location.href='noticia.html?id=${doc.id}'">
+                            ${noticia.imagem ? `<img src="${noticia.imagem}" alt="${noticia.titulo}" class="noticia-imagem-home">` : ''}
+                            <div class="noticia-conteudo-home">
+                                ${noticia.categoria ? `<span class="noticia-categoria-home">${noticia.categoria}</span>` : ''}
+                                <h3 class="noticia-titulo-home">${noticia.titulo || 'Título não disponível'}</h3>
+                                <p class="noticia-resumo-home">${noticia.resumo || noticia.conteudo?.substring(0, 150) + '...' || 'Conteúdo não disponível'}</p>
+                                <div class="noticia-meta-home">
+                                    <span class="noticia-data-home">
+                                        <i class="fas fa-calendar"></i>
+                                        ${data}
+                                    </span>
+                                    ${noticia.autor ? `
+                                    <span class="noticia-autor-home">
+                                        <i class="fas fa-user"></i>
+                                        ${noticia.autor}
+                                    </span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('noticiasGridHome').innerHTML = noticiasHTML;
+            console.log('Notícias da home carregadas com sucesso!');
+            
+        } catch (error) {
+            console.error('Erro ao carregar notícias da home:', error);
+            document.getElementById('noticiasGridHome').innerHTML = '<p class="erro-carregar">Erro ao carregar notícias.</p>';
+        }
+    }
+
     // Quando clicar em "Classificados"
     document.querySelector('a[href="#classificados"]').addEventListener('click', function() {
         console.log('Clicou em classificados');
         setTimeout(carregarAnuncios, 300);
+    });
+
+    // Carregar notícias automaticamente quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        carregarNoticiasHome();
     });
     </script>
 </body>
