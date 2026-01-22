@@ -118,17 +118,6 @@
         .btn-sair:hover {
             background: #c82333;
         }
-        
-        /* Cards desativados */
-        .opcao-card[style*="opacity: 0.5"] {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .opcao-card[style*="opacity: 0.5"]:hover {
-            transform: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body>
@@ -215,13 +204,13 @@
                 <p class="opcao-descricao">Publicar notícias da comunidade</p>
             </div>
             
-            <!-- CONFIGURAÇÕES (DESATIVADO POR ENQUANTO) -->
-            <div class="opcao-card" style="opacity: 0.5; cursor: not-allowed;">
+            <!-- CONFIGURAÇÕES - AGORA ATIVADO! -->
+            <div class="opcao-card" onclick="window.location.href='admin-config.html'">
                 <div class="opcao-icone">
                     <i class="fas fa-cog"></i>
                 </div>
                 <h3 class="opcao-titulo">Configurações</h3>
-                <p class="opcao-descricao">Em breve...</p>
+                <p class="opcao-descricao">Configurar o portal e usuários</p>
             </div>
         </div>
     </div>
