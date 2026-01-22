@@ -1,145 +1,50 @@
-// Menu hamburguer
+// Menu hambúrguer
 const hamburguer = document.getElementById('hamburguer');
 const navMenu = document.getElementById('navMenu');
 const overlay = document.getElementById('overlay');
 
-hamburguer.addEventListener('click', function() {
+hamburguer.addEventListener('click', () => {
     hamburguer.classList.toggle('active');
     navMenu.classList.toggle('active');
     overlay.classList.toggle('active');
 });
 
-overlay.addEventListener('click', function() {
+overlay.addEventListener('click', () => {
     hamburguer.classList.remove('active');
     navMenu.classList.remove('active');
     overlay.classList.remove('active');
 });
 
-// Fecha menu ao clicar em link
-document.querySelectorAll('.nav-list-hamburguer a').forEach(link => {
-    link.addEventListener('click', function() {
-        hamburguer.classList.remove('active');
-        navMenu.classList.remove('active');
-        overlay.classList.remove('active');
-    });
-});
-
-// NAVEGAÇÃO ENTRE SECTIONS - CORRIGIDO
-document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.nav-list-hamburguer a');
+// Navegação entre sections
+function showSection(targetId) {
     const sections = document.querySelectorAll('.content-section');
-    
-    // Função única para mostrar section - COM DISPLAY NONE/BLOCK
-    function showSection(targetId) {
-        sections.forEach(section => {
-            section.classList.remove('active');
-            section.style.display = 'none'; // FORÇA esconder
-        });
-        
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            targetSection.style.display = 'block'; // FORÇA mostrar
-        }
-    }
-    
-    // Clique nos links do menu
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
+    sections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none';
     });
     
-    // Carrega section baseada na URL ao entrar
-    const hash = window.location.hash.substring(1);
-    if (hash) {
-        showSection(hash);
-    } else {
-        showSection('home');
+    const target = document.getElementById(targetId);
+    if (target) {
+        target.classList.add('active');
+        target.style.display = 'block';
+        window.location.hash = targetId;
     }
-});
+}
 
-// Player de Rádio do Rodapé
-const radioAudio = document.getElementById('radioAudio');
-const playBtn = document.getElementById('playBtn');
-const volumeSlider = document.getElementById('volumeSlider');
-
-// Controle de play/pause
-playBtn.addEventListener('click', function() {
-    if (radioAudio.paused) {
-        radioAudio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-        radioAudio.pause();
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-});
-
-// Controle de volume
-volumeSlider.addEventListener('input', function() {
-    radioAudio.volume = this.value / 100;
-});
-
-// Quando o áudio começar a tocar
-radioAudio.addEventListener('play', function() {
-    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-});
-
-// Quando o áudio pausar
-radioAudio.addEventListener('pause', function() {
-    playBtn.innerHTML = '<i class="fas fa-play"></i>';
-});
-
-// Tenta dar play automaticamente
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        radioAudio.play().catch(function(error) {
-            console.log('Autoplay bloqueado:', error);
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        });
-    }, 1000);
-});
-
-// NAVEGAÇÃO ENTRE SECTIONS
-document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.nav-list-hamburguer a');
-    const sections = document.querySelectorAll('.content-section');
-    
-    function showSection(targetId) {
-        sections.forEach(section => {
-            section.classList.remove('active');
-            section.style.display = 'none';
-        });
-        
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            targetSection.style.display = 'block';
-        }
-    }
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
+// Links do menu
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        showSection(id);
     });
-    
-    // Adicionar hashchange pra funcionar com seta do navegador
-    window.addEventListener('hashchange', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-            showSection(hash);
-        }
-    });
-    
-    const hash = window.location.hash.substring(1);
-    if (hash) {
-        showSection(hash);
-    } else {
-        showSection('home');
-    }
 });
+
+// Carrega section pela URL
+window.addEventListener('hashchange', () => {
+    const id = window.location.hash.substring(1);
+    if (id) showSection(id);
+});
+
+// Inicializa
+showSection('home');

@@ -7,7 +7,10 @@ const urlsToCache = [
     '/script.js',
     '/carrega-conteudo.js',
     '/firebase-config.js',
-    '/logo-moradores.png'
+    '/admin-login.js',
+    '/admin-painel.js',
+    '/logo-moradores.png',
+    '/icon-152.png'
 ];
 
 // Instalação - Armazena arquivos no cache

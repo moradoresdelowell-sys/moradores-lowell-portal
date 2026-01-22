@@ -13,11 +13,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
-
+const storage = firebase.storage();
 
 // Exporta para uso global
 window.firebaseApp = {
   db: db,
   auth: auth,
-  analytics: analytics
+  storage: storage
 };

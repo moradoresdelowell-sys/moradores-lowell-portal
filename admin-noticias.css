@@ -1,52 +1,57 @@
-/* ESTILOS ESPECÍFICOS PARA NOTÍCIAS */
-.admin-noticias .admin-header h1 {
-    color: #6c757d;
-}
+// Editor Quill
+const quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: 'Escreva a notícia completa aqui...'
+});
 
-.editor-toolbar {
-    background: #f8f9fa;
-    padding: 8px;
-    border-bottom: 1px solid #e1e8ed;
-}
+// Upload de foto principal
+let uploadedImage = null;
 
-.editor-toolbar button {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-    margin: 2px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.editor-toolbar button:hover {
-    background: #e9ecef;
-}
-
-.editor-content {
-    min-height: 300px;
-    padding: 15px;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.ql-editor {
-    min-height: 300px;
-}
-
-.ql-editor p {
-    margin-bottom: 12px;
-}
-
-.ql-editor h1, .ql-editor h2, .ql-editor h3 {
-    margin-bottom: 16px;
-}
-
-.ql-editor ul, .ql-editor ol {
-    margin-bottom: 16px;
-    padding-left: 30px;
-}
-
-.ql-editor li {
-    margin-bottom: 8px;
-}
+document.getElementById('formNoticia').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const btn = document.querySelector('.btn-cadastrar');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+    
+    try {
+        // Upload foto
+        let fotoURL = '';
+        if (uploadedImage) {
+            const ref = firebase.storage().ref(`noticias/${Date.now()}_${uploadedImage.file.name}`);
+            await ref.put(uploadedImage.file);
+            fotoURL = await ref.getDownloadURL();
+        }
+        
+        // Conteúdo do editor
+        const conteudoHTML = quill.root.innerHTML;
+        
+        const noticia = {
+            titulo: document.getElementById('titulo').value,
+            categoria: document.getElementById('categoria').value,
+            resumo: document.getElementById('resumo').value,
+            conteudoHTML: conteudoHTML,
+            conteudoTexto: quill.getText(),
+            autor: document.getElementById('autor').value,
+            imagem: fotoURL,
+            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+            dataExibicao: new Date().toLocaleDateString('pt-BR'),
+            urgencia: document.getElementById('urgencia').value,
+            ativo: true,
+            secao: 'noticias'
+        };
+        
+        await db.collection('noticias').add(noticia);
+        
+        alert('✅ Notícia publicada com sucesso!');
+        document.getElementById('formNoticia').reset();
+        quill.setText('');
+        uploadedImage = null;
+        
+    } catch (error) {
+        alert('❌ Erro: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Publicar';
+    }
+});

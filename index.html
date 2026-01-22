@@ -3,54 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#dc143c">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MDL Portal">
-    <meta name="description" content="Portal digital da comunidade brasileira em Lowell, MA - Classificados, empregos, aluguel e notícias">
-    <meta name="keywords" content="comunidade brasileira, lowell, massachusetts, classificados, empregos, aluguel, notícias">
-    
-    <!-- Icons para PWA -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
-    <link rel="apple-touch-icon" href="icon-152.png">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    
     <title>Moradores de Lowell - Portal Digital</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="logo-moradores.png">
+    <meta name="theme-color" content="#dc143c">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
-    <!-- Config Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <base target="_self">
 </head>
 <body>
     <!-- Header com Hamburguer -->
     <header class="header">
         <div class="container">
             <div class="nav-container">
-                <!-- Logo e Nome -->
                 <div class="logo">
-                    <img src="logo-moradores.png" alt="Logo" class="logo-img">
+                    <img src="logo-moradores.png" alt="Logo">
                     <div class="logo-text">
                         <h1>Moradores de Lowell</h1>
                         <p>Portal Digital</p>
                     </div>
                 </div>
-                
-                <!-- Menu Hamburguer -->
                 <div class="hamburguer" id="hamburguer">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </div>
             </div>
         </div>
@@ -67,85 +46,23 @@
             <li><a href="#noticias" class="nav-link">Notícias</a></li>
         </ul>
     </nav>
-
-    <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
 
-    <!-- Main Content -->
+    <!-- Conteúdo Principal -->
     <main class="main-content">
-        <!-- INICIO - COM DESTAQUES PREMIUM -->
+        <!-- HOME -->
         <section id="home" class="content-section active">
             <div class="container">
                 <h2>Início</h2>
                 <p>Tudo para a comunidade brasileira de Lowell</p>
             </div>
-            
+
             <!-- DESTAQUES PREMIUM -->
             <div class="premium-destaques">
                 <div class="container">
                     <h2 class="premium-title">Estabelecimentos Destaque</h2>
-                    <p class="premium-subtitle">Conheça nossos comércios premium</p>
-                    
-                    <div class="premium-grid">
-                        <!-- Comércio 1 -->
-                        <div class="premium-card">
-                            <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comercio+1" alt="Estabelecimento 1">
-                                <div class="premium-badge">
-                                    <i class="fas fa-star"></i>
-                                    <span>PREMIUM</span>
-                                </div>
-                            </div>
-                            <div class="premium-content">
-                                <h3>Nome do Estabelecimento</h3>
-                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
-                                <div class="premium-info">
-                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
-                                    <span><i class="fas fa-phone"></i> (978) 555-0001</span>
-                                </div>
-                                <button class="premium-btn">Ver Detalhes</button>
-                            </div>
-                        </div>
-
-                        <!-- Comércio 2 -->
-                        <div class="premium-card">
-                            <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comercio+2" alt="Estabelecimento 2">
-                                <div class="premium-badge">
-                                    <i class="fas fa-star"></i>
-                                    <span>PREMIUM</span>
-                                </div>
-                            </div>
-                            <div class="premium-content">
-                                <h3>Nome do Estabelecimento</h3>
-                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
-                                <div class="premium-info">
-                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
-                                    <span><i class="fas fa-phone"></i> (978) 555-0002</span>
-                                </div>
-                                <button class="premium-btn">Ver Detalhes</button>
-                            </div>
-                        </div>
-
-                        <!-- Comércio 3 -->
-                        <div class="premium-card">
-                            <div class="premium-image">
-                                <img src="https://via.placeholder.com/300x200?text=Comercio+3" alt="Estabelecimento 3">
-                                <div class="premium-badge">
-                                    <i class="fas fa-star"></i>
-                                    <span>PREMIUM</span>
-                                </div>
-                            </div>
-                            <div class="premium-content">
-                                <h3>Nome do Estabelecimento</h3>
-                                <p class="premium-desc">Breve descrição do estabelecimento e seus serviços.</p>
-                                <div class="premium-info">
-                                    <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
-                                    <span><i class="fas fa-phone"></i> (978) 555-0003</span>
-                                </div>
-                                <button class="premium-btn">Ver Detalhes</button>
-                            </div>
-                        </div>
+                    <div class="premium-grid" id="premiumGrid">
+                        <!-- Carregado via JS -->
                     </div>
                 </div>
             </div>
@@ -153,119 +70,49 @@
             <!-- ÚLTIMAS NOTÍCIAS -->
             <div class="ultimas-noticias">
                 <div class="container">
-                    <div class="noticias-header">
-                        <h2 class="noticias-title">Últimas Notícias</h2>
-                        <a href="#noticias" class="ver-todas-noticias">Ver todas <i class="fas fa-arrow-right"></i></a>
-                    </div>
+                    <h2 class="noticias-title">Últimas Notícias</h2>
                     <div class="noticias-grid-home" id="noticiasGridHome">
-                        <div class="loading-message">
-                            <i class="fas fa-spinner fa-spin"></i> Carregando notícias...
-                        </div>
+                        <div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CLASSIFICADOS - PRODUTOS E DOAÇÕES -->
+        <!-- OUTRAS SECTIONS -->
         <section id="classificados" class="content-section">
             <div class="container">
                 <h2>Classificados</h2>
-                <p>Produtos e doações para nossa comunidade</p>
-                <div class="section-filters">
-                    <button class="filter-btn active" data-filter="todos">Todos</button>
-                    <button class="filter-btn" data-filter="produtos">Produtos</button>
-                    <button class="filter-btn" data-filter="doacoes">Doações</button>
-                </div>
                 <div class="anuncios-grid" id="anunciosGrid">
-                    <!-- Anúncios do Firebase vão aqui -->
-                    <div class="loading-message">Carregando classificados...</div>
+                    <div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
                 </div>
             </div>
         </section>
 
-        <!-- ALUGUEL - QUARTO, CASA E APARTAMENTOS -->
-        <section id="aluguel" class="content-section">
-            <div class="container">
-                <h2>Aluguel</h2>
-                <p>Quartos, casas e apartamentos na região</p>
-                <div class="aluguel-grid" id="aluguelGrid">
-                    <!-- Imóveis do Firebase vão aqui -->
-                    <div class="loading-message">Carregando imóveis...</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EMPREGOS - SOMENTE WHATSAPP -->
-        <section id="empregos" class="content-section">
-            <div class="container">
-                <h2>Empregos</h2>
-                <p>Oportunidades de trabalho na região</p>
-                <div class="vagas-list" id="vagasList">
-                    <!-- Vagas do Firebase vão aqui -->
-                    <div class="loading-message">Carregando vagas...</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- GUIA COMERCIAL - PREMIUM/DESTAQUE/GRÁTIS -->
-        <section id="guia" class="content-section">
-            <div class="container">
-                <h2>Guia Comercial</h2>
-                <p>Estabelecimentos da nossa comunidade</p>
-                <div class="estabelecimentos-list" id="estabelecimentosList">
-                    <!-- Estabelecimentos do Firebase vão aqui -->
-                    <div class="loading-message">Carregando estabelecimentos...</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- NOTÍCIAS -->
-        <section id="noticias" class="content-section">
-            <div class="container">
-                <h2>Notícias</h2>
-                <p>Fique informado sobre nossa comunidade</p>
-                <div class="noticias-grid" id="noticiasGrid">
-                    <!-- Notícias do Firebase vão aqui -->
-                    <div class="loading-message">Carregando notícias...</div>
-                </div>
-            </div>
-        </section>
+        <!-- Adicione as demais sections aqui -->
     </main>
 
     <!-- Footer com Rádio -->
     <footer class="footer">
         <div class="container">
-            <!-- Player de Rádio -->
             <div class="radio-player-footer">
                 <div class="radio-info">
                     <i class="fas fa-radio"></i>
                     <span>MDL Radio</span>
                 </div>
-                <div class="radio-controls-footer">
-                    <audio id="radioAudio" autoplay>
-                        <source src="https://stream.radio.com:8000/radio.mp3" type="audio/mpeg">
-                        Seu navegador não suporta o player de áudio.
-                    </audio>
-                    <button class="play-btn-footer" id="playBtn">
-                        <i class="fas fa-pause"></i>
-                    </button>
-                    <div class="volume-control">
-                        <i class="fas fa-volume-down"></i>
-                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
-                        <i class="fas fa-volume-up"></i>
-                    </div>
-                </div>
+                <audio id="radioAudio">
+                    <source src="https://stream.radio.com:8000/radio.mp3" type="audio/mpeg">
+                </audio>
+                <button class="play-btn-footer" id="playBtn"><i class="fas fa-pause"></i></button>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50">
             </div>
-            
-            <!-- Copyright -->
             <div class="footer-bottom">
                 <p>&copy; 2024 Moradores de Lowell</p>
             </div>
         </div>
     </footer>
 
-    <!-- LINK PRO ADMIN -->
-    <a href="admin-login.html" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background: #dc143c; color: white; padding: 1rem; border-radius: 50px; text-decoration: none; z-index: 9999; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <!-- Botão Admin -->
+    <a href="admin-login.html" class="btn-admin-float">
         <i class="fas fa-plus"></i> Admin
     </a>
 
