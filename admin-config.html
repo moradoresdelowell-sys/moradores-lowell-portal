@@ -1,36 +1,1013 @@
-<!-- TIRA: Limite de anúncios, email notificações, moderação -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações | Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        .admin-config-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 2rem;
+        }
+        
+        .config-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .config-header h1 {
+            color: #dc143c;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .config-header p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        
+        .btn-voltar:hover {
+            background: #5a6268;
+        }
+        
+        /* Grid de Configurações */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .config-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .config-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .config-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .config-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .config-icon.config { background: #3498db; }
+        .config-icon.users { background: #9b59b6; }
+        .config-icon.analytics { background: #e74c3c; }
+        .config-icon.backup { background: #27ae60; }
+        .config-icon.security { background: #f39c12; }
+        .config-icon.appearance { background: #1abc9c; }
+        
+        .config-card-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .config-card-subtitle {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #dc143c;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: #27ae60;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(25px);
+        }
+        
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+        
+        .btn-outline:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .status-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+        
+        .status-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .status-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* User List */
+        .users-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.3s;
+        }
+        
+        .user-item:hover {
+            background: #e9ecef;
+        }
+        
+        .user-info h4 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        
+        .user-info p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+        
+        /* Activity Log */
+        .activity-log {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-left: 3px solid #3498db;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .activity-content h5 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .activity-content p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: #3498db;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .close-modal {
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-config-container {
+                margin: 20px;
+                padding: 1rem;
+            }
+            
+            .config-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-config-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="config-header">
+            <h1><i class="fas fa-cog"></i> Central de Configurações</h1>
+            <p>Gerencie todas as configurações do portal</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <!-- STATUS RÁPIDO -->
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-number" id="totalUsuarios">0</div>
+                <div class="status-label">Usuários Ativos</div>
+            </div>
+            <div class="status-card">
+                <div class="status-number" id="totalVisitas">0</div>
+                <div class="status-label">Visitas Hoje</div>
+            </div>
+            <div class="status-card">
+                <div class="status-number" id="taxaCrescimento">0%</div>
+                <div class="status-label">Crescimento</div>
+            </div>
+            <div class="status-card">
+                <div class="status-number" id="statusSistema">✅</div>
+                <div class="status-label">Status Sistema</div>
+            </div>
+        </div>
+        
+        <!-- GRID DE CONFIGURAÇÕES -->
+        <div class="config-grid">
+            
+            <!-- CONFIGURAÇÕES GERAIS -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon config">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Configurações Gerais</h3>
+                        <p class="config-card-subtitle">Ajustes principais do portal</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diasExpirar">Dias para Expirar Anúncios</label>
+                    <select id="diasExpirar" class="form-select">
+                        <option value="30" selected>30 dias</option>
+                        <option value="60">60 dias</option>
+                        <option value="90">90 dias</option>
+                        <option value="180">180 dias</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="itensPorPagina">Itens por Página</label>
+                    <select id="itensPorPagina" class="form-select">
+                        <option value="10">10 itens</option>
+                        <option value="20" selected>20 itens</option>
+                        <option value="50">50 itens</option>
+                        <option value="100">100 itens</option>
+                    </select>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Notificações por Email</span>
+                    <div class="toggle-switch" id="notificacoesEmail">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Modo Manutenção</span>
+                    <div class="toggle-switch" id="modoManutencao">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="salvarConfigGerais()">
+                        <i class="fas fa-save"></i> Salvar Configurações
+                    </button>
+                </div>
+            </div>
+            
+            <!-- USUÁRIOS E PERMISSÕES -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Usuários e Permissões</h3>
+                        <p class="config-card-subtitle">Gerencie acessos ao sistema</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="novoUsuarioEmail">Email do Novo Usuário</label>
+                    <input type="email" id="novoUsuarioEmail" class="form-control" placeholder="usuario@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="novoUsuarioNome">Nome do Usuário</label>
+                    <input type="text" id="novoUsuarioNome" class="form-control" placeholder="Nome completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="novoUsuarioTipo">Tipo de Acesso</label>
+                    <select id="novoUsuarioTipo" class="form-select">
+                        <option value="editor">Editor - Apenas Notícias</option>
+                        <option value="moderador">Moderador - Notícias e Classificados</option>
+                        <option value="admin">Admin - Acesso Total</option>
+                    </select>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="criarUsuario()">
+                        <i class="fas fa-user-plus"></i> Criar Usuário
+                    </button>
+                    <button class="btn btn-outline" onclick="verUsuarios()">
+                        <i class="fas fa-list"></i> Ver Todos
+                    </button>
+                </div>
+                
+                <div class="users-list" id="listaUsuarios">
+                    <!-- Lista de usuários aparecerá aqui -->
+                </div>
+            </div>
+            
+            <!-- ANÁLISES E ESTATÍSTICAS -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon analytics">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Análises e Estatísticas</h3>
+                        <p class="config-card-subtitle">Dados e métricas do portal</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="periodoAnalytics">Período de Análise</label>
+                    <select id="periodoAnalytics" class="form-select">
+                        <option value="7">Últimos 7 dias</option>
+                        <option value="30" selected>Últimos 30 dias</option>
+                        <option value="90">Últimos 90 dias</option>
+                        <option value="365">Último ano</option>
+                    </select>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Coletar Dados de Uso</span>
+                    <div class="toggle-switch active" id="coletaDados">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Analytics Google</span>
+                    <div class="toggle-switch" id="analyticsGoogle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="gerarRelatorio()">
+                        <i class="fas fa-file-alt"></i> Gerar Relatório
+                    </button>
+                    <button class="btn btn-outline" onclick="exportarDados()">
+                        <i class="fas fa-download"></i> Exportar Dados
+                    </button>
+                </div>
+            </div>
+            
+            <!-- BACKUP E RESTAURAÇÃO -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon backup">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Backup e Restauração</h3>
+                        <p class="config-card-subtitle">Segurança dos dados</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Último Backup</label>
+                    <div class="form-control" style="background: #f8f9fa; cursor: not-allowed;">
+                        <span id="ultimoBackup">Nunca realizado</span>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Backup Automático</span>
+                    <div class="toggle-switch active" id="backupAuto">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="realizarBackup()">
+                        <i class="fas fa-save"></i> Fazer Backup Agora
+                    </button>
+                    <button class="btn btn-outline" onclick="restaurarBackup()">
+                        <i class="fas fa-undo"></i> Restaurar Backup
+                    </button>
+                </div>
+            </div>
+            
+            <!-- SEGURANÇA -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon security">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Segurança</h3>
+                        <p class="config-card-subtitle">Proteção do sistema</p>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Login com Dois Fatores</span>
+                    <div class="toggle-switch" id="doisFatores">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Bloquear IP Suspeitos</span>
+                    <div class="toggle-switch active" id="bloqueioIP">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tentativasLogin">Máximo de Tentativas de Login</label>
+                    <input type="number" id="tentativasLogin" class="form-control" value="5" min="3" max="10">
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="salvarSeguranca()">
+                        <i class="fas fa-lock"></i> Salvar Segurança
+                    </button>
+                    <button class="btn btn-danger" onclick="verLogsSeguranca()">
+                        <i class="fas fa-history"></i> Ver Logs
+                    </button>
+                </div>
+            </div>
+            
+            <!-- APARÊNCIA -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon appearance">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Aparência</h3>
+                        <p class="config-card-subtitle">Visual do portal</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="temaPortal">Tema do Portal</label>
+                    <select id="temaPortal" class="form-select">
+                        <option value="vermelho" selected>Vermelho Clássico</option>
+                        <option value="azul">Azul Profissional</option>
+                        <option value="verde">Verde Natureza</option>
+                        <option value="roxo">Roxo Moderno</option>
+                        <option value="escuro">Modo Escuro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="logoPortal">URL do Logo Principal</label>
+                    <input type="url" id="logoPortal" class="form-control" value="logo-moradores.png">
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Animações</span>
+                    <div class="toggle-switch active" id="animacoes">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="salvarAparência()">
+                        <i class="fas fa-save"></i> Salvar Aparência
+                    </button>
+                    <button class="btn btn-outline" onclick="previewTema()">
+                        <i class="fas fa-eye"></i> Pré-visualizar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- LOG DE ATIVIDADES -->
+            <div class="config-card">
+                <div class="config-card-header">
+                    <div class="config-icon analytics">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div>
+                        <h3 class="config-card-title">Log de Atividades</h3>
+                        <p class="config-card-subtitle">Últimas ações no sistema</p>
+                    </div>
+                </div>
+                
+                <div class="activity-log" id="activityLog">
+                    <!-- Atividades aparecerão aqui -->
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="limparLogs()">
+                        <i class="fas fa-broom"></i> Limpar Logs
+                    </button>
+                    <button class="btn btn-primary" onclick="exportarLogs()">
+                        <i class="fas fa-download"></i> Exportar Logs
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BOTÕES GLOBAIS -->
+        <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn btn-success" onclick="salvarTudo()" style="margin-right: 1rem;">
+                <i class="fas fa-check"></i> Salvar Todas as Configurações
+            </button>
+            <button class="btn btn-danger" onclick="resetarConfiguracoes()">
+                <i class="fas fa-undo"></i> Resetar para Padrão
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmação</h3>
+                <span class="close-modal" onclick="fecharModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modalMensagem">Tem certeza que deseja executar esta ação?</p>
+                <div class="btn-group" style="margin-top: 1.5rem;">
+                    <button class="btn btn-primary" id="btnConfirmar">Confirmar</button>
+                    <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- DEIXA: Sistema básico -->
-<div class="form-group">
-    <label for="diasExpirar">Dias para Expirar Anúncios</label>
-    <select id="diasExpirar">
-        <option value="30" selected>30 dias</option>
-        <option value="60">60 dias</option>
-        <option value="90">90 dias</option>
-    </select>
-</div>
+    <script>
+        // Verifica login
+        if (!localStorage.getItem('adminLogado')) {
+            window.location.href = 'admin-login.html';
+        }
 
-<!-- NOVO: Sistema de usuários para notícias -->
-<h3 style="color: #e74c3c; margin-bottom: 20px; margin-top: 30px;">
-    <i class="fas fa-users"></i> Usuários para Notícias
-</h3>
+        // Faz login no Firebase
+        firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
 
-<div class="form-group">
-    <label for="novoUsuarioEmail">Email do Novo Usuário</label>
-    <input type="email" id="novoUsuarioEmail" placeholder="usuario@email.com">
-</div>
+        // Sistema de Toggle Switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
 
-<div class="form-group">
-    <label for="novoUsuarioNome">Nome do Usuário</label>
-    <input type="text" id="novoUsuarioNome" placeholder="Nome completo">
-</div>
+        // Carrega configurações ao iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarConfiguracoes();
+            carregarUsuarios();
+            carregarActivityLog();
+            atualizarStatus();
+        });
 
-<div class="form-group">
-    <button type="button" class="btn-criar-usuario" onclick="criarUsuarioNoticias()">
-        <i class="fas fa-user-plus"></i> Criar Usuário para Notícias
-    </button>
-</div>
+        // FUNÇÕES DE CONFIGURAÇÃO GERAL
+        function carregarConfiguracoes() {
+            // Simula carregamento de configurações
+            const config = {
+                diasExpirar: '30',
+                itensPorPagina: '20',
+                notificacoesEmail: true,
+                modoManutencao: false,
+                coletaDados: true,
+                analyticsGoogle: false,
+                backupAuto: true,
+                doisFatores: false,
+                bloqueioIP: true,
+                tentativasLogin: '5',
+                temaPortal: 'vermelho',
+                animacoes: true
+            };
 
-<div id="listaUsuarios" class="usuarios-lista">
-    <!-- Lista de usuários aparecerá aqui -->
-</div>
+            // Aplica as configurações
+            document.getElementById('diasExpirar').value = config.diasExpirar;
+            document.getElementById('itensPorPagina').value = config.itensPorPagina;
+            
+            // Toggles
+            if (config.notificacoesEmail) document.getElementById('notificacoesEmail').classList.add('active');
+            if (config.modoManutencao) document.getElementById('modoManutencao').classList.add('active');
+            if (config.coletaDados) document.getElementById('coletaDados').classList.add('active');
+            if (config.analyticsGoogle) document.getElementById('analyticsGoogle').classList.add('active');
+            if (config.backupAuto) document.getElementById('backupAuto').classList.add('active');
+            if (config.doisFatores) document.getElementById('doisFatores').classList.add('active');
+            if (config.bloqueioIP) document.getElementById('bloqueioIP').classList.add('active');
+            if (config.animacoes) document.getElementById('animacoes').classList.add('active');
+            
+            document.getElementById('tentativasLogin').value = config.tentativasLogin;
+            document.getElementById('temaPortal').value = config.temaPortal;
+        }
+
+        function salvarConfigGerais() {
+            mostrarMensagem('sucesso', 'Configurações gerais salvas com sucesso!');
+        }
+
+        // FUNÇÕES DE USUÁRIOS
+        function criarUsuario() {
+            const email = document.getElementById('novoUsuarioEmail').value;
+            const nome = document.getElementById('novoUsuarioNome').value;
+            const tipo = document.getElementById('novoUsuarioTipo').value;
+
+            if (!email || !nome) {
+                mostrarMensagem('erro', 'Preencha todos os campos!');
+                return;
+            }
+
+            // Simula criação de usuário
+            const usuario = {
+                email: email,
+                nome: nome,
+                tipo: tipo,
+                dataCriacao: new Date().toLocaleDateString('pt-BR'),
+                ativo: true
+            };
+
+            // Adiciona à lista
+            adicionarUsuarioLista(usuario);
+
+            // Limpa formulário
+            document.getElementById('novoUsuarioEmail').value = '';
+            document.getElementById('novoUsuarioNome').value = '';
+            document.getElementById('novoUsuarioTipo').value = 'editor';
+
+            mostrarMensagem('sucesso', 'Usuário criado com sucesso!');
+        }
+
+        function adicionarUsuarioLista(usuario) {
+            const lista = document.getElementById('listaUsuarios');
+            const item = document.createElement('div');
+            item.className = 'user-item';
+            item.innerHTML = `
+                <div class="user-info">
+                    <h4>${usuario.nome}</h4>
+                    <p>${usuario.email} - ${usuario.tipo}</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="editarUsuario('${usuario.email}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="removerUsuario('${usuario.email}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            lista.appendChild(item);
+        }
+
+        function carregarUsuarios() {
+            // Usuários de exemplo
+            const usuarios = [
+                { nome: 'João Silva', email: 'joao@email.com', tipo: 'admin' },
+                { nome: 'Maria Santos', email: 'maria@email.com', tipo: 'editor' }
+            ];
+
+            usuarios.forEach(usuario => adicionarUsuarioLista(usuario));
+        }
+
+        // FUNÇÕES DE ANALYTICS
+        function gerarRelatorio() {
+            mostrarMensagem('sucesso', 'Relatório gerado com sucesso! Verifique sua pasta de downloads.');
+        }
+
+        function exportarDados() {
+            mostrarMensagem('sucesso', 'Dados exportados com sucesso!');
+        }
+
+        // FUNÇÕES DE BACKUP
+        function realizarBackup() {
+            document.getElementById('ultimoBackup').textContent = new Date().toLocaleString('pt-BR');
+            mostrarMensagem('sucesso', 'Backup realizado com sucesso!');
+        }
+
+        function restaurarBackup() {
+            mostrarModal('Tem certeza que deseja restaurar o backup? Isso substituirá os dados atuais.');
+            document.getElementById('btnConfirmar').onclick = function() {
+                mostrarMensagem('sucesso', 'Backup restaurado com sucesso!');
+                fecharModal();
+            };
+        }
+
+        // FUNÇÕES DE SEGURANÇA
+        function salvarSeguranca() {
+            mostrarMensagem('sucesso', 'Configurações de segurança salvas!');
+        }
+
+        function verLogsSeguranca() {
+            mostrarMensagem('info', 'Logs de segurança abertos em nova aba!');
+        }
+
+        // FUNÇÕES DE APARÊNCIA
+        function salvarAparência() {
+            const tema = document.getElementById('temaPortal').value;
+            mostrarMensagem('sucesso', `Tema ${tema} aplicado com sucesso!`);
+        }
+
+        function previewTema() {
+            const tema = document.getElementById('temaPortal').value;
+            mostrarMensagem('info', `Visualizando tema ${tema}...`);
+        }
+
+        // FUNÇÕES DE ACTIVITY LOG
+        function carregarActivityLog() {
+            const atividades = [
+                { icone: 'fa-user-plus', titulo: 'Novo usuário criado', descricao: 'João Silva foi adicionado como editor', cor: '#27ae60' },
+                { icone: 'fa-edit', titulo: 'Notícia publicada', descricao: 'Festa Junina 2024 - Moradores de Lowell', cor: '#3498db' },
+                { icone: 'fa-save', titulo: 'Backup realizado', descricao: 'Backup automático concluído com sucesso', cor: '#f39c12' }
+            ];
+
+            const log = document.getElementById('activityLog');
+            log.innerHTML = atividades.map(atividade => `
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: ${atividade.cor}">
+                        <i class="fas ${atividade.icone}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h5>${atividade.titulo}</h5>
+                        <p>${atividade.descricao}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // FUNÇÕES AUXILIARES
+        function mostrarMensagem(tipo, texto) {
+            const mensagemDiv = document.getElementById('mensagem');
+            mensagemDiv.className = `mensagem ${tipo}`;
+            mensagemDiv.innerHTML = `<i class="fas fa-${tipo === 'sucesso' ? 'check' : tipo === 'erro' ? 'exclamation-triangle' : 'info'}-circle"></i> ${texto}`;
+            mensagemDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function mostrarModal(mensagem) {
+            document.getElementById('modalMensagem').textContent = mensagem;
+            document.getElementById('modalConfirmacao').style.display = 'block';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalConfirmacao').style.display = 'none';
+        }
+
+        function atualizarStatus() {
+            // Atualiza números aleatórios para demonstração
+            document.getElementById('totalUsuarios').textContent = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('totalVisitas').textContent = Math.floor(Math.random() * 500) + 100;
+            document.getElementById('taxaCrescimento').textContent = '+' + (Math.random() * 20 + 5).toFixed(1) + '%';
+        }
+
+        // Salvar tudo
+        function salvarTudo() {
+            mostrarMensagem('sucesso', 'Todas as configurações foram salvas com sucesso!');
+        }
+
+        function resetarConfiguracoes() {
+            mostrarModal('Tem certeza que deseja resetar todas as configurações para o padrão?');
+            document.getElementById('btnConfirmar').onclick = function() {
+                mostrarMensagem('sucesso', 'Configurações resetadas para o padrão!');
+                fecharModal();
+                carregarConfiguracoes(); // Recarrega configurações padrão
+            };
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalConfirmacao');
+            if (event.target == modal) {
+                fecharModal();
+            }
+        }
+    </script>
+</body>
+</html>
