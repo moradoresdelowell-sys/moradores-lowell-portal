@@ -1,123 +1,80 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradores de Lowell - Portal Digital</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="logo-moradores.png">
-    <meta name="theme-color" content="#dc143c">
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    <script src="firebase-config.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moradores de Lowell e Região</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <!-- Header com Hamburguer -->
-    <header class="header">
-        <div class="container">
-            <div class="nav-container">
-                <div class="logo">
-                    <img src="logo-moradores.png" alt="Logo">
-                    <div class="logo-text">
-                        <h1>Moradores de Lowell</h1>
-                        <p>Portal Digital</p>
-                    </div>
-                </div>
-                <div class="hamburguer" id="hamburguer">
-                    <span></span><span></span><span></span>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Menu Lateral -->
-    <nav class="nav-menu-hamburguer" id="navMenu">
-        <ul class="nav-list-hamburguer">
-            <li><a href="#home" class="nav-link">Início</a></li>
-            <li><a href="#classificados" class="nav-link">Classificados</a></li>
-            <li><a href="#aluguel" class="nav-link">Aluguel</a></li>
-            <li><a href="#empregos" class="nav-link">Empregos</a></li>
-            <li><a href="#guia" class="nav-link">Guia Comercial</a></li>
-            <li><a href="#noticias" class="nav-link">Notícias</a></li>
-        </ul>
-    </nav>
-    <div class="overlay" id="overlay"></div>
+<header>
+  <img src="logo-moradores.png" alt="Logo" class="logo">
+  <h1>Moradores de Lowell e Região</h1>
+  <button id="menu-toggle">☰</button>
+</header>
 
-    <!-- Conteúdo Principal -->
-    <main class="main-content">
-        <!-- HOME -->
-        <section id="home" class="content-section active">
-            <div class="container">
-                <h2>Início</h2>
-                <p>Tudo para a comunidade brasileira de Lowell</p>
-            </div>
+<nav id="menu">
+  <a href="#destaques">Destaques</a>
+  <a href="#radio">Rádio</a>
+  <a href="#classificados">Classificados</a>
+  <a href="#noticias">Notícias</a>
+  <a href="#empregos">Empregos</a>
+  <a href="#guia">Guia Comercial</a>
+</nav>
 
-            <!-- DESTAQUES PREMIUM -->
-            <div class="premium-destaques">
-                <div class="container">
-                    <h2 class="premium-title">Estabelecimentos Destaque</h2>
-                    <div class="premium-grid" id="premiumGrid">
-                        <!-- Carregado via JS -->
-                    </div>
-                </div>
-            </div>
+<main>
+  <!-- BOTÕES RÁPIDOS PARA CRIAR DADOS FAKE -->
+  <section style="text-align:center; padding:1rem;">
+    <button onclick="criarDestaquesFake()">Criar 3 Destaques Premium</button>
+    <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
+    <button onclick="criarAdmin()">Criar usuário admin</button>
+  </section>
 
-            <!-- ÚLTIMAS NOTÍCIAS -->
-            <div class="ultimas-noticias">
-                <div class="container">
-                    <h2 class="noticias-title">Últimas Notícias</h2>
-                    <div class="noticias-grid-home" id="noticiasGridHome">
-                        <div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- DESTAQUES PREMIUM -->
+  <section id="destaques">
+    <h2>Destaques Premium</h2>
+    <div id="destaques-container">Carregando...</div>
+  </section>
 
-        <!-- OUTRAS SECTIONS -->
-        <section id="classificados" class="content-section">
-            <div class="container">
-                <h2>Classificados</h2>
-                <div class="anuncios-grid" id="anunciosGrid">
-                    <div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
-                </div>
-            </div>
-        </section>
+  <!-- RÁDIO -->
+  <section id="radio">
+    <h2>Rádio Online</h2>
+    <audio id="radio-player" src="https://stream.zeno.fm/1nqvelvvz98uv"></audio>
+    <button id="play-btn" class="play-pause">▶️</button>
+  </section>
 
-        <!-- Adicione as demais sections aqui -->
-    </main>
+  <!-- CLASSIFICADOS -->
+  <section id="classificados">
+    <h2>Classificados</h2>
+    <div id="classificados-container">Carregando...</div>
+  </section>
 
-    <!-- Footer com Rádio -->
-    <footer class="footer">
-        <div class="container">
-            <div class="radio-player-footer">
-                <div class="radio-info">
-                    <i class="fas fa-radio"></i>
-                    <span>MDL Radio</span>
-                </div>
-                <audio id="radioAudio">
-                    <source src="https://stream.radio.com:8000/radio.mp3" type="audio/mpeg">
-                </audio>
-                <button class="play-btn-footer" id="playBtn"><i class="fas fa-pause"></i></button>
-                <input type="range" id="volumeSlider" min="0" max="100" value="50">
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Moradores de Lowell</p>
-            </div>
-        </div>
-    </footer>
+  <!-- NOTÍCIAS -->
+  <section id="noticias">
+    <h2>Notícias</h2>
+    <div id="noticias-container">Carregando...</div>
+  </section>
 
-    <!-- Botão Admin -->
-    <a href="admin-login.html" class="btn-admin-float">
-        <i class="fas fa-plus"></i> Admin
-    </a>
+  <!-- EMPREGOS -->
+  <section id="empregos">
+    <h2>Empregos</h2>
+    <div id="empregos-container">Carregando...</div>
+  </section>
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
-    <script src="carrega-conteudo.js"></script>
+  <!-- GUIA COMERCIAL -->
+  <section id="guia">
+    <h2>Guia Comercial</h2>
+    <div id="guia-container">Carregando...</div>
+  </section>
+</main>
+
+<button id="admin-float" onclick="window.location.href='admin-login.html'">Admin</button>
+
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
