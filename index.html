@@ -27,11 +27,16 @@
 </nav>
 
 <main>
-  <!-- BOTÕES RÁPIDOS -->
+  <!-- BOTÕES RÁPIDOS PARA CRIAR ANÚNCIOS -->
   <section style="text-align:center; padding:1rem;">
     <button onclick="criarDestaquesFake()">Criar 3 Destaques Premium</button>
     <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
-    <button onclick="criarAdmin()">Criar usuário admin</button>
+    <button onclick="criarNoticiasFake()">Criar 3 Notícias</button>
+    <button onclick="criarVagasFake()">Criar 3 Vagas</button>
+    <button onclick="criarAlugueisFake()">Criar 3 Alugueis</button>
+    <button onclick="criarEstabFake()">Criar 3 Estabelecimentos</button>
+    <br><br>
+    <button onclick="criarAdmin()">Criar usuário admin (admin@moradoresdelowell.com)</button>
   </section>
 
   <!-- DESTAQUES -->
@@ -57,6 +62,142 @@
 <button id="admin-float" onclick="window.location.href='admin-login.html'">Admin</button>
 
 <script src="firebase-config.js"></script>
-<script src="script.js"></script>
+<script>
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+  apiKey: "AIzaSyA1k5lG6m5s6Z5B5B5B5B5B5B5B5B5B5B5B5",
+  authDomain: "moradores-lowell.firebaseapp.com",
+  projectId: "moradores-lowell",
+  storageBucket: "moradores-lowell.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abc123def456"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ===== FUNÇÕES RÁPIDAS =====
+window.criarDestaquesFake = async () => {
+  const batch = db.batch();
+  const dest = db.collection("destaques");
+  batch.set(dest.doc("1"), { titulo: "Apartamento 2 qtos", descricao: "Centro - $1.800", imagem: "https://via.placeholder.com/300x200?text=Apartamento", destaque: true });
+  batch.set(dest.doc("2"), { titulo: "Vaga de garagem", descricao: "Centro - $150/mês", imagem: "https://via.placeholder.com/300x200?text=Garagem", destaque: true });
+  batch.set(dest.doc("3"), { titulo: "Sala comercial", descricao: "Downtown - $900", imagem: "https://via.placeholder.com/300x200?text=Sala", destaque: true });
+  await batch.commit();
+  alert("3 destaques criados! Atualize a página.");
+};
+
+window.criarClassificadosFake = async () => {
+  const batch = db.batch();
+  const col = db.collection("classificados");
+  batch.set(col.doc("1"), { titulo: "Geladeira usada", descricao: "Em perfeito estado - $250", telefone: "(978) 555-1111", categoria: "eletro" });
+  batch.set(col.doc("2"), { titulo: "Cadeira de escritório", descricao: "Ajustável - $80", telefone: "(978) 555-2222", categoria: "móvel" });
+  batch.set(col.doc("3"), { titulo: "Aula de inglês", descricao: "Particular - $25/h", telefone: "(978) 555-3333", categoria: "serviço" });
+  await batch.commit();
+  alert("3 classificados criados! Atualize a página.");
+};
+
+window.criarNoticiasFake = async () => {
+  const batch = db.batch();
+  const col = db.collection("noticias");
+  batch.set(col.doc("1"), { titulo: "Festa Junina 2024", resumo: "Vai ter muito forró e comida típica!", conteudo: "A festa será no dia 15 de junho, às 18h, no Clube Brasileiro.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
+  batch.set(col.doc("2"), { titulo: "Curso de Inglês Grátis", resumo: "Inscrições abertas para o curso básico.", conteudo: "Aulas toda segunda e quarta, às 19h, na igreja.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
+  batch.set(col.doc("3"), { titulo: "Aviso de Água", resumo: "Corte programado para quinta-feira.", conteudo: "A concessionária avisa que haverá corte das 9h às 15h.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
+  await batch.commit();
+  alert("3 notícias criadas! Atualize a página.");
+};
+
+window.criarVagasFake = async () => {
+  const batch = db.batch();
+  const col = db.collection("vagas");
+  batch.set(col.doc("1"), { titulo: "Auxiliar de Cozinha", empresa: "Restaurante Brasil", descricao: "Preparar ingredientes, limpeza da cozinha.", salario: "$16/h", local: "Lowell, MA", contato: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
+  batch.set(col.doc("2"), { titulo: "Motorista Delivery", empresa: "Transportes Silva", descricao: "Entregas com carro ou moto.", salario: "$18/h + gorjeta", local: "Região de Boston", contato: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
+  batch.set(col.doc("3"), { titulo: "Operador de Caixa", empresa: "Mercado Brasil", descricao: "Atendimento ao cliente, operar caixa.", salario: "$15/h", local: "Lowell, MA", contato: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
+  await batch.commit();
+  alert("3 vagas criadas! Atualize a página.");
+};
+
+window.criarAlugueisFake = async () => {
+  const batch = db.batch();
+  const col = db.collection("aluguel");
+  batch.set(col.doc("1"), { titulo: "Quarto mobiliado", tipo: "quarto", descricao: "Quarto com cama, guarda-roupa e internet inclusa.", preco: "$600", telefone: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
+  batch.set(col.doc("2"), { titulo: "Apartamento 2 qtos", tipo: "apartamento", descricao: "Cozinha americana, próximo ao centro.", preco: "$1.800", telefone: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
+  batch.set(col.doc("3"), { titulo: "Casa com quintal", tipo: "casa", descricao: "2 quartos, quintal grande, vaga para carro.", preco: "$2.200", telefone: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
+  await batch.commit();
+  alert("3 alugueis criados! Atualize a página.");
+};
+
+window.criarEstabFake = async () => {
+  const batch = db.batch();
+  const col = db.collection("estabelecimentos");
+  batch.set(col.doc("1"), { nome: "Mercado Brasil", categoria: "mercado", descricao: "Produtos brasileiros, frios, legumes.", telefone: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
+  batch.set(col.doc("2"), { nome: "Salão Beleza", categoria: "salao", descricao: "Cabelo, manicure, penteados.", telefone: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
+  batch.set(col.doc("3"), { nome: "Restaurante Sabor", categoria: "restaurante", descricao: "Comida brasileira, feijoada nos sábados.", telefone: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
+  await batch.commit();
+  alert("3 estabelecimentos criados! Atualize a página.");
+};
+
+window.criarAdmin = async () => {
+  await db.collection("admins").doc("admin").set({ usuario: "admin@moradoresdelowell.com", senha: "123456" });
+  alert("Admin criado! Login: admin@moradoresdelowell.com / senha: 123456");
+};
+
+// ===== MENU E RÁDIO =====
+document.getElementById("menu-toggle").onclick = () =>
+  document.getElementById("menu").classList.toggle("open");
+
+const player = document.getElementById("radio-player");
+const btn = document.getElementById("play-btn");
+btn.onclick = () => {
+  if (player.paused) {
+    player.play();
+    btn.textContent = "⏸️";
+  } else {
+    player.pause();
+    btn.textContent = "▶️";
+  }
+};
+
+// ===== CARREGA DESTAQUES =====
+db.collection("destaques").where("destaque", "==", true).limit(3)
+  .onSnapshot(snap => {
+    const container = document.getElementById("destaques-container");
+    if (snap.empty) {
+      container.innerHTML = "<p>Nenhum destaque ainda. Clique no botão acima para criar.</p>";
+      return;
+    }
+    container.innerHTML = "";
+    snap.forEach(doc => {
+      const d = doc.data();
+      container.innerHTML += `
+        <div style="display:inline-block;margin:.5rem;background:#fff;border:1px solid #ddd;border-radius:6px;width:260px">
+          <img src="${d.imagem}" style="width:100%;height:150px;object-fit:cover;border-radius:6px 6px 0 0">
+          <div style="padding:.75rem">
+            <strong>${d.titulo}</strong><br>
+            <small>${d.descricao}</small>
+          </div>
+        </div>`;
+    });
+  });
+
+// ===== CARREGA CLASSIFICADOS =====
+db.collection("classificados").limit(3)
+  .onSnapshot(snap => {
+    const container = document.getElementById("classificados-container");
+    if (snap.empty) {
+      container.innerHTML = "<p>Nenhum classificado ainda. Clique no botão acima para criar.</p>";
+      return;
+    }
+    container.innerHTML = "";
+    snap.forEach(doc => {
+      const c = doc.data();
+      container.innerHTML += `
+        <div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:1rem;margin:.5rem 0">
+          <strong>${c.titulo}</strong><br>
+          <small>${c.descricao}</small><br>
+          <a href="https://wa.me/1${c.telefone.replace(/\D/g,'')}" target="_blank">WhatsApp</a>
+        </div>`;
+    });
+  });
+</script>
 </body>
 </html>
