@@ -1,0 +1,36 @@
+<!-- TIRA: Limite de anúncios, email notificações, moderação -->
+
+<!-- DEIXA: Sistema básico -->
+<div class="form-group">
+    <label for="diasExpirar">Dias para Expirar Anúncios</label>
+    <select id="diasExpirar">
+        <option value="30" selected>30 dias</option>
+        <option value="60">60 dias</option>
+        <option value="90">90 dias</option>
+    </select>
+</div>
+
+<!-- NOVO: Sistema de usuários para notícias -->
+<h3 style="color: #e74c3c; margin-bottom: 20px; margin-top: 30px;">
+    <i class="fas fa-users"></i> Usuários para Notícias
+</h3>
+
+<div class="form-group">
+    <label for="novoUsuarioEmail">Email do Novo Usuário</label>
+    <input type="email" id="novoUsuarioEmail" placeholder="usuario@email.com">
+</div>
+
+<div class="form-group">
+    <label for="novoUsuarioNome">Nome do Usuário</label>
+    <input type="text" id="novoUsuarioNome" placeholder="Nome completo">
+</div>
+
+<div class="form-group">
+    <button type="button" class="btn-criar-usuario" onclick="criarUsuarioNoticias()">
+        <i class="fas fa-user-plus"></i> Criar Usuário para Notícias
+    </button>
+</div>
+
+<div id="listaUsuarios" class="usuarios-lista">
+    <!-- Lista de usuários aparecerá aqui -->
+</div>
