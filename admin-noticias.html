@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Notícia | Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <!-- Editor de Texto -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+    
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-header h1 {
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        
+        .btn-voltar:hover {
+            background: #5a6268;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6c757d;
+        }
+        
+        /* Editor Quill */
+        .editor-container {
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .editor-toolbar {
+            border-bottom: 1px solid #e1e8ed;
+            padding: 8px;
+            background: #f8f9fa;
+        }
+        
+        .editor-content {
+            min-height: 300px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* Botões do Editor */
+        .editor-toolbar button {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .editor-toolbar button:hover {
+            background: #e9ecef;
+        }
+        
+        .editor-toolbar button.active {
+            background: #6c757d;
+            color: white;
+        }
+        
+        /* Upload de Fotos */
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: #6c757d;
+            background: #f8f9fa;
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        .upload-area small {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .preview-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .preview-image {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Links Sociais */
+        .social-links-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .social-link-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .social-link-input select {
+            width: 150px;
+        }
+        
+        .social-link-input input {
+            flex: 1;
+        }
+        
+        .btn-add-link {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .btn-add-link:hover {
+            background: #5a6268;
+        }
+        
+        .social-links-list {
+            margin-top: 10px;
+        }
+        
+        .social-link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .social-link-item i {
+            margin-right: 8px;
+        }
+        
+        .btn-remove-link {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-cadastrar,
+        .btn-limpar {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-cadastrar {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-cadastrar:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+        
+        .btn-limpar {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-limpar:hover {
+            background: #7f8c8d;
+        }
+        
+        /* Mensagens */
+        .mensagem {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mensagem.sucesso {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .mensagem.erro {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .admin-container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .social-link-input {
+                flex-direction: column;
+            }
+            
+            .social-link-input select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="admin-painel.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-newspaper"></i> Cadastrar Notícia</h1>
+            <p>Informações e novidades da comunidade</p>
+        </div>
+        
+        <div id="mensagem" class="mensagem"></div>
+        
+        <form id="formNoticia" class="admin-form">
+            <div class="form-group">
+                <label for="titulo">Título da Notícia *</label>
+                <input type="text" id="titulo" name="titulo" required placeholder="Ex: Festa Junina 2024 - Moradores de Lowell">
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione...</option>
+                    <option value="urgente">Urgente / Importante</option>
+                    <option value="eventos">Eventos da Comunidade</option>
+                    <option value="oportunidades">Oportunidades</option>
+                    <option value="imigracao">Imigração / Documentação</option>
+                    <option value="avisos">Avisos Gerais</option>
+                    <option value="informacao">Informação Útil</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="resumo">Resumo da Notícia *</label>
+                <textarea id="resumo" name="resumo" required placeholder="Breve descrição para aparecer nas listagens..." maxlength="200"></textarea>
+            </div>
+            
+            <!-- Editor de Texto Simples -->
+            <div class="form-group">
+                <label>Conteúdo Completo da Notícia *</label>
+                <div style="border: 2px solid #e1e8ed; border-radius: 8px;">
+                    <!-- Toolbar do Editor -->
+                    <div class="editor-toolbar">
+                        <button type="button" class="ql-bold" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="ql-italic" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="ql-underline" title="Sublinhado"><i class="fas fa-underline"></i></button>
+                        
+                        <span class="ql-formats">
+                            <select class="ql-size" title="Tamanho da Fonte">
+                                <option value="small">Pequeno</option>
+                                <option value="false" selected>Normal</option>
+                                <option value="large">Grande</option>
+                                <option value="huge">Enorme</option>
+                            </select>
+                        </span>
+                        
+                        <span class="ql-formats">
+                            <select class="ql-color" title="Cor do Texto">
+                                <option value="#000000">Preto</option>
+                                <option value="#e74c3c">Vermelho</option>
+                                <option value="#3498db">Azul</option>
+                                <option value="#27ae60">Verde</option>
+                            </select>
+                        </span>
+                        
+                        <button type="button" class="ql-list" value="ordered" title="Lista Numerada"><i class="fas fa-list-ol"></i></button>
+                        <button type="button" class="ql-list" value="bullet" title="Lista com Marcadores"><i class="fas fa-list-ul"></i></button>
+                        
+                        <button type="button" class="ql-align" value="" title="Alinhamento"><i class="fas fa-align-left"></i></button>
+                        <button type="button" class="ql-align" value="center" title="Centralizar"><i class="fas fa-align-center"></i></button>
+                        <button type="button" class="ql-align" value="right" title="Alinhar à Direita"><i class="fas fa-align-right"></i></button>
+                        
+                        <button type="button" class="ql-link" title="Inserir Link"><i class="fas fa-link"></i></button>
+                        
+                        <button type="button" class="ql-clean" title="Limpar Formatação"><i class="fas fa-eraser"></i></button>
+                    </div>
+                    
+                    <!-- Área de Edição -->
+                    <div id="editor" style="min-height: 300px; padding: 15px; font-size: 16px; line-height: 1.6;"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="autor">Autor da Notícia</label>
+                <input type="text" id="autor" name="autor" placeholder="Ex: Equipe MDL, João Silva">
+            </div>
+            
+            <!-- Foto Principal -->
+            <div class="form-group">
+                <label>Foto Principal da Notícia</label>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-image"></i>
+                    <p>Clique aqui ou arraste uma foto</p>
+                    <small>Formatos: JPG, PNG (máx. 5MB)</small>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="preview-container" id="previewContainer"></div>
+            </div>
+            
+            <!-- Links para Redes Sociais -->
+            <div class="form-group">
+                <label>Links para Redes Sociais (opcional)</label>
+                <div style="margin-bottom: 10px;">
+                    <input type="url" id="instagram" placeholder="Link do Instagram (https://...)">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="url" id="facebook" placeholder="Link do Facebook (https://...)">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="url" id="website" placeholder="Link do Website (https://...)">
+                </div>
+                <small>Estes links aparecerão na notícia para direcionar os leitores</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="dataPublicacao">Data de Publicação</label>
+                <input type="datetime-local" id="dataPublicacao" name="dataPublicacao">
+            </div>
+            
+            <div class="form-group">
+                <label for="urgencia">Nível de Urgência</label>
+                <select id="urgencia" name="urgencia">
+                    <option value="normal" selected>Normal</option>
+                    <option value="alta">Alta - Destacar na página inicial</option>
+                    <option value="critica">Crítica - Alerta vermelho</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-cadastrar">
+                    <i class="fas fa-save"></i> Publicar Notícia
+                </button>
+                <button type="reset" class="btn-limpar">
+                    <i class="fas fa-eraser"></i> Limpar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Modal de Visualização -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+    // Verifica login
+    if (!localStorage.getItem('adminLogado')) {
+        window.location.href = 'admin-login.html';
+    }
+
+    // Faz login no Firebase
+    firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
+
+    // Variáveis globais
+    let uploadedImage = null;
+
+    // Inicializa o editor Quill
+    const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: '#editor-toolbar'
+        },
+        placeholder: 'Escreva o conteúdo completo da notícia aqui...'
+    });
+
+    // Upload de foto
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#6c757d';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ddd';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ddd';
+        handleFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        handleFile(e.target.files[0]);
+    });
+
+    function handleFile(file) {
+        if (!file) return;
+        
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Arquivo muito grande! Máximo 5MB.');
+            return;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor, selecione uma imagem!');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            uploadedImage = {
+                file: file,
+                url: e.target.result
+            };
+            updatePreview();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function updatePreview() {
+        if (uploadedImage) {
+            previewContainer.innerHTML = `
+                <div class="preview-image" onclick="showImage()">
+                    <img src="${uploadedImage.url}" alt="Foto da notícia">
+                    <button type="button" class="remove-image" onclick="removeImage()" title="Remover foto">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        } else {
+            previewContainer.innerHTML = '';
+        }
+    }
+
+    function showImage() {
+        if (!uploadedImage) return;
+        
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = uploadedImage.url;
+    }
+
+    function removeImage() {
+        uploadedImage = null;
+        updatePreview();
+    }
+
+    // Fechar modal
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.getElementById('imageModal').style.display = 'none';
+    });
+
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('imageModal')) {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    });
+
+    // Cadastro da notícia
+    document.getElementById('formNoticia').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const mensagemDiv = document.getElementById('mensagem');
+        const btnSubmit = document.querySelector('.btn-cadastrar');
+        
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+            
+            // Upload da foto para o Firebase Storage
+            let fotoURL = '';
+            
+            if (uploadedImage) {
+                const storageRef = firebase.storage().ref();
+                const fileName = `noticias/${Date.now()}_${document.getElementById('titulo').value.replace(/[^a-z0-9]/gi, '_')}.jpg`;
+                const fileRef = storageRef.child(fileName);
+                
+                await fileRef.put(uploadedImage.file);
+                fotoURL = await fileRef.getDownloadURL();
+            }
+            
+            // Pega conteúdo do editor
+            const conteudoHTML = quill.root.innerHTML;
+            
+            // Pega links sociais
+            const linksSociais = [];
+            if (document.getElementById('instagram').value) {
+                linksSociais.push({tipo: 'instagram', url: document.getElementById('instagram').value});
+            }
+            if (document.getElementById('facebook').value) {
+                linksSociais.push({tipo: 'facebook', url: document.getElementById('facebook').value});
+            }
+            if (document.getElementById('website').value) {
+                linksSociais.push({tipo: 'website', url: document.getElementById('website').value});
+            }
+            
+            const noticia = {
+                titulo: document.getElementById('titulo').value,
+                categoria: document.getElementById('categoria').value,
+                resumo: document.getElementById('resumo').value,
+                conteudoHTML: conteudoHTML,
+                conteudoTexto: quill.getText(),
+                autor: document.getElementById('autor').value,
+                foto: fotoURL,
+                linksSociais: linksSociais,
+                dataPublicacao: document.getElementById('dataPublicacao').value || new Date().toISOString(),
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+                dataExibicao: new Date().toLocaleDateString('pt-BR'),
+                urgencia: document.getElementById('urgencia').value,
+                ativo: true,
+                secao: 'noticias'
+            };
+            
+            await db.collection('noticias').add(noticia);
+            
+            mensagemDiv.className = 'mensagem sucesso';
+            mensagemDiv.innerHTML = '<i class="fas fa-check-circle"></i> Notícia publicada com sucesso!';
+            mensagemDiv.style.display = 'block';
+            
+            // Limpa formulário
+            document.getElementById('formNoticia').reset();
+            quill.setText('');
+            uploadedImage = null;
+            updatePreview();
+            
+            setTimeout(() => {
+                mensagemDiv.style.display = 'none';
+            }, 3000);
+            
+        } catch (error) {
+            mensagemDiv.className = 'mensagem erro';
+            mensagemDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro: ' + error.message;
+            mensagemDiv.style.display = 'block';
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-save"></i> Publicar Notícia';
+        }
+    });
+
+    // Inicializa tudo quando carrega
+    document.addEventListener('DOMContentLoaded', function() {
+        // Define data atual como padrão
+        const agora = new Date();
+        const dataFormatada = agora.toISOString().slice(0, 16);
+        document.getElementById('dataPublicacao').value = dataFormatada;
+    });
+    </script>
+</body>
+</html>
