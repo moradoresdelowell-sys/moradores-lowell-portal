@@ -162,3 +162,13 @@
         font-size: 2rem;
     }
 }
+
+// Executa automaticamente quando entra no painel (apenas uma vez)
+if (!localStorage.getItem('bancoInicializado')) {
+    setTimeout(() => {
+        if (confirm('Deseja inicializar o banco de dados com dados de exemplo?')) {
+            inicializarBancoDados();
+            localStorage.setItem('bancoInicializado', 'true');
+        }
+    }, 2000);
+}
