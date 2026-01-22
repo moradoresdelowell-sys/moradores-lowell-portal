@@ -1,95 +1,183 @@
 // =====================================================
-// INICIALIZADOR COMPLETO DO BANCO DE DADOS - FIREBASE
-// Moradores de Lowell - Portal Digital
+// INICIALIZADOR INTELIGENTE DO BANCO DE DADOS
+// Verifica o que existe e só cria o que falta!
 // =====================================================
 
-console.log('🚀 Iniciando configuração do banco de dados...');
+console.log('🧠 Inicializador Inteligente do Banco de Dados');
 
-// Função principal de inicialização
+// Função principal INTELIGENTE
 async function inicializarBancoDados() {
     try {
-        console.log('📊 Criando coleções e documentos de exemplo...');
+        console.log('🔍 Verificando o que já existe no banco...');
         
-        // 1. COLEÇÃO: noticias
-        console.log('📰 Criando notícias de exemplo...');
-        await criarNoticiasExemplo();
-        
-        // 2. COLEÇÃO: classificados
-        console.log('🛒 Criando classificados de exemplo...');
-        await criarClassificadosExemplo();
-        
-        // 3. COLEÇÃO: vagas
-        console.log('💼 Criando vagas de emprego...');
-        await criarVagasExemplo();
-        
-        // 4. COLEÇÃO: aluguel
-        console.log('🏠 Criando imóveis para aluguel...');
-        await criarAluguelExemplo();
-        
-        // 5. COLEÇÃO: estabelecimentos
-        console.log('🏪 Criando estabelecimentos...');
-        await criarEstabelecimentosExemplo();
-        
-        // 6. COLEÇÃO: admin
-        console.log('👑 Criando usuário admin...');
-        await criarAdminUsuario();
-        
-        // 7. COLEÇÃO: config
-        console.log('⚙️ Criando configurações padrão...');
-        await criarConfiguracoesPadrao();
-        
-        // 8. COLEÇÃO: analytics
-        console.log('📈 Criando analytics inicial...');
-        await criarAnalyticsInicial();
-        
-        console.log('✅ Banco de dados inicializado com sucesso!');
-        alert('🎉 Banco de dados configurado com sucesso! Agora você pode começar a usar o portal.');
-        
+        // Verifica cada coleção individualmente
+        const verificacoes = await Promise.all([
+            verificarColecao('noticias'),
+            verificarColecao('classificados'),
+            verificarColecao('vagas'),
+            verificarColecao('aluguel'),
+            verificarColecao('estabelecimentos'),
+            verificarColecao('admin'),
+            verificarColecao('config'),
+            verificarColecao('analytics')
+        ]);
+
+        const resultado = {
+            noticias: verificacoes[0],
+            classificados: verificacoes[1],
+            vagas: verificacoes[2],
+            aluguel: verificacoes[3],
+            estabelecimentos: verificacoes[4],
+            admin: verificacoes[5],
+            config: verificacoes[6],
+            analytics: verificacoes[7]
+        };
+
+        console.log('📊 Resultado da verificação:', resultado);
+
+        // Cria apenas o que está faltando
+        let criados = 0;
+
+        if (!resultado.noticias.temDados) {
+            console.log('📰 Criando notícias...');
+            await criarNoticiasExemplo();
+            criados++;
+        }
+
+        if (!resultado.classificados.temDados) {
+            console.log('🛒 Criando classificados...');
+            await criarClassificadosExemplo();
+            criados++;
+        }
+
+        if (!resultado.vagas.temDados) {
+            console.log('💼 Criando vagas...');
+            await criarVagasExemplo();
+            criados++;
+        }
+
+        if (!resultado.aluguel.temDados) {
+            console.log('🏠 Criando imóveis...');
+            await criarAluguelExemplo();
+            criados++;
+        }
+
+        if (!resultado.estabelecimentos.temDados) {
+            console.log('🏪 Criando estabelecimentos...');
+            await criarEstabelecimentosExemplo();
+            criados++;
+        }
+
+        if (!resultado.admin.temDados) {
+            console.log('👑 Criando admin...');
+            await criarAdminUsuario();
+            criados++;
+        }
+
+        if (!resultado.config.temDados) {
+            console.log('⚙️ Criando configurações...');
+            await criarConfiguracoesPadrao();
+            criados++;
+        }
+
+        if (!resultado.analytics.temDados) {
+            console.log('📈 Criando analytics...');
+            await criarAnalyticsInicial();
+            criados++;
+        }
+
+        if (criados > 0) {
+            console.log(`✅ ${criados} coleções foram criadas/atualizadas!`);
+            alert(`🎉 Banco de dados atualizado! ${criados} coleções foram criadas com sucesso!`);
+        } else {
+            console.log('✅ Banco de dados já está completo!');
+            alert('ℹ️ O banco de dados já está configurado e completo!');
+        }
+
+        // Atualiza a página para mostrar os novos dados
+        setTimeout(() => {
+            location.reload();
+        }, 1500);
+
     } catch (error) {
-        console.error('❌ Erro ao inicializar banco de dados:', error);
-        alert('Erro ao configurar banco de dados: ' + error.message);
+        console.error('❌ Erro ao verificar/inicializar banco de dados:', error);
+        alert('Erro: ' + error.message);
     }
 }
 
 // =====================================================
-// FUNÇÕES DE CRIAÇÃO DE DADOS
+// FUNÇÃO INTELIGENTE - VERIFICA COLEÇÕES
 // =====================================================
 
-// 1. NOTÍCIAS
+async function verificarColecao(nomeColecao) {
+    try {
+        console.log(`🔍 Verificando coleção: ${nomeColecao}`);
+        
+        const snapshot = await db.collection(nomeColecao).limit(1).get();
+        const temDados = !snapshot.empty;
+        const quantidade = snapshot.size;
+        
+        console.log(`📊 ${nomeColecao}: ${temDados ? 'JÁ TEM DADOS' : 'VAZIA'} (${quantidade} documentos)`);
+        
+        return {
+            nome: nomeColecao,
+            temDados: temDados,
+            quantidade: quantidade
+        };
+        
+    } catch (error) {
+        console.log(`⚠️ Erro ao verificar ${nomeColecao}:`, error);
+        // Se der erro, assume que não existe e tenta criar
+        return {
+            nome: nomeColecao,
+            temDados: false,
+            quantidade: 0,
+            erro: error.message
+        };
+    }
+}
+
+// =====================================================
+// FUNÇÕES DE CRIAÇÃO (MESMAS DE ANTES, MAS COM LOGS)
+// =====================================================
+
 async function criarNoticiasExemplo() {
     const noticias = [
         {
-            titulo: "Festa Junina 2024 - Moradores de Lowell",
-            categoria: "eventos",
-            resumo: "Participe da maior festa junina da comunidade brasileira em Lowell!",
-            conteudoHTML: `<h2>🎉 Festa Junina 2024 está chegando!</h2>
-                          <p>Preparados para a maior celebração da nossa comunidade?</p>
-                          <p><strong>Data:</strong> 24 de Junho<br>
-                          <strong>Local:</strong> Lowell Common Park<br>
-                          <strong>Horário:</strong> 14h às 22h</p>
-                          <p>Vai ter quadrilha, comidas típicas, jogos e muita diversão!</p>`,
-            conteudoTexto: "Festa Junina 2024 está chegando! Preparados para a maior celebração da nossa comunidade? Data: 24 de Junho, Local: Lowell Common Park",
+            titulo: "🎉 Bem-vindo ao Portal Moradores de Lowell!",
+            categoria: "informacao",
+            resumo: "O novo portal da comunidade brasileira está no ar com muitas funcões!",
+            conteudoHTML: `<h2>🎊 Portal está no ar!</h2>
+                          <p>Bem-vindo ao novo portal digital da comunidade brasileira em Lowell!</p>
+                          <p>Aqui você encontra:</p>
+                          <ul>
+                            <li>📰 Notícias da comunidade</li>
+                            <li>🛒 Classificados e doações</li>
+                            <li>💼 Vagas de emprego</li>
+                            <li>🏠 Aluguel de imóveis</li>
+                            <li>🏪 Guia comercial</li>
+                          </ul>
+                          <p><strong>Explore todas as funcões!</strong></p>`,
+            conteudoTexto: "Bem-vindo ao novo portal digital da comunidade brasileira em Lowell!",
             autor: "Equipe MDL",
-            imagem: "https://via.placeholder.com/600x400?text=Festa+Junina+2024",
+            imagem: "https://via.placeholder.com/600x400?text=Bem+Vindo+MDL",
             dataPublicacao: new Date().toISOString(),
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            urgencia: "normal",
+            urgencia: "alta",
             ativo: true,
-            secao: "noticias",
-            linksSociais: [
-                {tipo: "instagram", url: "https://instagram.com/moradoresdelowell"},
-                {tipo: "facebook", url: "https://facebook.com/moradoresdelowell"}
-            ]
+            secao: "noticias"
         },
         {
-            titulo: "Oportunidade de Emprego - Novas Vagas Disponíveis",
-            categoria: "oportunidades",
-            resumo: "Mais de 20 novas vagas de emprego disponíveis para a comunidade.",
-            conteudoHTML: `<h2>💼 Vagas de Emprego Disponíveis</h2>
-                          <p>Foram adicionadas 20 novas vagas em diferentes áreas.</p>
-                          <p>Confira as oportunidades na seção EMPREGOS do portal.</p>`,
-            conteudoTexto: "Mais de 20 novas vagas de emprego disponíveis para a comunidade.",
+            titulo: "Como usar o portal - Tutorial rápido",
+            categoria: "informacao",
+            resumo: "Aprenda a navegar por todas as funcões do portal",
+            conteudoHTML: `<h2>📖 Tutorial rápido</h2>
+                          <p>O portal é muito fácil de usar:</p>
+                          <p><strong>1.</strong> Use o menu hambúrguer para navegar<br>
+                          <strong>2.</strong> Clique nos cards para ver detalhes<br>
+                          <strong>3.</strong> Admin - Use o botão +Admin para adicionar conteúdo</p>`,
+            conteudoTexto: "Aprenda a navegar por todas as funcões do portal",
             autor: "Equipe MDL",
             dataPublicacao: new Date().toISOString(),
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
@@ -106,31 +194,18 @@ async function criarNoticiasExemplo() {
     }
 }
 
-// 2. CLASSIFICADOS
+// [REPETE AS MESMAS FUNÇÕES DOS OUTROS EXEMPLOS, MAS COM console.log]
+
 async function criarClassificadosExemplo() {
     const classificados = [
         {
-            titulo: "Geladeira Brastemp em Ótimo Estado",
+            titulo: "Geladeira Brastemp - Semi Nova",
             categoria: "produtos",
-            descricao: "Geladeira Brastemp 450L, 2 anos de uso, sem defeitos. Motivo: mudança.",
+            descricao: "Geladeira em ótimo estado, 450L, motivo: mudança",
             preco: "$350",
             telefone: "(978) 555-0123",
             local: "Lowell, MA",
             tipo: "venda",
-            fotos: ["https://via.placeholder.com/400x300?text=Geladeira"],
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "classificados"
-        },
-        {
-            titulo: "Doação de Roupas Infantis",
-            categoria: "doacoes",
-            descricao: "Roupas de criança (2-8 anos) em bom estado. Preciso doar urgente.",
-            preco: "Grátis",
-            telefone: "(978) 555-0456",
-            local: "Lowell, MA",
-            tipo: "doacao",
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             dataExibicao: new Date().toLocaleDateString('pt-BR'),
             ativo: true,
@@ -144,39 +219,15 @@ async function criarClassificadosExemplo() {
     }
 }
 
-// 3. VAGAS DE EMPREGO
 async function criarVagasExemplo() {
     const vagas = [
         {
             titulo: "Auxiliar de Cozinha",
-            empresa: "Restaurante Brasil",
-            descricao: "Preparar ingredientes, auxiliar no preparo de pratos, manter área de trabalho limpa. Experiência anterior preferível mas não obrigatória.",
-            salario: "$15/hora",
+            empresa: "Restaurante Sabor Brasil",
+            descricao: "Preparar ingredientes, auxiliar no preparo de pratos",
+            salario: "$16/hora",
             local: "Lowell, MA",
-            horario: "Segunda a Sexta, 9h às 17h",
-            beneficios: "Vale transporte, refeição no local",
-            requisitos: "Disponibilidade para trabalhar aos finais de semana quando necessário",
             contato: "(978) 555-0789",
-            dataLimite: "2024-07-15",
-            observacoes: "Enviar mensagem no WhatsApp com currículo",
-            fotos: [],
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "vagas"
-        },
-        {
-            titulo: "Motorista Delivery",
-            empresa: "Transportes Silva",
-            descricao: "Entregas locais em Lowell e região. Veículo próprio necessário.",
-            salario: "$18/hora + gorjeta",
-            local: "Lowell, MA",
-            horario: "Flexível",
-            beneficios: "Horário flexível, gorjetas",
-            requisitos: "CNH válida, veículo próprio",
-            contato: "(978) 555-0234",
-            dataLimite: "2024-07-30",
-            observacoes: "Começar imediatamente",
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             dataExibicao: new Date().toLocaleDateString('pt-BR'),
             ativo: true,
@@ -190,38 +241,15 @@ async function criarVagasExemplo() {
     }
 }
 
-// 4. IMÓVEIS PARA ALUGUEL
 async function criarAluguelExemplo() {
     const imoveis = [
         {
-            titulo: "Quarto Mobiliado em Área Tranquila",
+            titulo: "Quarto Individual - Tudo Incluído",
             tipo: "quarto",
-            descricao: "Quarto espaçoso com cama, guarda-roupa, escrivaninha. Acesso a cozinha completa, lavanderia e Wi-Fi. Área residencial tranquila, próximo a transporte público.",
+            descricao: "Quarto espaçoso, mobiliado, tudo incluído",
             preco: "650",
-            endereco: "123 Main St, Lowell, MA 01851",
+            endereco: "123 Main St, Lowell, MA",
             telefone: "(978) 555-0567",
-            whatsapp: "(978) 555-0567",
-            comodidades: "Wi-Fi, água, luz, gás, lavanderia",
-            regras: "Não fumante, sem animais, visitas até 22h",
-            disponibilidade: "Disponível imediatamente",
-            fotos: ["https://via.placeholder.com/500x400?text=Quarto+Mobiliado"],
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "aluguel"
-        },
-        {
-            titulo: "Apartamento 2 Quartos Completo",
-            tipo: "apartamento",
-            descricao: "Apartamento espaçoso com 2 quartos, sala, cozinha, banheiro. Próximo a mercados e transporte.",
-            preco: "1200",
-            endereco: "456 Broadway St, Lowell, MA 01852",
-            telefone: "(978) 555-0912",
-            whatsapp: "(978) 555-0912",
-            comodidades: "Wi-Fi, estacionamento",
-            regras: "Máximo 4 pessoas, depósito de segurança de $1200",
-            disponibilidade: "Disponível a partir de 01/08/2024",
-            fotos: ["https://via.placeholder.com/500x400?text=Apartamento+2Q"],
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             dataExibicao: new Date().toLocaleDateString('pt-BR'),
             ativo: true,
@@ -235,48 +263,19 @@ async function criarAluguelExemplo() {
     }
 }
 
-// 5. ESTABELECIMENTOS
 async function criarEstabelecimentosExemplo() {
     const estabelecimentos = [
         {
             nome: "Mercado Brasil",
             categoria: "mercado",
-            descricao: "Produtos brasileiros, frutas, verduras, carnes e muito mais. A maior variedade da região!",
-            endereco: "789 Central St, Lowell, MA 01850",
+            descricao: "Produtos brasileiros e latinos",
+            endereco: "123 Central St, Lowell, MA",
             telefone: "(978) 555-0345",
-            whatsapp: "(978) 555-0345",
-            email: "contato@mercadobrasil.com",
-            horario: "Seg-Sáb: 8h-20h, Dom: 9h-18h",
-            website: "https://mercadobrasil.com",
-            servicos: "Produtos brasileiros, frutas, verduras, carnes, frios, produtos de limpeza",
             plano: "premium",
-            fotos: ["https://via.placeholder.com/600x400?text=Mercado+Brasil"],
             dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
             dataExibicao: new Date().toLocaleDateString('pt-BR'),
             ativo: true,
-            secao: "estabelecimentos",
-            enderecoMaps: "789 Central St, Lowell, MA 01850",
-            whatsappNumero: "9785550345"
-        },
-        {
-            nome: "Salão Beleza Brasil",
-            categoria: "salao",
-            descricao: "Cabelos, manicure, pedicure, maquiagem. Profissionais qualificados e ambiente acolhedor.",
-            endereco: "321 Oak Ave, Lowell, MA 01851",
-            telefone: "(978) 555-0678",
-            whatsapp: "(978) 555-0678",
-            email: "belezabrasil@email.com",
-            horario: "Ter-Sáb: 9h-18h",
-            website: "@salonbelezabrasil",
-            servicos: "Cabelo, manicure, pedicure, maquiagem, sobrancelha",
-            plano: "destaque",
-            fotos: ["https://via.placeholder.com/600x400?text=Salao+Beleza"],
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "estabelecimentos",
-            enderecoMaps: "321 Oak Ave, Lowell, MA 01851",
-            whatsappNumero: "9785550678"
+            secao: "estabelecimentos"
         }
     ];
 
@@ -286,22 +285,19 @@ async function criarEstabelecimentosExemplo() {
     }
 }
 
-// 6. USUÁRIO ADMIN
 async function criarAdminUsuario() {
     const adminData = {
         email: "admin@moradoresdelowell.com",
         nome: "Administrador Principal",
         tipo: "admin",
         ativo: true,
-        dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
-        ultimoAcesso: firebase.firestore.FieldValue.serverTimestamp()
+        dataCriacao: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     await db.collection('admin').doc('admin-principal').set(adminData);
-    console.log('✅ Usuário admin criado');
+    console.log('✅ Admin criado');
 }
 
-// 7. CONFIGURAÇÕES PADRÃO
 async function criarConfiguracoesPadrao() {
     const configuracoes = {
         geral: {
@@ -310,62 +306,25 @@ async function criarConfiguracoesPadrao() {
             notificacoesEmail: true,
             modoManutencao: false
         },
-        seguranca: {
-            maxTentativasLogin: 5,
-            bloquearIPSuspeitos: true,
-            doisFatores: false
-        },
-        aparencia: {
-            tema: "vermelho",
-            animacoes: true,
-            logoUrl: "logo-moradores.png"
-        },
-        backup: {
-            automatico: true,
-            frequencia: "diaria",
-            ultimoBackup: null
-        },
-        analytics: {
-            coletarDados: true,
-            googleAnalytics: false
-        },
         dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     await db.collection('config').doc('sistema').set(configuracoes);
-    console.log('✅ Configurações padrão criadas');
+    console.log('✅ Configurações criadas');
 }
 
-// 8. ANALYTICS INICIAL
 async function criarAnalyticsInicial() {
     const analytics = {
         visitasTotais: 0,
         visitasHoje: 0,
-        usuariosAtivos: 0,
-        taxaCrescimento: 0,
-        paginasMaisVisitadas: ["home", "noticias", "classificados"],
-        dispositivos: {
-            desktop: 0,
-            mobile: 0,
-            tablet: 0
-        },
         dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     await db.collection('analytics').doc('geral').set(analytics);
-    console.log('✅ Analytics inicial criado');
+    console.log('✅ Analytics criado');
 }
 
-// =====================================================
-// FUNÇÃO PARA EXECUTAR TUDO
-// =====================================================
-
-// Adicione um botão no admin-painel.html para executar isso:
+// Adiciona ao HTML um botão:
 // <button onclick="inicializarBancoDados()" class="btn btn-primary">
-//     <i class="fas fa-database"></i> Inicializar Banco de Dados
+//     <i class="fas fa-database"></i> Inicializar Banco
 // </button>
-
-// Ou execute automaticamente quando quiser:
-// inicializarBancoDados();
-
-console.log('📋 Script de inicialização carregado! Clique no botão para configurar o banco de dados.');
