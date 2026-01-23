@@ -3,47 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - Moradores de Lowell e Região</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Login Admin - Moradores de Lowell</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        .login-title {
+            color: #dc3545;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #dc3545;
+            outline: none;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-login:hover {
+            background: #c82333;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 5px;
+            display: none;
+        }
+        .login-footer {
+            margin-top: 20px;
+        }
+        .login-footer a {
+            color: #dc3545;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
     <link rel="icon" type="image/png" href="logo-moradores.png">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body>
     <div class="login-container">
-        <div class="login-box">
-            <div class="login-header">
-                <img src="logo-moradores.png" alt="Logo" class="login-logo">
-                <h2>Admin - Moradores de Lowell</h2>
+        <img src="logo-moradores.png" alt="Logo" class="login-logo">
+        <h2 class="login-title">Admin - Moradores de Lowell</h2>
+        
+        <div id="errorMessage" class="error-message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="seu@email.com" required>
             </div>
             
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" required>
-                </div>
-                
-                <div id="errorMessage" class="error-message"></div>
-                
-                <button type="submit" class="btn btn-primary btn-block">
-                    Entrar
-                </button>
-            </form>
-            
-            <div class="login-footer">
-                <p><a href="index.html">← Voltar ao Site</a></p>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" placeholder="Sua senha" required>
             </div>
+            
+            <button type="submit" class="btn-login">ENTRAR</button>
+        </form>
+        
+        <div class="login-footer">
+            <p><a href="index.html">← Voltar ao Site</a></p>
         </div>
     </div>
 
-    <script src="firebase-config.js"></script>
-    <script src="admin-login.js"></script>
+    <script src="./firebase-config.js"></script>
+    <script src="./admin-login.js"></script>
 </body>
 </html>

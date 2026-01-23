@@ -1,19 +1,7 @@
-// Login Admin
+// Login Simples e Funcional
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
-    
-    // Verificar se já está logado
-    auth.onAuthStateChanged(function(user) {
-        if (user) {
-            // Verificar se é admin
-            db.collection('usuarios').doc(user.uid).get().then(function(doc) {
-                if (doc.exists && doc.data().role === 'admin') {
-                    window.location.href = 'admin-painel.html';
-                }
-            });
-        }
-    });
     
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -21,24 +9,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
         
-        // Limpar mensagem de erro
-        errorMessage.textContent = '';
-        errorMessage.style.display = 'none';
+        // Mostrar loading
+        const btn = e.target.querySelector('button');
+        btn.textContent = 'ENTRANDO...';
+        btn.disabled = true;
         
         try {
             const result = await firebaseUtils.loginAdmin(email, senha);
             
             if (result.success) {
-                // Login bem-sucedido, redirecionar para o painel
+                // Sucesso! Redirecionar
                 window.location.href = 'admin-painel.html';
             } else {
-                // Mostrar erro
+                // Erro
                 errorMessage.textContent = result.error;
                 errorMessage.style.display = 'block';
+                btn.textContent = 'ENTRAR';
+                btn.disabled = false;
             }
         } catch (error) {
-            errorMessage.textContent = 'Erro ao fazer login: ' + error.message;
+            errorMessage.textContent = 'Erro de conexão. Tente novamente.';
             errorMessage.style.display = 'block';
+            btn.textContent = 'ENTRAR';
+            btn.disabled = false;
         }
     });
 });
