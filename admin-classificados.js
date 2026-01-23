@@ -47,22 +47,25 @@ function removeImage(index) {
 }
 
 // Envia formulário
-document.getElementById('formClassificado').addEventListener('submit', async e => {
+document.getElementById('formClassificado').addEventListener('submit', async function(e) {
   e.preventDefault();
+  
   const btn = document.querySelector('.btn-cadastrar');
   const msg = document.getElementById('mensagem');
+  
   btn.disabled = true;
-  btn.textContent = 'Cadastrando...';
-
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+  
   try {
+    // Upload fotos
     const fotoURLs = [];
-    for (const img of uploadedImages) {
+    for (let img of uploadedImages) {
       const ref = firebase.storage().ref(`classificados/${Date.now()}_${img.file.name}`);
       await ref.put(img.file);
       fotoURLs.push(await ref.getDownloadURL());
     }
-
-    await db.collection('classificados').add({
+    
+    const anuncio = {
       titulo: document.getElementById('titulo').value,
       tipo: document.getElementById('tipo').value,
       descricao: document.getElementById('descricao').value,
@@ -73,20 +76,25 @@ document.getElementById('formClassificado').addEventListener('submit', async e =
       dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
       ativo: true,
       secao: 'classificados'
-    });
-
+    };
+    
+    await db.collection('classificados').add(anuncio);
+    
     msg.className = 'mensagem sucesso';
-    msg.textContent = '✅ Anúncio cadastrado!';
-    msg.style.display = 'flex';
-    e.target.reset();
+    msg.innerHTML = '<i class="fas fa-check-circle"></i> Anúncio cadastrado com sucesso!';
+    msg.style.display = 'block';
+    
+    // Limpa formulário
+    document.getElementById('formClassificado').reset();
     uploadedImages = [];
     updatePreview();
-  } catch (err) {
+    
+  } catch (error) {
     msg.className = 'mensagem erro';
-    msg.textContent = '❌ Erro: ' + err.message;
-    msg.style.display = 'flex';
+    msg.innerHTML = '❌ Erro: ' + error.message;
+    msg.style.display = 'block';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Cadastrar Classificado';
+    btn.innerHTML = '<i class="fas fa-save"></i> Cadastrar Classificado';
   }
 });
