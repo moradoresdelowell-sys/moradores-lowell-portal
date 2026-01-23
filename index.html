@@ -1,179 +1,85 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moradores de Lowell e Região</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <link rel="manifest" href="manifest.json"/>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-</head>
-<body>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-<header>
-  <img src="logo-moradores.png" alt="Logo" class="logo">
-  <h1>Moradores de Lowell e Região</h1>
-  <button id="menu-toggle">☰</button>
-</header>
+body {
+  background: #f4f4f4;
+  color: #333;
+}
 
-<nav id="menu">
-  <a href="#destaques">Destaques</a>
-  <a href="#radio">Rádio</a>
-  <a href="#classificados">Classificados</a>
-  <a href="#noticias">Notícias</a>
-  <a href="#empregos">Empregos</a>
-  <a href="#guia">Guia Comercial</a>
-</nav>
+header {
+  background: #b60000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: .5rem 1rem;
+}
 
-<main>
-  <!-- BOTÕES RÁPIDOS PARA CRIAR ANÚNCIOS -->
-  <section style="text-align:center; padding:1rem;">
-    <button onclick="criarDestaquesFake()">Criar 3 Destaques Premium</button>
-    <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
-    <button onclick="criarNoticiasFake()">Criar 3 Notícias</button>
-    <button onclick="criarVagasFake()">Criar 3 Vagas</button>
-    <button onclick="criarAlugueisFake()">Criar 3 Alugueis</button>
-    <button onclick="criarEstabFake()">Criar 3 Estabelecimentos</button>
-    <br><br>
-    <button onclick="criarAdmin()">Criar usuário admin (admin@moradoresdelowell.com)</button>
-  </section>
+.logo {
+  height: 40px;
+  margin-right: .5rem;
+}
 
-  <!-- DESTAQUES -->
-  <section id="destaques">
-    <h2>Destaques Premium</h2>
-    <div id="destaques-container">Carregando...</div>
-  </section>
+#menu-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  margin-left: auto;
+  cursor: pointer;
+}
 
-  <!-- RÁDIO -->
-  <section id="radio">
-    <h2>Rádio Online</h2>
-    <!-- Player removido temporariamente -->
-    <p>Em breve: rádio ao vivo da comunidade.</p>
-  </section>
+nav {
+  display: none;
+  flex-direction: column;
+  background: #900;
+}
 
-  <!-- CLASSIFICADOS -->
-  <section id="classificados">
-    <h2>Classificados</h2>
-    <div id="classificados-container">Carregando...</div>
-  </section>
-</main>
+nav a {
+  color: #fff;
+  padding: .75rem 1rem;
+  text-decoration: none;
+  border-bottom: 1px solid #700;
+}
 
-<button id="admin-float" onclick="window.location.href='admin-login.html'">Admin</button>
+nav.open {
+  display: flex;
+}
 
-<script src="firebase-config.js"></script>
-<script>
-// ===== FUNÇÕES RÁPIDAS =====
-window.criarDestaquesFake = async () => {
-  const batch = db.batch();
-  const dest = db.collection("destaques");
-  batch.set(dest.doc("1"), { titulo: "Apartamento 2 qtos", descricao: "Centro - $1.800", imagem: "https://via.placeholder.com/300x200?text=Apartamento", destaque: true });
-  batch.set(dest.doc("2"), { titulo: "Vaga de garagem", descricao: "Centro - $150/mês", imagem: "https://via.placeholder.com/300x200?text=Garagem", destaque: true });
-  batch.set(dest.doc("3"), { titulo: "Sala comercial", descricao: "Downtown - $900", imagem: "https://via.placeholder.com/300x200?text=Sala", destaque: true });
-  await batch.commit();
-  alert("3 destaques criados! Atualize a página.");
-};
+section {
+  padding: 1rem;
+  background: #fff;
+  margin: 1rem;
+  border-radius: 6px;
+}
 
-window.criarClassificadosFake = async () => {
-  const batch = db.batch();
-  const col = db.collection("classificados");
-  batch.set(col.doc("1"), { titulo: "Geladeira usada", descricao: "Em perfeito estado - $250", telefone: "(978) 555-1111", categoria: "eletro" });
-  batch.set(col.doc("2"), { titulo: "Cadeira de escritório", descricao: "Ajustável - $80", telefone: "(978) 555-2222", categoria: "móvel" });
-  batch.set(col.doc("3"), { titulo: "Aula de inglês", descricao: "Particular - $25/h", telefone: "(978) 555-3333", categoria: "serviço" });
-  await batch.commit();
-  alert("3 classificados criados! Atualize a página.");
-};
+button {
+  background: #b60000;
+  color: #fff;
+  border: none;
+  padding: .5rem 1rem;
+  margin: .25rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-window.criarNoticiasFake = async () => {
-  const batch = db.batch();
-  const col = db.collection("noticias");
-  batch.set(col.doc("1"), { titulo: "Festa Junina 2024", resumo: "Vai ter muito forró e comida típica!", conteudo: "A festa será no dia 15 de junho, às 18h, no Clube Brasileiro.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
-  batch.set(col.doc("2"), { titulo: "Curso de Inglês Grátis", resumo: "Inscrições abertas para o curso básico.", conteudo: "Aulas toda segunda e quarta, às 19h, na igreja.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
-  batch.set(col.doc("3"), { titulo: "Aviso de Água", resumo: "Corte programado para quinta-feira.", conteudo: "A concessionária avisa que haverá corte das 9h às 15h.", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "noticias" });
-  await batch.commit();
-  alert("3 notícias criadas! Atualize a página.");
-};
+button:hover {
+  background: #900;
+}
 
-window.criarVagasFake = async () => {
-  const batch = db.batch();
-  const col = db.collection("vagas");
-  batch.set(col.doc("1"), { titulo: "Auxiliar de Cozinha", empresa: "Restaurante Brasil", descricao: "Preparar ingredientes, limpeza da cozinha.", salario: "$16/h", local: "Lowell, MA", contato: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
-  batch.set(col.doc("2"), { titulo: "Motorista Delivery", empresa: "Transportes Silva", descricao: "Entregas com carro ou moto.", salario: "$18/h + gorjeta", local: "Região de Boston", contato: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
-  batch.set(col.doc("3"), { titulo: "Operador de Caixa", empresa: "Mercado Brasil", descricao: "Atendimento ao cliente, operar caixa.", salario: "$15/h", local: "Lowell, MA", contato: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "vagas" });
-  await batch.commit();
-  alert("3 vagas criadas! Atualize a página.");
-};
-
-window.criarAlugueisFake = async () => {
-  const batch = db.batch();
-  const col = db.collection("aluguel");
-  batch.set(col.doc("1"), { titulo: "Quarto mobiliado", tipo: "quarto", descricao: "Quarto com cama, guarda-roupa e internet inclusa.", preco: "$600", telefone: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
-  batch.set(col.doc("2"), { titulo: "Apartamento 2 qtos", tipo: "apartamento", descricao: "Cozinha americana, próximo ao centro.", preco: "$1.800", telefone: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
-  batch.set(col.doc("3"), { titulo: "Casa com quintal", tipo: "casa", descricao: "2 quartos, quintal grande, vaga para carro.", preco: "$2.200", telefone: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "aluguel" });
-  await batch.commit();
-  alert("3 alugueis criados! Atualize a página.");
-};
-
-window.criarEstabFake = async () => {
-  const batch = db.batch();
-  const col = db.collection("estabelecimentos");
-  batch.set(col.doc("1"), { nome: "Mercado Brasil", categoria: "mercado", descricao: "Produtos brasileiros, frios, legumes.", telefone: "(978) 555-1111", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
-  batch.set(col.doc("2"), { nome: "Salão Beleza", categoria: "salao", descricao: "Cabelo, manicure, penteados.", telefone: "(978) 555-2222", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
-  batch.set(col.doc("3"), { nome: "Restaurante Sabor", categoria: "restaurante", descricao: "Comida brasileira, feijoada nos sábados.", telefone: "(978) 555-3333", dataCadastro: firebase.firestore.FieldValue.serverTimestamp(), ativo: true, secao: "estabelecimentos" });
-  await batch.commit();
-  alert("3 estabelecimentos criados! Atualize a página.");
-};
-
-window.criarAdmin = async () => {
-  await db.collection("admins").doc("admin").set({ usuario: "admin@moradoresdelowell.com", senha: "123456" });
-  alert("Admin criado! Login: admin@moradoresdelowell.com / senha: 123456");
-};
-
-// ===== MENU HAMBURGUER =====
-document.getElementById("menu-toggle").onclick = () =>
-  document.getElementById("menu").classList.toggle("open");
-
-// ===== CARREGA DESTAQUES =====
-db.collection("destaques").where("destaque", "==", true).limit(3)
-  .onSnapshot(snap => {
-    const container = document.getElementById("destaques-container");
-    if (snap.empty) {
-      container.innerHTML = "<p>Nenhum destaque ainda. Clique no botão acima para criar.</p>";
-      return;
-    }
-    container.innerHTML = "";
-    snap.forEach(doc => {
-      const d = doc.data();
-      container.innerHTML += `
-        <div style="display:inline-block;margin:.5rem;background:#fff;border:1px solid #ddd;border-radius:6px;width:260px">
-          <img src="${d.imagem}" style="width:100%;height:150px;object-fit:cover;border-radius:6px 6px 0 0">
-          <div style="padding:.75rem">
-            <strong>${d.titulo}</strong><br>
-            <small>${d.descricao}</small>
-          </div>
-        </div>`;
-    });
-  });
-
-// ===== CARREGA CLASSIFICADOS =====
-db.collection("classificados").limit(3)
-  .onSnapshot(snap => {
-    const container = document.getElementById("classificados-container");
-    if (snap.empty) {
-      container.innerHTML = "<p>Nenhum classificado ainda. Clique no botão acima para criar.</p>";
-      return;
-    }
-    container.innerHTML = "";
-    snap.forEach(doc => {
-      const c = doc.data();
-      container.innerHTML += `
-        <div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:1rem;margin:.5rem 0">
-          <strong>${c.titulo}</strong><br>
-          <small>${c.descricao}</small><br>
-          <a href="https://wa.me/1${c.telefone.replace(/\D/g,'')}" target="_blank">WhatsApp</a>
-        </div>`;
-    });
-  });
-</script>
-</body>
-</html>
+#admin-float {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: #b60000;
+  color: #fff;
+  border: none;
+  padding: .75rem 1.5rem;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
