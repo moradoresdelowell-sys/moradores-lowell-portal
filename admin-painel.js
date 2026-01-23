@@ -1,23 +1,39 @@
+// Verifica login
 if (!localStorage.getItem('adminLogado')) {
   window.location.href = 'admin-login.html';
 }
 
-const db = firebase.firestore();
+// Faz login no Firebase (CORRIGIDO)
+firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'ph140204');
 
-document.addEventListener('DOMContentLoaded', function() {
-  const adminEmail = localStorage.getItem('adminEmail') || 'admin@moradoresdelowell.com';
-  document.getElementById('adminEmail').textContent = adminEmail;
-  carregarEstatisticas();
-});
-
+// Função sair
 function sairAdmin() {
-  if (confirm('Tem certeza que deseja sair?')) {
-    localStorage.removeItem('adminLogado');
-    localStorage.removeItem('adminEmail');
-    window.location.href = 'admin-login.html';
+  const confirmar = confirm('Tem certeza que deseja sair do sistema?');
+  if (confirmar) {
+    try {
+      localStorage.removeItem('adminLogado');
+      localStorage.removeItem('adminEmail');
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'admin-login.html';
+      });
+    } catch (error) {
+      window.location.href = 'admin-login.html';
+    }
   }
 }
 
+// Mostra email do admin
+document.addEventListener('DOMContentLoaded', function() {
+  const adminEmail = localStorage.getItem('adminEmail') || 'admin@moradoresdelowell.com';
+  document.getElementById('adminEmail').textContent = adminEmail;
+  const btnSair = document.querySelector('.btn-sair');
+  if (btnSair) {
+    btnSair.addEventListener('click', sairAdmin);
+  }
+  carregarEstatisticas();
+});
+
+// Carrega estatísticas
 async function carregarEstatisticas() {
   try {
     const [anuncios, vagas, aluguel, estab] = await Promise.all([
