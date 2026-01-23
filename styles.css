@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #f5f5f5;
+  background: #f8f9fa;
   color: #333;
   line-height: 1.6;
 }
@@ -23,6 +23,11 @@ header {
 .logo {
   height: 40px;
   margin-right: .75rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 #menu-toggle {
@@ -58,11 +63,13 @@ nav a:hover {
 
 main {
   padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .botoes-rapidos {
   text-align: center;
-  margin: 1.5rem 0;
+  margin: 2rem 0;
 }
 
 .botoes-rapidos button {
@@ -74,6 +81,7 @@ main {
   border-radius: 6px;
   cursor: pointer;
   font-size: .9rem;
+  transition: background .2s;
 }
 
 .botoes-rapidos button:hover {
@@ -91,6 +99,7 @@ main {
 .secao h2 {
   margin-bottom: 1rem;
   color: #b60000;
+  font-size: 1.4rem;
 }
 
 .cards-grid {
@@ -106,6 +115,33 @@ main {
   gap: 1rem;
 }
 
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 260px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px 6px 0 0;
+}
+
+.card-content {
+  padding: .75rem;
+}
+
+.card-list-item {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
 #admin-float {
   position: fixed;
   bottom: 1rem;
@@ -118,6 +154,7 @@ main {
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  font-size: .9rem;
 }
 
 @media (max-width: 600px) {
