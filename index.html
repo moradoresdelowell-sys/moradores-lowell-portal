@@ -1,85 +1,57 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moradores de Lowell e Região</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
 
-body {
-  background: #f4f4f4;
-  color: #333;
-}
+<header>
+  <img src="logo-moradores.png" alt="Logo" class="logo">
+  <h1>Moradores de Lowell e Região</h1>
+  <button id="menu-toggle">☰</button>
+</header>
 
-header {
-  background: #b60000;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  padding: .5rem 1rem;
-}
+<nav id="menu">
+  <a href="#destaques">Destaques</a>
+  <a href="#radio">Rádio</a>
+  <a href="#classificados">Classificados</a>
+  <a href="#noticias">Notícias</a>
+  <a href="#empregos">Empregos</a>
+  <a href="#guia">Guia Comercial</a>
+</nav>
 
-.logo {
-  height: 40px;
-  margin-right: .5rem;
-}
+<main>
+  <section style="text-align:center; padding:1rem;">
+    <button onclick="criarDestaquesFake()">Criar 3 Destaques</button>
+    <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
+    <button onclick="criarAdmin()">Criar admin</button>
+  </section>
 
-#menu-toggle {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  margin-left: auto;
-  cursor: pointer;
-}
+  <section id="destaques">
+    <h2>Destaques Premium</h2>
+    <div id="destaques-container">Carregando...</div>
+  </section>
 
-nav {
-  display: none;
-  flex-direction: column;
-  background: #900;
-}
+  <section id="radio">
+    <h2>Rádio Online</h2>
+    <p>Em breve: rádio ao vivo da comunidade.</p>
+  </section>
 
-nav a {
-  color: #fff;
-  padding: .75rem 1rem;
-  text-decoration: none;
-  border-bottom: 1px solid #700;
-}
+  <section id="classificados">
+    <h2>Classificados</h2>
+    <div id="classificados-container">Carregando...</div>
+  </section>
+</main>
 
-nav.open {
-  display: flex;
-}
+<button id="admin-float" onclick="window.location.href='admin-login.html'">Admin</button>
 
-section {
-  padding: 1rem;
-  background: #fff;
-  margin: 1rem;
-  border-radius: 6px;
-}
-
-button {
-  background: #b60000;
-  color: #fff;
-  border: none;
-  padding: .5rem 1rem;
-  margin: .25rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #900;
-}
-
-#admin-float {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  background: #b60000;
-  color: #fff;
-  border: none;
-  padding: .75rem 1.5rem;
-  border-radius: 30px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

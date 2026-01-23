@@ -12,20 +12,9 @@ document.querySelectorAll("nav a").forEach(a => {
   };
 });
 
-// Player rádio
-const player = document.getElementById("radio-player");
-const btn = document.getElementById("play-btn");
-btn.onclick = () => {
-  if (player.paused) {
-    player.play();
-    btn.textContent = "⏸️";
-  } else {
-    player.pause();
-    btn.textContent = "▶️";
-  }
-};
-
 // Carrega destaques
+const db = firebase.firestore();
+
 db.collection("destaques").where("destaque", "==", true).limit(3)
   .onSnapshot(snap => {
     const container = document.getElementById("destaques-container");
