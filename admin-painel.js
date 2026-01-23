@@ -3,37 +3,26 @@ if (!localStorage.getItem('adminLogado')) {
   window.location.href = 'admin-login.html';
 }
 
-// Faz login no Firebase (CORRIGIDO)
-firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'ph140204');
+// Login simples (sem Firebase Auth)
+const adminEmail = 'admin@moradoresdelowell.com';
+const adminSenha = 'ph140204';
 
-// Função sair
-function sairAdmin() {
-  const confirmar = confirm('Tem certeza que deseja sair do sistema?');
-  if (confirmar) {
-    try {
-      localStorage.removeItem('adminLogado');
-      localStorage.removeItem('adminEmail');
-      firebase.auth().signOut().then(() => {
-        window.location.href = 'admin-login.html';
-      });
-    } catch (error) {
-      window.location.href = 'admin-login.html';
-    }
-  }
-}
-
-// Mostra email do admin
+// Mostra email
 document.addEventListener('DOMContentLoaded', function() {
-  const adminEmail = localStorage.getItem('adminEmail') || 'admin@moradoresdelowell.com';
-  document.getElementById('adminEmail').textContent = adminEmail;
-  const btnSair = document.querySelector('.btn-sair');
-  if (btnSair) {
-    btnSair.addEventListener('click', sairAdmin);
-  }
+  document.getElementById('adminEmail').textContent = localStorage.getItem('adminEmail') || adminEmail;
   carregarEstatisticas();
 });
 
-// Carrega estatísticas
+// Sair
+function sairAdmin() {
+  if (confirm('Tem certeza que deseja sair?')) {
+    localStorage.removeItem('adminLogado');
+    localStorage.removeItem('adminEmail');
+    window.location.href = 'admin-login.html';
+  }
+}
+
+// Carrega estatísticas (sem erros)
 async function carregarEstatisticas() {
   try {
     const [anuncios, vagas, aluguel, estab] = await Promise.all([
@@ -48,6 +37,6 @@ async function carregarEstatisticas() {
     document.getElementById('totalAluguel').textContent = aluguel.size;
     document.getElementById('totalEstabelecimentos').textContent = estab.size;
   } catch (error) {
-    console.error('Erro ao carregar estatísticas:', error);
+    console.log('Erro ao carregar estatísticas:', error);
   }
 }
