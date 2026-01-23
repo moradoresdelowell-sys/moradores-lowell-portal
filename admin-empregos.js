@@ -1,13 +1,9 @@
-// Formata telefone
-function formatPhone(input) {
+// Formata contato
+function formatContato(input) {
   let value = input.value.replace(/\D/g, '');
-  let formatted = '';
-  if (value.length > 0) {
-    if (value.length <= 3) formatted = `(${value}`;
-    else if (value.length <= 6) formatted = `(${value.slice(0, 3)}) ${value.slice(3)}`;
-    else formatted = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+  if (value.length <= 10) {
+    input.value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6,10)}`;
   }
-  input.value = formatted;
 }
 
 // Upload de fotos
@@ -46,13 +42,8 @@ function removeImage(index) {
   updatePreview();
 }
 
-// Formata preço
-document.getElementById('preco').addEventListener('input', e => {
-  e.target.value = e.target.value.replace(/[^0-9]/g, '');
-});
-
 // Envia formulário
-document.getElementById('formAluguel').addEventListener('submit', async e => {
+document.getElementById('formVaga').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.querySelector('.btn-cadastrar');
   const msg = document.getElementById('mensagem');
@@ -62,25 +53,26 @@ document.getElementById('formAluguel').addEventListener('submit', async e => {
   try {
     const fotoURLs = [];
     for (const img of uploadedImages) {
-      const ref = firebase.storage().ref(`aluguel/${Date.now()}_${img.file.name}`);
+      const ref = firebase.storage().ref(`vagas/${Date.now()}_${img.file.name}`);
       await ref.put(img.file);
       fotoURLs.push(await ref.getDownloadURL());
     }
 
-    await db.collection('aluguel').add({
+    await db.collection('vagas').add({
       titulo: document.getElementById('titulo').value,
-      tipo: document.getElementById('tipo').value,
+      empresa: document.getElementById('empresa').value,
       descricao: document.getElementById('descricao').value,
-      preco: document.getElementById('preco').value,
-      telefone: document.getElementById('telefone').value,
+      salario: document.getElementById('salario').value,
+      local: document.getElementById('local').value,
+      contato: document.getElementById('contato').value,
       fotos: fotoURLs,
       dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
       ativo: true,
-      secao: 'aluguel'
+      secao: 'vagas'
     });
 
     msg.className = 'mensagem sucesso';
-    msg.textContent = '✅ Imóvel cadastrado!';
+    msg.textContent = '✅ Vaga cadastrada!';
     msg.style.display = 'flex';
     e.target.reset();
     uploadedImages = [];
@@ -91,6 +83,6 @@ document.getElementById('formAluguel').addEventListener('submit', async e => {
     msg.style.display = 'flex';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Cadastrar Aluguel';
+    btn.textContent = 'Cadastrar Vaga';
   }
 });

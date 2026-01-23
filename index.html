@@ -6,6 +6,7 @@
   <title>Moradores de Lowell e Região</title>
   <link rel="stylesheet" href="styles.css"/>
   <link rel="manifest" href="manifest.json"/>
+  <meta name="mobile-web-app-capable" content="yes">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
@@ -27,25 +28,29 @@
 </nav>
 
 <main>
-  <section style="text-align:center; padding:1rem;">
+  <!-- BOTÕES RÁPIDOS -->
+  <section class="botoes-rapidos">
     <button onclick="criarDestaquesFake()">Criar 3 Destaques</button>
     <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
-    <button onclick="criarAdmin()">Criar admin</button>
+    <button onclick="criarAdmin()">Criar Admin</button>
   </section>
 
-  <section id="destaques">
+  <!-- DESTAQUES -->
+  <section id="destaques" class="secao">
     <h2>Destaques Premium</h2>
-    <div id="destaques-container">Carregando...</div>
+    <div id="destaques-container" class="cards-grid">Carregando...</div>
   </section>
 
-  <section id="radio">
+  <!-- RÁDIO -->
+  <section id="radio" class="secao">
     <h2>Rádio Online</h2>
     <p>Em breve: rádio ao vivo da comunidade.</p>
   </section>
 
-  <section id="classificados">
+  <!-- CLASSIFICADOS -->
+  <section id="classificados" class="secao">
     <h2>Classificados</h2>
-    <div id="classificados-container">Carregando...</div>
+    <div id="classificados-container" class="cards-list">Carregando...</div>
   </section>
 </main>
 

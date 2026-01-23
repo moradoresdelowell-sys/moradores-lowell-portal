@@ -46,13 +46,8 @@ function removeImage(index) {
   updatePreview();
 }
 
-// Formata preço
-document.getElementById('preco').addEventListener('input', e => {
-  e.target.value = e.target.value.replace(/[^0-9]/g, '');
-});
-
 // Envia formulário
-document.getElementById('formAluguel').addEventListener('submit', async e => {
+document.getElementById('formClassificado').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.querySelector('.btn-cadastrar');
   const msg = document.getElementById('mensagem');
@@ -62,25 +57,26 @@ document.getElementById('formAluguel').addEventListener('submit', async e => {
   try {
     const fotoURLs = [];
     for (const img of uploadedImages) {
-      const ref = firebase.storage().ref(`aluguel/${Date.now()}_${img.file.name}`);
+      const ref = firebase.storage().ref(`classificados/${Date.now()}_${img.file.name}`);
       await ref.put(img.file);
       fotoURLs.push(await ref.getDownloadURL());
     }
 
-    await db.collection('aluguel').add({
+    await db.collection('classificados').add({
       titulo: document.getElementById('titulo').value,
       tipo: document.getElementById('tipo').value,
       descricao: document.getElementById('descricao').value,
-      preco: document.getElementById('preco').value,
+      preco: document.getElementById('preco').value || 'Grátis',
       telefone: document.getElementById('telefone').value,
+      local: document.getElementById('local').value,
       fotos: fotoURLs,
       dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
       ativo: true,
-      secao: 'aluguel'
+      secao: 'classificados'
     });
 
     msg.className = 'mensagem sucesso';
-    msg.textContent = '✅ Imóvel cadastrado!';
+    msg.textContent = '✅ Anúncio cadastrado!';
     msg.style.display = 'flex';
     e.target.reset();
     uploadedImages = [];
@@ -91,6 +87,6 @@ document.getElementById('formAluguel').addEventListener('submit', async e => {
     msg.style.display = 'flex';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Cadastrar Aluguel';
+    btn.textContent = 'Cadastrar Classificado';
   }
 });

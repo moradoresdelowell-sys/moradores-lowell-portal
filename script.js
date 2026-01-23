@@ -13,8 +13,6 @@ document.querySelectorAll("nav a").forEach(a => {
 });
 
 // Carrega destaques
-const db = firebase.firestore();
-
 db.collection("destaques").where("destaque", "==", true).limit(3)
   .onSnapshot(snap => {
     const container = document.getElementById("destaques-container");
