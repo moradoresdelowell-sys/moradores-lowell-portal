@@ -28,33 +28,61 @@
 </nav>
 
 <main>
-  <!-- BOTÕES RÁPIDOS -->
+  <!-- BOTÕES RÁPIDOS PARA ADMIN -->
   <section class="botoes-rapidos">
     <button onclick="criarDestaquesFake()">Criar 3 Destaques</button>
     <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
     <button onclick="criarAdmin()">Criar Admin</button>
   </section>
 
-  <!-- DESTAQUES -->
+  <!-- DESTAQUES PREMIUM -->
   <section id="destaques" class="secao">
-    <h2>Destaques Premium</h2>
-    <div id="destaques-container" class="cards-grid">Carregando...</div>
-  </section>
-
-  <!-- RÁDIO -->
-  <section id="radio" class="secao">
-    <h2>Rádio Online</h2>
-    <p>Em breve: rádio ao vivo da comunidade.</p>
+    <h2>Estabelecimentos Destaque</h2>
+    <p class="secao-subtitulo">Conheça nossos comércios premium</p>
+    <div id="destaques-container" class="cards-grid">
+      <div class="card-loading">Carregando estabelecimentos...</div>
+    </div>
   </section>
 
   <!-- CLASSIFICADOS -->
   <section id="classificados" class="secao">
     <h2>Classificados</h2>
-    <div id="classificados-container" class="cards-list">Carregando...</div>
+    <div id="classificados-container" class="cards-list">
+      <div class="card-loading">Carregando classificados...</div>
+    </div>
+  </section>
+
+  <!-- NOTÍCIAS -->
+  <section id="noticias" class="secao">
+    <h2>Últimas Notícias</h2>
+    <div class="noticias-header">
+      <a href="noticias.html" class="ver-todas">Ver todas →</a>
+    </div>
+    <div id="noticias-container" class="noticias-container">
+      <div class="card-loading">Carregando notícias...</div>
+    </div>
+  </section>
+
+  <!-- RÁDIO ONLINE -->
+  <section id="radio" class="secao radio-section">
+    <h2>MDL Radio</h2>
+    <div class="radio-player">
+      <p>Em breve: rádio ao vivo da comunidade.</p>
+      <audio id="radio-audio" controls style="display: none;">
+        <source src="" type="audio/mp3">
+        Seu navegador não suporta o player de áudio.
+      </audio>
+    </div>
   </section>
 </main>
 
-<button id="admin-float" onclick="window.location.href='admin-login.html'">Admin</button>
+<!-- BOTÃO ADMIN FLOTANTE -->
+<button id="admin-float" onclick="window.location.href='admin-login.html'">+ Admin</button>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2024 Moradores de Lowell</p>
+</footer>
 
 <script src="firebase-config.js"></script>
 <script src="script.js"></script>
