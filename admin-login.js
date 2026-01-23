@@ -5,18 +5,19 @@ document.getElementById('formLogin').addEventListener('submit', async e => {
   const erro = document.getElementById('mensagemErro');
 
   try {
-    await firebase.auth().signInWithEmailAndPassword(email, senha);
-
+    // Busca o admin no Firestore
     const adminDoc = await db.collection('admins').doc('admin').get();
-    if (adminDoc.exists && adminDoc.data().usuario === email) {
+
+    if (adminDoc.exists && adminDoc.data().usuario === email && adminDoc.data().senha === senha) {
       localStorage.setItem('adminLogado', 'true');
       localStorage.setItem('adminEmail', email);
       window.location.href = 'admin-painel.html';
     } else {
-      throw new Error('Você não tem permissão de administrador.');
+      erro.textContent = 'Email ou senha incorretos.';
+      erro.classList.add('show');
     }
   } catch (err) {
-    erro.textContent = err.message;
+    erro.textContent = 'Erro ao verificar login: ' + err.message;
     erro.classList.add('show');
   }
 });
