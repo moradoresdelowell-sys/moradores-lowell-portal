@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moradores de Lowell e Região</title>
+  <title>Moradores de Lowell - Portal da Comunidade</title>
   <link rel="stylesheet" href="styles.css"/>
   <link rel="manifest" href="manifest.json"/>
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
@@ -19,69 +21,79 @@
 </header>
 
 <nav id="menu">
-  <a href="#destaques">Destaques</a>
-  <a href="#radio">Rádio</a>
-  <a href="#classificados">Classificados</a>
-  <a href="#noticias">Notícias</a>
-  <a href="#empregos">Empregos</a>
-  <a href="#guia">Guia Comercial</a>
+  <a href="#destaques">🏪 Destaques</a>
+  <a href="#noticias">📰 Notícias</a>
+  <a href="#classificados">📋 Classificados</a>
+  <a href="#radio">🎵 Rádio</a>
+  <a href="#empregos">💼 Empregos</a>
+  <a href="#guia">📍 Guia</a>
 </nav>
 
 <main>
-  <!-- BOTÕES RÁPIDOS PARA ADMIN -->
-  <section class="botoes-rapidos">
-    <button onclick="criarDestaquesFake()">Criar 3 Destaques</button>
-    <button onclick="criarClassificadosFake()">Criar 3 Classificados</button>
-    <button onclick="criarAdmin()">Criar Admin</button>
+  <!-- Botões Admin (SOMENTE PARA TESTE) -->
+  <section class="admin-controls">
+    <button onclick="criarDestaquesFake()" class="btn-admin">✨ Criar Destaques</button>
+    <button onclick="criarClassificadosFake()" class="btn-admin">📝 Criar Classificados</button>
+    <button onclick="criarAdmin()" class="btn-admin">👤 Criar Admin</button>
   </section>
 
-  <!-- DESTAQUES PREMIUM -->
-  <section id="destaques" class="secao">
-    <h2>Estabelecimentos Destaque</h2>
-    <p class="secao-subtitulo">Conheça nossos comércios premium</p>
+  <!-- DESTAQUES PREMIUM (NO CENTRO) -->
+  <section id="destaques" class="secao destaques-section">
+    <div class="secao-header">
+      <h2>Estabelecimentos em Destaque</h2>
+      <p class="secao-subtitulo">Conheça nossos parceiros premium da comunidade</p>
+    </div>
     <div id="destaques-container" class="cards-grid">
       <div class="card-loading">Carregando estabelecimentos...</div>
     </div>
   </section>
 
-  <!-- CLASSIFICADOS -->
-  <section id="classificados" class="secao">
-    <h2>Classificados</h2>
-    <div id="classificados-container" class="cards-list">
-      <div class="card-loading">Carregando classificados...</div>
+  <!-- ÚLTIMAS NOTÍCIAS -->
+  <section id="noticias" class="secao noticias-section">
+    <div class="secao-header">
+      <h2>📰 Últimas Notícias</h2>
+      <a href="noticias.html" class="ver-mais-btn">Ver todas →</a>
+    </div>
+    <div id="noticias-container" class="noticias-grid">
+      <div class="card-loading">Carregando notícias...</div>
     </div>
   </section>
 
-  <!-- NOTÍCIAS -->
-  <section id="noticias" class="secao">
-    <h2>Últimas Notícias</h2>
-    <div class="noticias-header">
-      <a href="noticias.html" class="ver-todas">Ver todas →</a>
+  <!-- CLASSIFICADOS -->
+  <section id="classificados" class="secao classificados-section">
+    <div class="secao-header">
+      <h2>📋 Classificados da Semana</h2>
+      <p class="secao-subtitulo">Anúncios da comunidade para a comunidade</p>
     </div>
-    <div id="noticias-container" class="noticias-container">
-      <div class="card-loading">Carregando notícias...</div>
+    <div id="classificados-container" class="classificados-list">
+      <div class="card-loading">Carregando classificados...</div>
     </div>
   </section>
 
   <!-- RÁDIO ONLINE -->
   <section id="radio" class="secao radio-section">
-    <h2>MDL Radio</h2>
+    <div class="secao-header">
+      <h2>🎵 MDL Rádio Online</h2>
+      <p class="secao-subtitulo">A voz da comunidade brasileira em Lowell</p>
+    </div>
     <div class="radio-player">
-      <p>Em breve: rádio ao vivo da comunidade.</p>
-      <audio id="radio-audio" controls style="display: none;">
-        <source src="" type="audio/mp3">
-        Seu navegador não suporta o player de áudio.
-      </audio>
+      <div class="radio-placeholder">
+        <span class="radio-icon">📻</span>
+        <p>Em breve: Transmissão ao vivo 24h</p>
+        <small>Aguarde nossa estreia!</small>
+      </div>
     </div>
   </section>
+
 </main>
 
-<!-- BOTÃO ADMIN FLOTANTE -->
-<button id="admin-float" onclick="window.location.href='admin-login.html'">+ Admin</button>
+<!-- Botão Admin Flutuante -->
+<button id="admin-float" onclick="window.location.href='admin-login.html'" title="Área Admin">+ Admin</button>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
-  <p>&copy; 2024 Moradores de Lowell</p>
+  <p>&copy; 2024 Moradores de Lowell. Todos os direitos reservados.</p>
+  <p>Portal da Comunidade Brasileira em Massachusetts</p>
 </footer>
 
 <script src="firebase-config.js"></script>
