@@ -48,8 +48,8 @@
   <!-- RÁDIO -->
   <section id="radio">
     <h2>Rádio Online</h2>
-    <audio id="radio-player" src="https://stream.zeno.fm/1nqvelvvz98uv"></audio>
-    <button id="play-btn" class="play-pause">▶️</button>
+    <!-- Player removido temporariamente -->
+    <p>Em breve: rádio ao vivo da comunidade.</p>
   </section>
 
   <!-- CLASSIFICADOS -->
@@ -63,18 +63,6 @@
 
 <script src="firebase-config.js"></script>
 <script>
-// ===== FIREBASE CONFIG =====
-const firebaseConfig = {
-  apiKey: "AIzaSyA1k5lG6m5s6Z5B5B5B5B5B5B5B5B5B5B5B5",
-  authDomain: "moradores-lowell.firebaseapp.com",
-  projectId: "moradores-lowell",
-  storageBucket: "moradores-lowell.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abc123def456"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
 // ===== FUNÇÕES RÁPIDAS =====
 window.criarDestaquesFake = async () => {
   const batch = db.batch();
@@ -141,21 +129,9 @@ window.criarAdmin = async () => {
   alert("Admin criado! Login: admin@moradoresdelowell.com / senha: 123456");
 };
 
-// ===== MENU E RÁDIO =====
+// ===== MENU HAMBURGUER =====
 document.getElementById("menu-toggle").onclick = () =>
   document.getElementById("menu").classList.toggle("open");
-
-const player = document.getElementById("radio-player");
-const btn = document.getElementById("play-btn");
-btn.onclick = () => {
-  if (player.paused) {
-    player.play();
-    btn.textContent = "⏸️";
-  } else {
-    player.pause();
-    btn.textContent = "▶️";
-  }
-};
 
 // ===== CARREGA DESTAQUES =====
 db.collection("destaques").where("destaque", "==", true).limit(3)
