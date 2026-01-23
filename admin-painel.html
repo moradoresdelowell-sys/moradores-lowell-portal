@@ -1,302 +1,107 @@
-// =============================================
-// ADMIN PAINEL - COMPLETO E CORRIGIDO
-// =============================================
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Moradores de Lowell e Região</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo-moradores.png">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <!-- Header Admin -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="logo-moradores.png" alt="Logo">
+                <h1>Painel Admin - Moradores de Lowell</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#" onclick="logout()" class="admin-link">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-// VERIFICA LOGIN AO CARREGAR
-if (!localStorage.getItem('adminLogado')) {
-    window.location.href = 'admin-login.html';
-}
-
-// FAZ LOGIN NO FIREBASE
-firebase.auth().signInWithEmailAndPassword('admin@moradoresdelowell.com', 'Admin2024!');
-
-// =============================================
-// FUNÇÃO SAIR - CORRIGIDA
-// =============================================
-function sairAdmin() {
-    const confirmar = confirm('Tem certeza que deseja sair do sistema?');
-    
-    if (confirmar) {
-        try {
-            // Remove do localStorage
-            localStorage.removeItem('adminLogado');
-            localStorage.removeItem('adminEmail');
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard -->
+            <div class="admin-panel">
+                <h2>Dashboard</h2>
+                
+                <!-- Estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalAnuncios">0</div>
+                        <div class="stat-label">Anúncios</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalVagas">0</div>
+                        <div class="stat-label">Vagas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEstabelecimentos">0</div>
+                        <div class="stat-label">Estabelecimentos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalNoticias">0</div>
+                        <div class="stat-label">Notícias</div>
+                    </div>
+                </div>
+                
+                <!-- Menu de Administração -->
+                <div class="admin-sections">
+                    <div class="admin-card" onclick="showSection('anuncios')">
+                        <h3>📢 Anúncios</h3>
+                        <p>Gerenciar classificados</p>
+                    </div>
+                    <div class="admin-card" onclick="showSection('vagas')">
+                        <h3>💼 Vagas</h3>
+                        <p>Gerenciar empregos</p>
+                    </div>
+                    <div class="admin-card" onclick="showSection('estabelecimentos')">
+                        <h3>🏪 Estabelecimentos</h3>
+                        <p>Gerenciar guia comercial</p>
+                    </div>
+                    <div class="admin-card" onclick="showSection('noticias')">
+                        <h3>📰 Notícias</h3>
+                        <p>Gerenciar notícias</p>
+                    </div>
+                    <div class="admin-card" onclick="showSection('aluguel')">
+                        <h3>🏠 Aluguel</h3>
+                        <p>Gerenciar imóveis</p>
+                    </div>
+                    <div class="admin-card" onclick="showSection('config')">
+                        <h3>⚙️ Configurações</h3>
+                        <p>Configurar site</p>
+                    </div>
+                </div>
+            </div>
             
-            // Faz logout do Firebase
-            firebase.auth().signOut().then(() => {
-                console.log('✅ Logout realizado com sucesso');
-                window.location.href = 'admin-login.html';
-            }).catch((error) => {
-                console.log('⚠️ Erro no logout:', error);
-                // Mesmo com erro, redireciona
-                window.location.href = 'admin-login.html';
-            });
-        } catch (error) {
-            console.log('⚠️ Erro:', error);
-            window.location.href = 'admin-login.html';
-        }
-    }
-}
+            <!-- Seções de Gerenciamento -->
+            <div id="adminContent" class="admin-content">
+                <!-- Conteúdo dinâmico será carregado aqui -->
+            </div>
+        </div>
+    </main>
 
-// =============================================
-// MOSTRA EMAIL DO ADMIN
-// =============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const adminEmail = localStorage.getItem('adminEmail') || 'admin@moradoresdelowell.com';
-    document.getElementById('adminEmail').textContent = adminEmail;
-    
-    // Adiciona evento ao botão sair
-    const btnSair = document.querySelector('.btn-sair');
-    if (btnSair) {
-        btnSair.addEventListener('click', sairAdmin);
-    }
-    
-    // Carrega estatísticas
-    carregarEstatisticas();
-});
+    <!-- Modal de Formulário -->
+    <div id="formModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeFormModal()">&times;</span>
+            <div id="formContent">
+                <!-- Formulário dinâmico será carregado aqui -->
+            </div>
+        </div>
+    </div>
 
-// =============================================
-// CARREGA ESTATÍSTICAS
-// =============================================
-async function carregarEstatisticas() {
-    try {
-        console.log('📊 Carregando estatísticas...');
-        
-        // Conta documentos em cada coleção
-        const anunciosSnapshot = await db.collection('classificados').where('ativo', '==', true).get();
-        const vagasSnapshot = await db.collection('vagas').where('ativo', '==', true).get();
-        const aluguelSnapshot = await db.collection('aluguel').where('ativo', '==', true).get();
-        const estabSnapshot = await db.collection('estabelecimentos').where('ativo', '==', true).get();
-        
-        // Atualiza os números na tela
-        document.getElementById('totalAnuncios').textContent = anunciosSnapshot.size;
-        document.getElementById('totalVagas').textContent = vagasSnapshot.size;
-        document.getElementById('totalAluguel').textContent = aluguelSnapshot.size;
-        document.getElementById('totalEstabelecimentos').textContent = estabSnapshot.size;
-        
-        console.log('✅ Estatísticas carregadas com sucesso!');
-        
-    } catch (error) {
-        console.error('❌ Erro ao carregar estatísticas:', error);
-        // Coloca 0 se der erro
-        document.getElementById('totalAnuncios').textContent = '0';
-        document.getElementById('totalVagas').textContent = '0';
-        document.getElementById('totalAluguel').textContent = '0';
-        document.getElementById('totalEstabelecimentos').textContent = '0';
-    }
-}
-
-// =============================================
-// CONTROLE DO BANCO DE DADOS
-// =============================================
-
-// Botão Inicializar Banco de Dados
-async function inicializarBancoDados() {
-    console.log('🚀 Inicializando banco de dados...');
-    
-    const confirmar = confirm(
-        'Deseja inicializar o banco de dados com dados de exemplo?\n\n' +
-        'Isso vai adicionar notícias, classificados, vagas e mais conteúdo ao portal.'
-    );
-    
-    if (confirmar) {
-        try {
-            console.log('📊 Criando dados de exemplo...');
-            
-            // Cria cada coleção
-            await criarNoticiasExemplo();
-            await criarClassificadosExemplo();
-            await criarVagasExemplo();
-            await criarAluguelExemplo();
-            await criarEstabelecimentosExemplo();
-            
-            console.log('✅ Banco de dados inicializado com sucesso!');
-            alert('🎉 Banco de dados inicializado com sucesso! A página vai recarregar...');
-            
-            // Recarrega para mostrar os novos dados
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
-            
-        } catch (error) {
-            console.error('❌ Erro ao inicializar:', error);
-            alert('Erro ao inicializar banco de dados: ' + error.message);
-        }
-    }
-}
-
-// Botão Limpar e Criar Novo
-async function limparEcriarNovo() {
-    console.log('🧹 Iniciando limpeza e recriação...');
-    
-    const confirmar = confirm(
-        '⚠️ ATENÇÃO!\n\n' +
-        'Isso vai APAGAR TODOS os dados e recriar do zero!\n\n' +
-        'Deseja continuar?'
-    );
-    
-    if (confirmar) {
-        try {
-            console.log('🗑️ Apagando tudo...');
-            await apagarTudo();
-            
-            console.log('🚀 Criando novo...');
-            await criarTudoPerfeito();
-            
-            console.log('✅ Tudo recriado com sucesso!');
-            alert('🎉 Banco de dados recriado com sucesso! A página vai recarregar...');
-            
-            // Recarrega para mostrar os novos dados
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
-            
-        } catch (error) {
-            console.error('❌ Erro na operação:', error);
-            alert('Erro: ' + error.message);
-        }
-    }
-}
-
-// =============================================
-// FUNÇÕES DE CRIAÇÃO
-// =============================================
-
-async function criarNoticiasExemplo() {
-    const noticias = [
-        {
-            titulo: "🎉 Bem-vindo ao Portal Moradores de Lowell!",
-            categoria: "informacao",
-            resumo: "O novo portal da comunidade brasileira está no ar!",
-            conteudoHTML: `<h2>🎊 Bem-vindo!</h2><p>O portal está no ar com notícias, classificados, empregos e muito mais!</p>`,
-            conteudoTexto: "Bem-vindo ao portal da comunidade!",
-            autor: "Equipe MDL",
-            dataPublicacao: new Date().toISOString(),
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            urgencia: "normal",
-            ativo: true,
-            secao: "noticias"
-        }
-    ];
-
-    for (const noticia of noticias) {
-        await db.collection('noticias').add(noticia);
-        console.log('✅ Notícia criada:', noticia.titulo);
-    }
-}
-
-async function criarClassificadosExemplo() {
-    const classificados = [
-        {
-            titulo: "Geladeira Brastemp - Ótima Estado",
-            categoria: "produtos",
-            descricao: "Geladeira 450L, funcionando perfeitamente",
-            preco: "$350",
-            telefone: "(978) 555-0123",
-            local: "Lowell, MA",
-            tipo: "venda",
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "classificados"
-        }
-    ];
-
-    for (const classificado of classificados) {
-        await db.collection('classificados').add(classificado);
-        console.log('✅ Classificado criado:', classificado.titulo);
-    }
-}
-
-async function criarVagasExemplo() {
-    const vagas = [
-        {
-            titulo: "Auxiliar de Cozinha",
-            empresa: "Restaurante Brasil",
-            descricao: "Preparar ingredientes, auxiliar no preparo de pratos",
-            salario: "$15/hora",
-            local: "Lowell, MA",
-            contato: "(978) 555-0789",
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "vagas"
-        }
-    ];
-
-    for (const vaga of vagas) {
-        await db.collection('vagas').add(vaga);
-        console.log('✅ Vaga criada:', vaga.titulo);
-    }
-}
-
-async function criarAluguelExemplo() {
-    const imoveis = [
-        {
-            titulo: "Quarto Mobiliado - Tudo Incluído",
-            tipo: "quarto",
-            descricao: "Quarto espaçoso, mobiliado, tudo incluído",
-            preco: "650",
-            endereco: "123 Main St, Lowell, MA",
-            telefone: "(978) 555-0567",
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "aluguel"
-        }
-    ];
-
-    for (const imovel of imoveis) {
-        await db.collection('aluguel').add(imovel);
-        console.log('✅ Imóvel criado:', imovel.titulo);
-    }
-}
-
-async function criarEstabelecimentosExemplo() {
-    const estabelecimentos = [
-        {
-            nome: "Mercado Brasil",
-            categoria: "mercado",
-            descricao: "Produtos brasileiros e latinos",
-            endereco: "123 Central St, Lowell, MA",
-            telefone: "(978) 555-0345",
-            plano: "premium",
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            dataExibicao: new Date().toLocaleDateString('pt-BR'),
-            ativo: true,
-            secao: "estabelecimentos"
-        }
-    ];
-
-    for (const estab of estabelecimentos) {
-        await db.collection('estabelecimentos').add(estab);
-        console.log('✅ Estabelecimento criado:', estab.nome);
-    }
-}
-
-async function apagarTudo() {
-    const colecoes = ['noticias', 'classificados', 'vagas', 'aluguel', 'estabelecimentos'];
-    
-    for (const colecao of colecoes) {
-        try {
-            const snapshot = await db.collection(colecao).get();
-            const deletePromises = [];
-            snapshot.forEach(doc => {
-                deletePromises.push(doc.ref.delete());
-            });
-            await Promise.all(deletePromises);
-            console.log(`✅ ${colecao} apagada`);
-        } catch (error) {
-            console.log(`⚠️ ${colecao} já vazia`);
-        }
-    }
-}
-
-async function criarTudoPerfeito() {
-    await criarNoticiasExemplo();
-    await criarClassificadosExemplo();
-    await criarVagasExemplo();
-    await criarAluguelExemplo();
-    await criarEstabelecimentosExemplo();
-}
+    <script src="firebase-config.js"></script>
+    <script src="admin-painel.js"></script>
+</body>
+</html>

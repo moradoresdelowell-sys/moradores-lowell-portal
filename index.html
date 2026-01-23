@@ -1,102 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Moradores de Lowell - Portal da Comunidade</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <link rel="manifest" href="manifest.json"/>
-  <meta name="mobile-web-app-capable" content="yes">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moradores de Lowell e Região</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#dc3545">
+    <link rel="icon" type="image/png" href="logo-moradores.png">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="logo-moradores.png" alt="Logo">
+                <h1>Moradores de Lowell e Região</h1>
+            </div>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <nav class="nav" id="nav">
+                <ul>
+                    <li><a href="#inicio" class="active">Início</a></li>
+                    <li><a href="#aluguel">Aluguel</a></li>
+                    <li><a href="#classificados">Classificados</a></li>
+                    <li><a href="#empregos">Empregos</a></li>
+                    <li><a href="#guia">Guia Comercial</a></li>
+                    <li><a href="#noticias">Notícias</a></li>
+                    <li><a href="admin-login.html" class="admin-link">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<header>
-  <img src="logo-moradores.png" alt="Logo" class="logo">
-  <h1>Moradores de Lowell e Região</h1>
-  <button id="menu-toggle">☰</button>
-</header>
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Seção Início -->
+            <section id="inicio" class="section active">
+                <h2>Bem-vindo ao Portal da Comunidade</h2>
+                
+                <!-- Anúncios Premium -->
+                <div class="premium-ads">
+                    <h3>Destaques Premium</h3>
+                    <div id="premiumAds" class="ads-grid"></div>
+                </div>
 
-<nav id="menu">
-  <a href="#destaques">🏪 Destaques</a>
-  <a href="#noticias">📰 Notícias</a>
-  <a href="#classificados">📋 Classificados</a>
-  <a href="#radio">🎵 Rádio</a>
-  <a href="#empregos">💼 Empregos</a>
-  <a href="#guia">📍 Guia</a>
-</nav>
+                <!-- Últimas Notícias -->
+                <div class="news-preview">
+                    <h3>Últimas Notícias</h3>
+                    <div id="latestNews" class="news-grid"></div>
+                    <a href="#noticias" class="btn">Ver Todas</a>
+                </div>
+            </section>
 
-<main>
-  <!-- Botões Admin (SOMENTE PARA TESTE) -->
-  <section class="admin-controls">
-    <button onclick="criarDestaquesFake()" class="btn-admin">✨ Criar Destaques</button>
-    <button onclick="criarClassificadosFake()" class="btn-admin">📝 Criar Classificados</button>
-    <button onclick="criarAdmin()" class="btn-admin">👤 Criar Admin</button>
-  </section>
+            <!-- Seção Aluguel -->
+            <section id="aluguel" class="section">
+                <h2>Imóveis para Aluguel</h2>
+                <div class="filters">
+                    <select id="aluguelTipo">
+                        <option value="">Todos os Tipos</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="casa">Casa</option>
+                        <option value="quarto">Quarto</option>
+                    </select>
+                    <select id="aluguelPreco">
+                        <option value="">Faixa de Preço</option>
+                        <option value="0-1000">Até $1.000</option>
+                        <option value="1000-2000">$1.000 - $2.000</option>
+                        <option value="2000+">Acima de $2.000</option>
+                    </select>
+                </div>
+                <div id="aluguelList" class="items-grid"></div>
+            </section>
 
-  <!-- DESTAQUES PREMIUM (NO CENTRO) -->
-  <section id="destaques" class="secao destaques-section">
-    <div class="secao-header">
-      <h2>Estabelecimentos em Destaque</h2>
-      <p class="secao-subtitulo">Conheça nossos parceiros premium da comunidade</p>
-    </div>
-    <div id="destaques-container" class="cards-grid">
-      <div class="card-loading">Carregando estabelecimentos...</div>
-    </div>
-  </section>
+            <!-- Seção Classificados -->
+            <section id="classificados" class="section">
+                <h2>Classificados</h2>
+                <div class="filters">
+                    <select id="classificadosCategoria">
+                        <option value="">Todas Categorias</option>
+                        <option value="produtos">Produtos</option>
+                        <option value="doacoes">Doações</option>
+                        <option value="servicos">Serviços</option>
+                    </select>
+                </div>
+                <div id="classificadosList" class="items-grid"></div>
+            </section>
 
-  <!-- ÚLTIMAS NOTÍCIAS -->
-  <section id="noticias" class="secao noticias-section">
-    <div class="secao-header">
-      <h2>📰 Últimas Notícias</h2>
-      <a href="noticias.html" class="ver-mais-btn">Ver todas →</a>
-    </div>
-    <div id="noticias-container" class="noticias-grid">
-      <div class="card-loading">Carregando notícias...</div>
-    </div>
-  </section>
+            <!-- Seção Empregos -->
+            <section id="empregos" class="section">
+                <h2>Oportunidades de Emprego</h2>
+                <div class="filters">
+                    <select id="empregosTipo">
+                        <option value="">Todos os Tipos</option>
+                        <option value="tempo-integral">Tempo Integral</option>
+                        <option value="meio-periodo">Meio Período</option>
+                        <option value="temporario">Temporário</option>
+                    </select>
+                </div>
+                <div id="empregosList" class="items-grid"></div>
+            </section>
 
-  <!-- CLASSIFICADOS -->
-  <section id="classificados" class="secao classificados-section">
-    <div class="secao-header">
-      <h2>📋 Classificados da Semana</h2>
-      <p class="secao-subtitulo">Anúncios da comunidade para a comunidade</p>
-    </div>
-    <div id="classificados-container" class="classificados-list">
-      <div class="card-loading">Carregando classificados...</div>
-    </div>
-  </section>
+            <!-- Seção Guia Comercial -->
+            <section id="guia" class="section">
+                <h2>Guia Comercial</h2>
+                <div class="filters">
+                    <select id="guiaCategoria">
+                        <option value="">Todas Categorias</option>
+                        <option value="restaurantes">Restaurantes</option>
+                        <option value="servicos">Serviços</option>
+                        <option value="comercio">Comércio</option>
+                        <option value="saude">Saúde</option>
+                    </select>
+                </div>
+                <div id="guiaList" class="items-grid"></div>
+            </section>
 
-  <!-- RÁDIO ONLINE -->
-  <section id="radio" class="secao radio-section">
-    <div class="secao-header">
-      <h2>🎵 MDL Rádio Online</h2>
-      <p class="secao-subtitulo">A voz da comunidade brasileira em Lowell</p>
-    </div>
+            <!-- Seção Notícias -->
+            <section id="noticias" class="section">
+                <h2>Notícias</h2>
+                <div id="noticiasList" class="news-full"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Player de Rádio Fixo -->
     <div class="radio-player">
-      <div class="radio-placeholder">
-        <span class="radio-icon">📻</span>
-        <p>Em breve: Transmissão ao vivo 24h</p>
-        <small>Aguarde nossa estreia!</small>
-      </div>
+        <div class="radio-controls">
+            <button id="playPause" class="play-btn">▶</button>
+            <div class="radio-info">
+                <span class="radio-title">Rádio Comunidade</span>
+                <span class="radio-status" id="radioStatus">Parado</span>
+            </div>
+            <div class="volume-control">
+                <input type="range" id="volume" min="0" max="100" value="50">
+            </div>
+        </div>
     </div>
-  </section>
 
-</main>
+    <!-- Modal de Compartilhamento -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Compartilhar</h3>
+            <div class="share-buttons">
+                <button class="share-btn whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
+                <button class="share-btn facebook" onclick="shareFacebook()">Facebook</button>
+                <button class="share-btn copy" onclick="copyLink()">Copiar Link</button>
+            </div>
+        </div>
+    </div>
 
-<!-- Botão Admin Flutuante -->
-<button id="admin-float" onclick="window.location.href='admin-login.html'" title="Área Admin">+ Admin</button>
-
-<!-- Footer -->
-<footer>
-  <p>&copy; 2024 Moradores de Lowell. Todos os direitos reservados.</p>
-  <p>Portal da Comunidade Brasileira em Massachusetts</p>
-</footer>
-
-<script src="firebase-config.js"></script>
-<script src="script.js"></script>
+    <!-- Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="app.js"></script>
+    <script src="radio.js"></script>
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registrado'))
+                .catch(err => console.log('Erro ao registrar Service Worker:', err));
+        }
+    </script>
 </body>
 </html>
