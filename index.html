@@ -156,10 +156,38 @@
         </div>
     </div>
 
+<script>
+// NAVEGAÇÃO SIMPLES - FUNCIONA IMEDIATAMENTE
+document.addEventListener('DOMContentLoaded', function() {
+    // Função simples de navegação
+    function navegarPara(secao) {
+        // Esconder todas
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Mostrar a selecionada
+        document.getElementById(secao).classList.add('active');
+        // Atualizar link ativo
+        document.querySelectorAll('.nav a').forEach(l => l.classList.remove('active'));
+        document.querySelector(`a[href="#${secao}"]`)?.classList.add('active');
+    }
+    
+    // Configurar cliques
+    document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const secao = this.getAttribute('href').substring(1);
+            navegarPara(secao);
+        });
+    });
+    
+    // Começar na home
+    navegarPara('inicio');
+});
+</script>
+
     <!-- Scripts -->
-    <script src="firebase-config.js"></script>
-    <script src="app.js"></script>
-    <script src="radio.js"></script>
+    <script src="./firebase-config.js"></script>
+<script src="./app.js"></script>
+<script src="./radio.js"></script>
     <script>
         // Registrar Service Worker
         if ('serviceWorker' in navigator) {
