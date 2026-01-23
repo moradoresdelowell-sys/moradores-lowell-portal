@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Admin - Moradores de Lowell</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #218838; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔧 Criar Usuário Admin</h2>
+        <p>Use este formulário para criar um novo administrador</p>
+        
+        <form id="criarAdminForm">
+            <div class="form-group">
+                <label>Email do novo admin:</label>
+                <input type="email" id="email" placeholder="admin@exemplo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" id="senha" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" id="nome" placeholder="Nome do administrador" required>
+            </div>
+            
+            <button type="submit">CRIAR ADMIN</button>
+        </form>
+        
+        <div id="resultado"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Config Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyACxtgupeUfltzuZPK7MnVl7hMfz21q4K4",
+            authDomain: "moradoresdelowell-543d3.firebaseapp.com",
+            projectId: "moradoresdelowell-543d3",
+            storageBucket: "moradoresdelowell-543d3.firebasestorage.app",
+            messagingSenderId: "248930823442",
+            appId: "1:248930823442:web:610ab36aa30f7c567517cb"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Função para criar admin
+        async function criarAdmin(email, senha, nome) {
+            try {
+                // Criar usuário no Authentication
+                const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+                const user = userCredential.user;
+                
+                // Adicionar dados do admin no Firestore
+                await db.collection('usuarios').doc(user.uid).set({
+                    nome: nome,
+                    email: email,
+                    role: 'admin',
+                    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                return { success: true, uid: user.uid };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        // Evento do formulário
+        document.getElementById('criarAdminForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const nome = document.getElementById('nome').value;
+            
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = '<div class="result">Criando administrador...</div>';
+            
+            const result = await criarAdmin(email, senha, nome);
+            
+            if (result.success) {
+                resultado.innerHTML = `
+                    <div class="result success">
+                        <strong>✅ Admin criado com sucesso!</strong><br>
+                        Email: ${email}<br>
+                        UID: ${result.uid}<br><br>
+                        <strong>Agora você pode fazer login!</strong>
+                    </div>
+                `;
+                // Limpar formulário
+                e.target.reset();
+            } else {
+                resultado.innerHTML = `
+                    <div class="result error">
+                        <strong>❌ Erro:</strong> ${result.error}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
