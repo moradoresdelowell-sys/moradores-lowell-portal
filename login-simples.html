@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Versão Simples</title>
+    <link rel="stylesheet" href="admin-login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="logo-moradores.png" alt="Moradores de Lowell">
+                <h2>Painel Administrativo</h2>
+            </div>
+            
+            <form id="login-form-simples">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required placeholder="admin@seuemail.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn-login">Entrar</button>
+                
+                <div id="login-mensagem" class="mensagem"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // LOGIN SIMPLES SEM FIREBASE (SOMENTE PARA TESTE)
+        document.getElementById('login-form-simples').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const mensagem = document.getElementById('login-mensagem');
+            
+            // Credenciais de teste (MUDE DEPOIS!)
+            if (email === 'admin@moradoresdelowell.com' && senha === 'admin123') {
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminEmail', email);
+                
+                mensagem.innerHTML = '<div class="success">✅ Login realizado!</div>';
+                mensagem.style.display = 'block';
+                
+                setTimeout(function() {
+                    window.location.href = 'admin-painel.html';
+                }, 1000);
+            } else {
+                mensagem.innerHTML = '<div class="error">❌ Email ou senha incorretos</div>';
+                mensagem.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
