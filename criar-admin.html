@@ -1,221 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Admin - Moradores de Lowell</title>
-    <style>
-        body { 
-            font-family: Arial; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container { 
-            max-width: 500px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        h2 { 
-            text-align: center; 
-            color: #333; 
-            margin-bottom: 10px;
-        }
-        p { 
-            text-align: center; 
-            color: #666; 
-            margin-bottom: 30px;
-        }
-        .form-group { 
-            margin-bottom: 20px; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: bold; 
-            color: #333;
-        }
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            border: 2px solid #ddd; 
-            border-radius: 8px; 
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        input:focus { 
-            border-color: #007bff; 
-            outline: none;
-        }
-        button { 
-            background: #007bff; 
-            color: white; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 18px; 
-            width: 100%;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        button:hover { 
-            background: #0056b3; 
-        }
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .result { 
-            margin-top: 20px; 
-            padding: 15px; 
-            border-radius: 8px; 
-            text-align: center;
-        }
-        .success { 
-            background: #d4edda; 
-            color: #155724; 
-            border: 1px solid #c3e6cb; 
-        }
-        .error { 
-            background: #f8d7da; 
-            color: #721c24; 
-            border: 1px solid #f5c6cb; 
-        }
-        .loading {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>🔧 Criar Admin no Banco</h2>
-        <p>Cria direto no Firestore (sem autenticação)</p>
-        
-        <form id="criarAdminForm">
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="email" id="email" placeholder="admin@exemplo.com" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Nome:</label>
-                <input type="text" id="nome" placeholder="Nome do administrador" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Senha (só para registro):</label>
-                <input type="text" id="senha" placeholder="Senha para anotar" required>
-            </div>
-            
-            <button type="submit" id="submitBtn">CRIAR ADMIN</button>
-        </form>
-        
-        <div id="resultado"></div>
-    </div>
-
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+// NOVO código para criar admin com módulos ES6
+document.getElementById('criarAdminForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    <script>
-        console.log('Iniciando Firebase...');
+    const email = document.getElementById('email').value;
+    const nome = document.getElementById('nome').value;
+    const senha = document.getElementById('senha').value;
+    
+    const resultado = document.getElementById('resultado');
+    resultado.innerHTML = '<div class="result loading">Criando administrador...</div>';
+    
+    try {
+        const db = window.firebaseDb;
         
-        // Config Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyACxtgupeUfltzuZPK7MnVl7hMfz21q4K4",
-            authDomain: "moradoresdelowell-543d3.firebaseapp.com",
-            projectId: "moradoresdelowell-543d3",
-            storageBucket: "moradoresdelowell-543d3.firebasestorage.app",
-            messagingSenderId: "248930823442",
-            appId: "1:248930823442:web:610ab36aa30f7c567517cb"
+        // Criar admin com ID único
+        const adminId = 'admin-' + Date.now();
+        const adminData = {
+            nome: nome,
+            email: email,
+            senha: senha,
+            role: 'admin',
+            criadoEm: new Date()
         };
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase inicializado com sucesso!');
-        } catch (error) {
-            console.error('❌ Erro ao inicializar Firebase:', error);
-        }
         
-        const db = firebase.firestore();
-        console.log('✅ Firestore conectado!');
-
-        // Função de criar admin
-        async function criarAdminNoBanco(email, nome, senha) {
-            console.log('Criando admin...', { email, nome });
-            
-            try {
-                const adminId = db.collection('usuarios').doc().id;
-                
-                await db.collection('usuarios').doc(adminId).set({
-                    nome: nome,
-                    email: email,
-                    senha: senha,
-                    role: 'admin',
-                    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                console.log('✅ Admin criado com sucesso! ID:', adminId);
-                return { success: true, id: adminId };
-                
-            } catch (error) {
-                console.error('❌ Erro ao criar admin:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        // Evento do formulário
-        document.getElementById('criarAdminForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const btn = document.getElementById('submitBtn');
-            const email = document.getElementById('email').value;
-            const nome = document.getElementById('nome').value;
-            const senha = document.getElementById('senha').value;
-            
-            // Desabilitar botão
-            btn.disabled = true;
-            btn.textContent = 'CRIANDO...';
-            
-            const resultado = document.getElementById('resultado');
-            resultado.innerHTML = '<div class="result loading">Criando administrador...</div>';
-            
-            const result = await criarAdminNoBanco(email, nome, senha);
-            
-            if (result.success) {
-                resultado.innerHTML = `
-                    <div class="result success">
-                        <strong>✅ Admin criado no banco!</strong><br>
-                        ID: ${result.id}<br>
-                        Email: ${email}<br><br>
-                        <strong>Agora você pode fazer login com qualquer senha!</strong>
-                    </div>
-                `;
-                e.target.reset();
-            } else {
-                resultado.innerHTML = `
-                    <div class="result error">
-                        <strong>❌ Erro:</strong> ${result.error}
-                    </div>
-                `;
-            }
-            
-            // Reabilitar botão
-            btn.disabled = false;
-            btn.textContent = 'CRIAR ADMIN';
-        });
-
-        // Teste automático ao carregar
-        console.log('📋 Formulário pronto para uso!');
-    </script>
-</body>
-</html>
+        await db.collection('usuarios').doc(adminId).set(adminData);
+        
+        resultado.innerHTML = `
+            <div class="result success">
+                ✅ Admin criado com sucesso!<br>
+                ID: ${adminId}<br>
+                Agora você pode fazer login!
+            </div>
+        `;
+        
+    } catch (error) {
+        resultado.innerHTML = `
+            <div class="result error">
+                ❌ Erro: ${error.message}
+            </div>
+        `;
+    }
+});
