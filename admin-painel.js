@@ -1,66 +1,228 @@
-// ADMIN-LOGIN.JS COMPLETO E FUNCIONAL
-console.log('🔧 Login iniciado...');
-
+// ADMIN PAINEL - NAVEGAÇÃO
 document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
-    const errorMessage = document.getElementById('errorMessage');
     
-    // Carregar Firebase
-    const script1 = document.createElement('script');
-    script1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
-    document.head.appendChild(script1);
-    
-    const script2 = document.createElement('script');
-    script2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js';
-    document.head.appendChild(script2);
-    
-    setTimeout(function() {
-        const firebaseConfig = {
-            apiKey: "AIzaSyCYx6LLnu4tf6OS4W4xPcBprve4IRROtX8",
-            authDomain: "moradores-lowell-portal.firebaseapp.com",
-            projectId: "moradores-lowell-portal",
-            storageBucket: "moradores-lowell-portal.firebasestorage.app",
-            messagingSenderId: "967028216371",
-            appId: "1:967028216371:web:6d8d01956a2d9b9c6b0946"
-        };
+    // Função para carregar conteúdo dinamicamente
+    function loadContent(page) {
+        const contentArea = document.getElementById('content-area');
         
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Remove conteúdo anterior
+        contentArea.innerHTML = '';
         
-        loginForm.addEventListener('submit', async function(e) {
+        // Carrega nova página
+        switch(page) {
+            case 'anuncios':
+                loadAnuncios();
+                break;
+            case 'classificados':
+                loadClassificados();
+                break;
+            case 'empregos':
+                loadEmpregos();
+                break;
+            case 'noticias':
+                loadNoticias();
+                break;
+            case 'comercio':
+                loadComercio();
+                break;
+            case 'alertas':
+                loadAlertas();
+                break;
+            case 'radio':
+                loadRadio();
+                break;
+            case 'config':
+                loadConfig();
+                break;
+            default:
+                loadDashboard();
+        }
+    }
+    
+    // Função para carregar dashboard inicial
+    function loadDashboard() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="dashboard">
+                <h2>Dashboard - Resumo do Sistema</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Anúncios</h3>
+                        <p class="number" id="count-anuncios">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Classificados</h3>
+                        <p class="number" id="count-classificados">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Empregos</h3>
+                        <p class="number" id="count-empregos">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Notícias</h3>
+                        <p class="number" id="count-noticias">0</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        updateCounts();
+    }
+    
+    // Funções para carregar cada seção
+    function loadAnuncios() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Anúncios</h2>
+                <button class="btn-add" onclick="showAddForm('anuncios')">+ Adicionar Novo Anúncio</button>
+                <div id="anuncios-list" class="items-list"></div>
+            </div>
+        `;
+        loadAnunciosList();
+    }
+    
+    function loadClassificados() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Classificados</h2>
+                <button class="btn-add" onclick="showAddForm('classificados')">+ Adicionar Novo Classificado</button>
+                <div id="classificados-list" class="items-list"></div>
+            </div>
+        `;
+        loadClassificadosList();
+    }
+    
+    function loadEmpregos() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Empregos</h2>
+                <button class="btn-add" onclick="showAddForm('empregos')">+ Adicionar Nova Vaga</button>
+                <div id="empregos-list" class="items-list"></div>
+            </div>
+        `;
+        loadEmpregosList();
+    }
+    
+    function loadNoticias() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Notícias</h2>
+                <button class="btn-add" onclick="showAddForm('noticias')">+ Adicionar Nova Notícia</button>
+                <div id="noticias-list" class="items-list"></div>
+            </div>
+        `;
+        loadNoticiasList();
+    }
+    
+    function loadComercio() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Comércio Local</h2>
+                <button class="btn-add" onclick="showAddForm('comercio')">+ Adicionar Novo Comércio</button>
+                <div id="comercio-list" class="items-list"></div>
+            </div>
+        `;
+        loadComercioList();
+    }
+    
+    function loadAlertas() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Gerenciar Alertas</h2>
+                <button class="btn-add" onclick="showAddForm('alertas')">+ Adicionar Novo Alerta</button>
+                <div id="alertas-list" class="items-list"></div>
+            </div>
+        `;
+        loadAlertasList();
+    }
+    
+    function loadRadio() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Configurar Rádio Online</h2>
+                <form id="radio-config-form">
+                    <div class="form-group">
+                        <label>URL da Stream:</label>
+                        <input type="text" id="radio-url" placeholder="http://stream.exemplo.com:8000/radio.mp3">
+                    </div>
+                    <div class="form-group">
+                        <label>Nome da Rádio:</label>
+                        <input type="text" id="radio-name" placeholder="Rádio Moradores">
+                    </div>
+                    <button type="submit" class="btn-save">Salvar Configurações</button>
+                </form>
+            </div>
+        `;
+        loadRadioConfig();
+    }
+    
+    function loadConfig() {
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = `
+            <div class="content-section">
+                <h2>Configurações do Sistema</h2>
+                <p>Configurações gerais do portal...</p>
+            </div>
+        `;
+    }
+    
+    // Event listeners para os menu items
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function(e) {
             e.preventDefault();
+            const page = this.getAttribute('data-page');
+            loadContent(page);
             
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            
-            try {
-                // VERIFICAR ADMIN COM ID SEM HÍFEN
-                const adminDoc = await db.collection('usuarios').doc('adminprincipal').get();
-                
-                if (adminDoc.exists) {
-                    const adminData = adminDoc.data();
-                    if (adminData.email === email && adminData.senha === senha) {
-                        window.location.href = 'admin-painel.html';
-                        return;
-                    }
-                }
-                
-                // Se não encontrou, mostrar erro
-                errorMessage.textContent = 'Email ou senha incorretos';
-                errorMessage.style.display = 'block';
-                
-            } catch (error) {
-                errorMessage.textContent = 'Erro de conexão';
-                errorMessage.style.display = 'block';
-            }
+            // Remove active de todos e adiciona no atual
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
         });
-    }, 2000);
+    });
+    
+    // Carrega dashboard inicial
+    loadDashboard();
 });
-            } catch (error) {
-                errorMessage.textContent = 'Erro de conexão';
-                errorMessage.style.display = 'block';
-                console.error('Erro:', error);
-            }
-        });
-    }, 2000);
-});
+
+// Funções auxiliares
+function showAddForm(type) {
+    alert(`Formulário para adicionar ${type} será implementado`);
+}
+
+function loadAnunciosList() {
+    // Implementar carregamento dos anúncios
+    document.getElementById('anuncios-list').innerHTML = '<p>Carregando anúncios...</p>';
+}
+
+function loadClassificadosList() {
+    document.getElementById('classificados-list').innerHTML = '<p>Carregando classificados...</p>';
+}
+
+function loadEmpregosList() {
+    document.getElementById('empregos-list').innerHTML = '<p>Carregando empregos...</p>';
+}
+
+function loadNoticiasList() {
+    document.getElementById('noticias-list').innerHTML = '<p>Carregando notícias...</p>';
+}
+
+function loadComercioList() {
+    document.getElementById('comercio-list').innerHTML = '<p>Carregando comércios...</p>';
+}
+
+function loadAlertasList() {
+    document.getElementById('alertas-list').innerHTML = '<p>Carregando alertas...</p>';
+}
+
+function loadRadioConfig() {
+    // Carregar configurações existentes
+}
+
+function updateCounts() {
+    // Atualizar contagens do dashboard
+}

@@ -3,105 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - Moradores de Lowell e Região</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="logo-moradores.png">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <title>Painel Administrativo - Moradores de Lowell</title>
+    <link rel="stylesheet" href="admin-painel.css">
 </head>
 <body>
-    <!-- Header Admin -->
-    <header class="header">
-        <div class="container">
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
             <div class="logo">
-                <img src="logo-moradores.png" alt="Logo">
-                <h1>Painel Admin - Moradores de Lowell</h1>
+                <img src="logo-moradores.png" alt="Moradores de Lowell">
+                <h2>Admin</h2>
             </div>
-            <nav class="nav">
-                <ul>
-                    <li><a href="#" onclick="logout()" class="admin-link">Sair</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+            <ul class="menu">
+                <li><a href="#" class="menu-item active" data-page="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" class="menu-item" data-page="anuncios">📢 Anúncios</a></li>
+                <li><a href="#" class="menu-item" data-page="classificados">📋 Classificados</a></li>
+                <li><a href="#" class="menu-item" data-page="empregos">💼 Empregos</a></li>
+                <li><a href="#" class="menu-item" data-page="noticias">📰 Notícias</a></li>
+                <li><a href="#" class="menu-item" data-page="comercio">🏪 Comércio Local</a></li>
+                <li><a href="#" class="menu-item" data-page="alertas">🚨 Alertas</a></li>
+                <li><a href="#" class="menu-item" data-page="radio">🎵 Rádio Online</a></li>
+                <li><a href="#" class="menu-item" data-page="config">⚙️ Configurações</a></li>
+                <li><a href="#" onclick="logout()">🚪 Sair</a></li>
+            </ul>
+        </nav>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <!-- Dashboard -->
-            <div class="admin-panel">
-                <h2>Dashboard</h2>
-                
-                <!-- Estatísticas -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalAnuncios">0</div>
-                        <div class="stat-label">Anúncios</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalVagas">0</div>
-                        <div class="stat-label">Vagas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalEstabelecimentos">0</div>
-                        <div class="stat-label">Estabelecimentos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalNoticias">0</div>
-                        <div class="stat-label">Notícias</div>
-                    </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>Painel Administrativo</h1>
+                <div class="user-info">
+                    <span id="admin-email">admin@moradores.com</span>
                 </div>
-                
-                <!-- Menu de Administração -->
-                <div class="admin-sections">
-                    <div class="admin-card" onclick="showSection('anuncios')">
-                        <h3>📢 Anúncios</h3>
-                        <p>Gerenciar classificados</p>
-                    </div>
-                    <div class="admin-card" onclick="showSection('vagas')">
-                        <h3>💼 Vagas</h3>
-                        <p>Gerenciar empregos</p>
-                    </div>
-                    <div class="admin-card" onclick="showSection('estabelecimentos')">
-                        <h3>🏪 Estabelecimentos</h3>
-                        <p>Gerenciar guia comercial</p>
-                    </div>
-                    <div class="admin-card" onclick="showSection('noticias')">
-                        <h3>📰 Notícias</h3>
-                        <p>Gerenciar notícias</p>
-                    </div>
-                    <div class="admin-card" onclick="showSection('aluguel')">
-                        <h3>🏠 Aluguel</h3>
-                        <p>Gerenciar imóveis</p>
-                    </div>
-                    <div class="admin-card" onclick="showSection('config')">
-                        <h3>⚙️ Configurações</h3>
-                        <p>Configurar site</p>
-                    </div>
-                </div>
-            </div>
+            </header>
             
-            <!-- Seções de Gerenciamento -->
-            <div id="adminContent" class="admin-content">
-                <!-- Conteúdo dinâmico será carregado aqui -->
+            <div id="content-area" class="content-area">
+                <!-- Conteúdo será carregado aqui dinamicamente -->
             </div>
-        </div>
-    </main>
-
-    <!-- Modal de Formulário -->
-    <div id="formModal" class="modal">
-        <div class="modal-content large">
-            <span class="close" onclick="closeFormModal()">&times;</span>
-            <div id="formContent">
-                <!-- Formulário dinâmico será carregado aqui -->
-            </div>
-        </div>
+        </main>
     </div>
 
-    <script src="firebase-config.js"></script>
     <script src="admin-painel.js"></script>
+    <script>
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'admin-login.html';
+        }
+        
+        // Verifica se está logado
+        if (!localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-login.html';
+        }
+    </script>
 </body>
 </html>
