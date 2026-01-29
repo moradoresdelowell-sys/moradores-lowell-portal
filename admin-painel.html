@@ -3,57 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - Moradores de Lowell</title>
-    <link rel="stylesheet" href="admin-painel.css">
+    <title>Login Admin - Moradores de Lowell</title>
+    <link rel="stylesheet" href="admin-login.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Config Firebase -->
+    <script src="firebase-config.js"></script>
 </head>
 <body>
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <nav class="sidebar">
+    <div class="login-container">
+        <div class="login-box">
             <div class="logo">
                 <img src="logo-moradores.png" alt="Moradores de Lowell">
-                <h2>Admin</h2>
+                <h2>Painel Administrativo</h2>
             </div>
-            <ul class="menu">
-                <li><a href="#" class="menu-item active" data-page="dashboard">📊 Dashboard</a></li>
-                <li><a href="#" class="menu-item" data-page="anuncios">📢 Anúncios</a></li>
-                <li><a href="#" class="menu-item" data-page="classificados">📋 Classificados</a></li>
-                <li><a href="#" class="menu-item" data-page="empregos">💼 Empregos</a></li>
-                <li><a href="#" class="menu-item" data-page="noticias">📰 Notícias</a></li>
-                <li><a href="#" class="menu-item" data-page="comercio">🏪 Comércio Local</a></li>
-                <li><a href="#" class="menu-item" data-page="alertas">🚨 Alertas</a></li>
-                <li><a href="#" class="menu-item" data-page="radio">🎵 Rádio Online</a></li>
-                <li><a href="#" class="menu-item" data-page="config">⚙️ Configurações</a></li>
-                <li><a href="#" onclick="logout()">🚪 Sair</a></li>
-            </ul>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="header">
-                <h1>Painel Administrativo</h1>
-                <div class="user-info">
-                    <span id="admin-email">admin@moradores.com</span>
-                </div>
-            </header>
             
-            <div id="content-area" class="content-area">
-                <!-- Conteúdo será carregado aqui dinamicamente -->
-            </div>
-        </main>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required placeholder="admin@seuemail.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn-login">Entrar</button>
+                
+                <div id="login-mensagem" class="mensagem"></div>
+            </form>
+        </div>
     </div>
-
-    <script src="admin-painel.js"></script>
-    <script>
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            window.location.href = 'admin-login.html';
-        }
-        
-        // Verifica se está logado
-        if (!localStorage.getItem('adminLoggedIn')) {
-            window.location.href = 'admin-login.html';
-        }
-    </script>
+    
+    <script src="admin-login.js"></script>
 </body>
 </html>

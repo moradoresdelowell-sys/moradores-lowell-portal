@@ -1,52 +1,37 @@
-// NOVO admin-login.js com módulos ES6
+// ADMIN LOGIN - CÓDIGO COMPLETO E FUNCIONAL
 document.addEventListener('DOMContentLoaded', function() {
-    // Aguardar Firebase carregar
-    setTimeout(async function() {
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('errorMessage');
-        
+    const loginForm = document.getElementById('login-form');
+    
+    if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
-            
-            // Desabilitar botão
-            const btn = e.target.querySelector('button');
-            btn.textContent = 'ENTRANDO...';
-            btn.disabled = true;
+            const mensagem = document.getElementById('login-mensagem');
             
             try {
-                // Usar o novo Firebase
-                const auth = window.firebaseAuth;
-                const db = window.firebaseDb;
+                // Autenticação no Firebase
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
                 
-                // Criar usuário temporário para teste (já que não temos auth habilitado)
-                const userCredential = { user: { uid: 'admin-paulo', email: email } };
+                // Salva sessão no localStorage
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminEmail', email);
                 
-                // Verificar se existe no banco
-                const userDoc = await db.collection('usuarios').doc('admin-paulo').get();
+                // Mostra mensagem de sucesso
+                mensagem.innerHTML = '<div class="success">✅ Login realizado com sucesso!</div>';
+                mensagem.style.display = 'block';
                 
-                if (userDoc.exists && userDoc.data().role === 'admin') {
-                    // Sucesso!
+                // Aguarda 1 segundo e redireciona
+                setTimeout(function() {
                     window.location.href = 'admin-painel.html';
-                } else {
-                    // Criar admin se não existir
-                    await db.collection('usuarios').doc('admin-paulo').set({
-                        nome: 'Administrador',
-                        email: email,
-                        role: 'admin',
-                        criadoEm: new Date()
-                    });
-                    window.location.href = 'admin-painel.html';
-                }
+                }, 1000);
                 
             } catch (error) {
-                errorMessage.textContent = 'Erro: ' + error.message;
-                errorMessage.style.display = 'block';
-                btn.textContent = 'ENTRAR';
-                btn.disabled = false;
+                // Erro no login
+                mensagem.innerHTML = '<div class="error">❌ ' + error.message + '</div>';
+                mensagem.style.display = 'block';
             }
         });
-    }, 1000);
+    }
 });
