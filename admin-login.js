@@ -1,4 +1,4 @@
-// ADMIN LOGIN - CÓDIGO COMPLETO E FUNCIONAL
+// ADMIN LOGIN - COM FALLBACK PARA FIREBASE BLOQUEADO
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
     
@@ -11,24 +11,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const mensagem = document.getElementById('login-mensagem');
             
             try {
-                // Autenticação no Firebase
+                // Verifica se Firebase está disponível
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase não carregado. Verifique sua conexão.');
+                }
+                
+                // Aguarda Firebase estar pronto
+                await new Promise((resolve, reject) => {
+                    if (firebase.auth()) {
+                        resolve();
+                    } else {
+                        reject(new Error('Firebase Auth não disponível'));
+                    }
+                });
+                
+                // Autenticação
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
                 
-                // Salva sessão no localStorage
+                // Salva sessão
                 localStorage.setItem('adminLoggedIn', 'true');
                 localStorage.setItem('adminEmail', email);
                 
-                // Mostra mensagem de sucesso
+                // Sucesso
                 mensagem.innerHTML = '<div class="success">✅ Login realizado com sucesso!</div>';
                 mensagem.style.display = 'block';
                 
-                // Aguarda 1 segundo e redireciona
+                // Redireciona
                 setTimeout(function() {
                     window.location.href = 'admin-painel.html';
                 }, 1000);
                 
             } catch (error) {
-                // Erro no login
                 mensagem.innerHTML = '<div class="error">❌ ' + error.message + '</div>';
                 mensagem.style.display = 'block';
             }
